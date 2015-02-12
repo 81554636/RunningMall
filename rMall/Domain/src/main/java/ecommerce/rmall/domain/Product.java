@@ -1,8 +1,5 @@
 package ecommerce.rmall.domain;
 
-/***
- * 客户信息
- */
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -13,23 +10,20 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
-@Table(name="T_Mall_Customer")
+@Table(name="T_Mall_Product")
 @XmlRootElement (name = "Product")
-public class Customer {
-
+public class Product {
+	
 	@Id
 	@GeneratedValue
 	@Column(name="ID", nullable = false)
-	private long id;
+	private int id;
+
+	@Column(name="name", nullable = false)
+	private String displayName;
 	
-	@Column(name="Name", nullable = false)
-	private String name;
-	
-	@Column(name="Phone", nullable=false)
-	private String phone;
-	
-	@Column(name="Addr")
-	private String Address;
+	@Column(name="price", nullable = false)
+	private float price;
 	
 	@Column(name = "CreateDate", nullable = false, columnDefinition="timestamp default CURRENT_TIMESTAMP")
 	private Date createDate;
@@ -37,31 +31,28 @@ public class Customer {
 	@Column(name = "UpdateDate", nullable = false, columnDefinition="timestamp")
 	private Date lastUpdate;
 	
-	@Column(name = "UpdateBy", nullable = true)
-	private String lastUpdateBy;
-
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getDisplayName() {
+		return displayName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
-	public String getAddress() {
-		return Address;
+	public float getPrice() {
+		return price;
 	}
 
-	public void setAddress(String address) {
-		Address = address;
+	public void setPrice(float price) {
+		this.price = price;
 	}
 
 	public Date getCreateDate() {
@@ -78,21 +69,5 @@ public class Customer {
 
 	public void setLastUpdate(Date lastUpdate) {
 		this.lastUpdate = lastUpdate;
-	}
-
-	public String getLastUpdateBy() {
-		return lastUpdateBy;
-	}
-
-	public void setLastUpdateBy(String lastUpdateBy) {
-		this.lastUpdateBy = lastUpdateBy;
-	}
-	
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
 	}
 }

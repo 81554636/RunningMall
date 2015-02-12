@@ -1,43 +1,60 @@
 package ecommerce.rmall.domain;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name="T_Mall_Order")
+@XmlRootElement (name = "Order")
 public class Order {
 	
 	@Id
 	@GeneratedValue
-	@Column(name="ID", nullable = false)
+	@Column(name="ID", nullable=false)
 	private long id;
-	
-	@Column(name="OrderDate", nullable = false)
-	private Date orderDate;
-	
-	@Column(name="ShipDate")
-	private Date shipDate;
 	
 	@Column(name="Status")
 	private String status;
 	
-	@Column(name = "LastUpdate", nullable = false)
+	@Column(name="CreateDate", nullable=false, columnDefinition="timestamp default CURRENT_TIMESTAMP")
+	private Date createDate;
+	
+	@Column(name="UpdateDate", nullable=false, columnDefinition="timestamp")
 	private Date lastUpdate;
 	
-	@Column(name = "LastUpdateBy", nullable = false)
+	@Column(name="UpdateBy", nullable=true)
 	private String lastUpdateBy;
 	
 	@JoinColumn(name="CustomerID")
-	@ManyToOne(optional=false)
+	@ManyToOne(cascade={CascadeType.ALL},fetch=FetchType.EAGER)
 	private Customer customer;
+	
+	@JoinColumn(name="DeliveryID")
+	@ManyToOne(cascade={CascadeType.ALL},fetch=FetchType.EAGER)
+	private Delivery delivery;
 
+	@JoinColumn(name="OrderID",nullable=false)
+	@OneToMany(cascade={CascadeType.MERGE,CascadeType.PERSIST},fetch=FetchType.EAGER)
+	private List<OrderItem> details;
+
+	public List<OrderItem> getDetails() {
+		return details;
+	}
+	public void setDetails(List<OrderItem> details) {
+		this.details = details;
+	}
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -51,17 +68,17 @@ public class Order {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public Date getOrderDate() {
-		return orderDate;
+	public Date getCreateDate() {
+		return createDate;
 	}
-	public void setOrderDate(Date orderDate) {
-		this.orderDate = orderDate;
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
-	public Date getShipDate() {
-		return shipDate;
+	public Delivery getDelivery() {
+		return delivery;
 	}
-	public void setShipDate(Date shipDate) {
-		this.shipDate = shipDate;
+	public void setDelivery(Delivery delivery) {
+		this.delivery = delivery;
 	}
 	public String getStatus() {
 		return status;

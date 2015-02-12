@@ -1,10 +1,8 @@
 package ecommerce.rmall.service.restful;
 
-import java.util.Date;
-
 import javax.annotation.Resource;
 
-import ecommerce.rmall.domain.Customer;
+import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.service.ICustomerService;
 import ecommerce.rmall.service.IOrderService;
 
@@ -12,19 +10,18 @@ public class OrderService implements IOrderService {
 
 	@Resource(name="customerService")
 	private ICustomerService service;
-	public void setService(ICustomerService service) {
+	public void setService(ICustomerService service){
 		this.service = service;
 	}
 
 	@Override
-	public void Place(String content) {
-		Customer customer = new Customer();
-		customer.setAddress("莲溪路780弄21号301室");
-		customer.setName("凌小舟");
-		customer.setCreateDate(new Date());
-		customer.setLastUpdate(new Date());
+	public Order Place(Order order, long customerID) {
+		return this.service.place(order, customerID);
+	}
 
-		this.service.saveCustomer(customer);
-		System.out.println(content);
+	@Override
+	public Order Query(long orderID) {
+		Order rtn = this.service.query(orderID);
+		return rtn;
 	}
 }

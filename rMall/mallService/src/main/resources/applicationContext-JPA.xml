@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" 
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd 
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 
@@ -19,14 +23,26 @@
 	<context:component-scan base-package="ecommerce.rmall.service"/>
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/><!-- 注释有效 -->
 	
+	<bean id="org.h2.tools.Server-WebServer" class="org.h2.tools.Server" depends-on="dataSource" 
+    	factory-method="createWebServer" init-method="start" lazy-init="false">
+    	<constructor-arg value="-web,-webPort,11111" />
+	</bean>
+	<!-- 初始化数据表结构 -->
+	
+    <jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
+        <jdbc:script location="classpath:schema.sql" encoding="UTF-8"/>
+    </jdbc:initialize-database>
+    
 	<!-- 数据源 -->
 	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
-		<property name="driver" value="com.mysql.jdbc.Driver" />
+		<!-- <property name="driver" value="com.mysql.jdbc.Driver" />
 		<property name="driverUrl"
-			value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf-8" />
+			value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf-8" /> -->
+		<property name="driver" value="org.h2.Driver"/>  
+		<property name="driverUrl" value="jdbc:h2:mem:test;MODE=MYSQL;DB_CLOSE_DELAY=-1"/>  
 		<property name="user" value="root" />
 		<property name="password" value="123456" />
-		<!-- proxool自动侦察各个连接状态的时间间隔(毫秒),侦察到空闲的连接就马上回 收,超时的销毁 （默认30秒） -->
+		<!-- proxool自动侦察各个连接状态的时间间隔(毫秒),侦察到空闲的连接就马上回收,超时的销毁 （默认30秒） -->
 		<property name="houseKeepingSleepTime" value="90000" />
 		<!-- 最少保持的空闲连接数 （默认5个） -->
 		<property name="prototypeCount" value="5" />
@@ -37,8 +53,7 @@
 	</bean>
 
 	<!--指定实现JPA的适配器 -->
-	<bean id="hibernateJpaVendorAdapter"
-		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+	<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 		<property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect" />
 	</bean>
 
@@ -53,7 +68,7 @@
 		<property name="jpaProperties">
 			<props>
 				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
-				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.show_sql">false</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 			</props>
 		</property>
@@ -70,6 +85,7 @@
 			<tx:method name="delete*" propagation="REQUIRED" />
 			<tx:method name="remove*" propagation="REQUIRED" />
 			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="place" propagation="REQUIRED" />
 			<tx:method name="*" read-only="true" />
 		</tx:attributes>
 	</tx:advice>
