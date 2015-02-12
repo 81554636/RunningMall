@@ -37,8 +37,8 @@
         	</bean>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
-<!-- <bean class="org.apache.cxf.jaxrs.provider.JAXBElementProvider"/> -->
-<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+		<!-- <bean class="org.apache.cxf.jaxrs.provider.JAXBElementProvider"/> -->
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
         </jaxrs:providers>
     </jaxrs:server>
     
