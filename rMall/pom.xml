@@ -169,7 +169,6 @@
 	<modules>
 		<module>mallService</module>
 		<module>Domain</module>
-		<module>Dao</module>
-    <module>Service</module>
+    	<module>Service</module>
   </modules>
 </project>
