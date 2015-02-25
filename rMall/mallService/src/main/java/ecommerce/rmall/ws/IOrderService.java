@@ -1,4 +1,4 @@
-package ecommerce.rmall.service;
+package ecommerce.rmall.ws;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -17,11 +17,11 @@ public interface IOrderService {
 	@Path("/Place/{customer}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	Order Place(Order order, @PathParam("customer")long customerID);
+	Order Place(Order order, @PathParam("customer")int customerID);
 	
 	@GET
 	@Path("/Query/{order}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	Order Query(@PathParam("order")long orderID);
+	Order Query(@PathParam("order")int orderID);
 }

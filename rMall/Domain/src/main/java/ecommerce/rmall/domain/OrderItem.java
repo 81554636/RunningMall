@@ -1,39 +1,20 @@
 package ecommerce.rmall.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@Entity
-@Table(name="T_Mall_OrderItem")
 @XmlRootElement (name = "OrderItem")
 public class OrderItem {
 
-	@Id
-	@GeneratedValue
-	@Column(name="ID", nullable=false)
-	private long id;
-	
-	@JoinColumn(name="ProductID")
-	@ManyToOne(optional=false)
+	private int id;
 	private Product product;
-	
-	@Column
 	private int quantity;
-	
-	@Column
 	private float price;
 	
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

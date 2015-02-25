@@ -2,11 +2,6 @@ package ecommerce.rmall.domain;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /***
@@ -15,32 +10,25 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  */
 
-@Entity
-@Table(name="T_Mall_Delivery")
 @XmlRootElement (name = "Delivery")
 public class Delivery {
 
-	@Id
-	@GeneratedValue
-	@Column(name="ID", nullable=false)
-	private long id;
-	
-	@Column(name="Name", nullable=false)
+	private int id;
 	private String name;
-	
-	@Column(name="Addr", nullable=false)
 	private String address;
-	
-	@Column(name="Phone", nullable=false)
 	private String phone;
-	
-	@Column(name="deliverDate", nullable=false, columnDefinition="timestamp default CURRENT_TIMESTAMP")
 	private Date deliverDate;
 	
-	public long getId() {
+	public Date getDeliverDate() {
+		return deliverDate;
+	}
+	public void setDeliverDate(Date deliverDate) {
+		this.deliverDate = deliverDate;
+	}
+	public int getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getName() {

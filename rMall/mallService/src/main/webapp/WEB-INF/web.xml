@@ -8,7 +8,8 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			classpath:applicationContext-spring.xml,
-			classpath:applicationContext-JPA.xml,classpath:applicationContext-cxf.xml</param-value>
+			classpath:applicationContext-hibernate.xml,
+			classpath:applicationContext-cxf.xml</param-value>
 	</context-param>
 
 	<listener>

@@ -8,29 +8,21 @@
 		<artifactId>rMall</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>Domain</artifactId>
-	<name>Domain</name>
+	<artifactId>Dao</artifactId>
+	<name>Dao</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
 		</dependency>
-
 		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>persistence-api</artifactId>
-			<version>1.0.2</version>
+			<groupId>eCommerce</groupId>
+			<artifactId>Domain</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
-		<dependency>  
-	        <groupId>commons-lang</groupId>  
-	        <artifactId>commons-lang</artifactId>  
-	        <version>2.4</version>  
-	    </dependency>  
 	</dependencies>
 </project>

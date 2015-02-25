@@ -27,11 +27,6 @@
     	factory-method="createWebServer" init-method="start" lazy-init="false">
     	<constructor-arg value="-web,-webPort,11111" />
 	</bean>
-	<!-- 初始化数据表结构 -->
-	
-    <jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
-        <jdbc:script location="classpath:schema.sql" encoding="UTF-8"/>
-    </jdbc:initialize-database>
     
 	<!-- 数据源 -->
 	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
@@ -55,6 +50,8 @@
 	<!--指定实现JPA的适配器 -->
 	<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 		<property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect" />
+		<property name="showSql" value="true" />
+		<property name="generateDdl" value="true" />  
 	</bean>
 
 	<!-- JPA实体管理工厂的配置 -->
@@ -67,16 +64,18 @@
 		<property name="packagesToScan" value="ecommerce.rmall.domain" /><!--待扫描的实体类包，不再需要persistence.xml了 -->
 		<property name="jpaProperties">
 			<props>
-				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
+				<!-- <prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
 				<prop key="hibernate.show_sql">false</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop> -->
 			</props>
 		</property>
 	</bean>
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
+	
 	<!-- 定义使用事务的方法 -->
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
@@ -85,7 +84,7 @@
 			<tx:method name="delete*" propagation="REQUIRED" />
 			<tx:method name="remove*" propagation="REQUIRED" />
 			<tx:method name="update*" propagation="REQUIRED" />
-			<tx:method name="place" propagation="REQUIRED" />
+			<tx:method name="place*" propagation="REQUIRED" />
 			<tx:method name="*" read-only="true" />
 		</tx:attributes>
 	</tx:advice>
@@ -94,4 +93,9 @@
 		<aop:pointcut id="pointcut" expression="execution(* ecommerce.rmall.service.*Service.*(..))" />
 		<aop:advisor pointcut-ref="pointcut" advice-ref="txAdvice" />
 	</aop:config>
+	
+	<!-- 初始化数据表结构 -->
+    <jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
+        <jdbc:script location="classpath:schema.sql" encoding="UTF-8"/>
+    </jdbc:initialize-database>
 </beans>
