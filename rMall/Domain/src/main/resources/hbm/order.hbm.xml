@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Hibernate-mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="ecommerce.rmall.domain.Order" table="rmall_order"> 
+        <id name="id" type="java.lang.Integer">
+            <column name="id"/>
+            <generator class="identity"/>
+        </id>
+        <property name="createDate" type="java.sql.Timestamp" column="createDate"/>
+        <property name="lastUpdate" type="java.sql.Timestamp" column="lastUpdate"/>
+        <property name="lastUpdateBy" type="java.lang.String" column="updateBy"/>
+        <property name="status" type="java.lang.String" column="status"/>
+        <many-to-one name="customer" column="customerID" 
+        	cascade="save-update" not-null="true"
+        	class="ecommerce.rmall.domain.Customer" lazy="false"/>
+        <many-to-one name="delivery" column="deliverID" 
+        	cascade="save-update" not-null="true"
+        	class="ecommerce.rmall.domain.Delivery" lazy="false"/>
+        <!-- <list name="details" table="rmall_orderDetails" cascade="save-update" lazy="false">
+        	<key column="orderID"/>
+        	<list-index column="bus_stop_index"/>
+        	<many-to-many class="ecommerce.rmall.domain.OrderItem" column="orderItemID"/>
+        </list> -->
+        <set name="details" table="rmall_orderDetails" cascade="save-update" lazy="false">
+        	<key column="orderID"/>
+        	<many-to-many class="ecommerce.rmall.domain.OrderItem" column="orderItemID"/>
+        </set>
+    </class>
+</hibernate-mapping>

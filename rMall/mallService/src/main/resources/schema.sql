@@ -1,2 +1,2 @@
-insert into t_mall_customer(name,phone,addr,update_date) values('凌晓舟','18616834285','虹梅路1801号新业园B栋3楼',CURRENT_TIMESTAMP);
-insert into t_mall_product(name,price,update_date) values('wine红酒',230.00,current_timestamp),('kiwi奇异果',120.00,current_timestamp);
+insert into rmall_customer(name,phone,address,createDate,lastUpdate) values('凌晓舟','18616834285','虹梅路1801号新业园B栋3楼',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
+insert into rmall_product(id,displayName,price,createDate,lastUpdate) values(1,'wine红酒',230.00,current_timestamp,current_timestamp),(2,'kiwi奇异果',120.00,current_timestamp,current_timestamp);

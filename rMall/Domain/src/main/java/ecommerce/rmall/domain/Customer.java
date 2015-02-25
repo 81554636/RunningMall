@@ -5,46 +5,24 @@ package ecommerce.rmall.domain;
  */
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@Entity
-@Table(name="T_Mall_Customer")
-@XmlRootElement (name = "Product")
+@XmlRootElement (name = "Customer")
 public class Customer {
 
-	@Id
-	@GeneratedValue
-	@Column(name="ID", nullable = false)
-	private long id;
-	
-	@Column(name="Name", nullable = false)
+	private int id;
 	private String name;
-	
-	@Column(name="Phone", nullable=false)
 	private String phone;
-	
-	@Column(name="Addr")
 	private String Address;
-	
-	@Column(name = "CreateDate", nullable = false, columnDefinition="timestamp default CURRENT_TIMESTAMP")
 	private Date createDate;
-	
-	@Column(name = "UpdateDate", nullable = false, columnDefinition="timestamp")
 	private Date lastUpdate;
-	
-	@Column(name = "UpdateBy", nullable = true)
 	private String lastUpdateBy;
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
