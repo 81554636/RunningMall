@@ -12,7 +12,6 @@
         <property name="price" type="float" column="price"/>
         <property name="quantity" type="java.lang.Integer" column="quantity"/>
         <many-to-one name="product" column="productID" lazy="false" 
-        	cascade="save-update" not-null="true"
-        	class="ecommerce.rmall.domain.Product"/>
+        	not-null="true" class="ecommerce.rmall.domain.Product"/>
     </class>
 </hibernate-mapping>

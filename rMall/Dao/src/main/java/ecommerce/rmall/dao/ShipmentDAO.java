@@ -4,8 +4,8 @@ import ecommerce.rmall.domain.Shipment;
 
 public class ShipmentDAO extends DaoSupport {
 	
-	public void save(Shipment order){
-		super.save(order);
+	public void save(Shipment shipment){
+		super.save(shipment);
 	}
 	
 	public Shipment findByID(int identity){

@@ -12,11 +12,12 @@
 	</bean>
 	
 	<bean id="orderService" class="ecommerce.rmall.service.OrderService">
-		<property name="customerDao">
-			<ref bean="customerDao"/>
-		</property>
-		<property name="orderDao">
-			<ref bean="orderDao"/>
-		</property>
+		<property name="customerDao"><ref bean="customerDao"/></property>
+		<property name="orderDao"><ref bean="orderDao"/></property>
+	</bean>
+	
+	<bean id="shipmentService" class="ecommerce.rmall.service.ShipmentService">
+		<property name="shipDao"><ref bean="shipmentDao"/></property>
+		<property name="stationDao"><ref bean="stationDao"/></property>
 	</bean>
 </beans>

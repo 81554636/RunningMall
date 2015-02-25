@@ -68,6 +68,7 @@
     
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
+        	<tx:method name="query" read-only="true" propagation="REQUIRED"/>
             <tx:method name="*" propagation="REQUIRED"/>
         </tx:attributes>
     </tx:advice>
@@ -91,6 +92,9 @@
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	<bean id="shipmentDao" class="ecommerce.rmall.dao.ShipmentDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<bean id="stationDao" class="ecommerce.rmall.dao.StationDAO">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 </beans>
