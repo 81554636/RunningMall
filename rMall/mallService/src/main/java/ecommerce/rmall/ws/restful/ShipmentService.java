@@ -1,5 +1,7 @@
 package ecommerce.rmall.ws.restful;
 
+import java.util.List;
+
 import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.Shipment;
 import ecommerce.rmall.ws.IShipmentService;
@@ -24,5 +26,15 @@ public class ShipmentService implements IShipmentService {
 		if(null != order)
 			rtn = this.shipmentServ.dispatch(order, stationID);
 		return rtn;
+	}
+
+	@Override
+	public Shipment queryByID(int shipmentID) {
+		return this.shipmentServ.queryByID(shipmentID);
+	}
+
+	@Override
+	public List<Shipment> queryByStation(int stationID) {
+		return this.shipmentServ.queryByStation(stationID);
 	}
 }

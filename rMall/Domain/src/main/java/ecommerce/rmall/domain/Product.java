@@ -4,13 +4,17 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @XmlRootElement (name = "Product")
 public class Product {
 	
 	private int id;
 	private String displayName;
 	private float price;
+	@JsonIgnore
 	private Date createDate;
+	@JsonIgnore
 	private Date lastUpdate;
 	
 	public int getId() {

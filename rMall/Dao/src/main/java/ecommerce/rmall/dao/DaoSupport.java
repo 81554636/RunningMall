@@ -13,11 +13,9 @@ public class DaoSupport {
 
 	@Resource(name="sessionFactory")
     private SessionFactory sessionFactory;
-
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-
     protected Session getSession() {
         return sessionFactory.getCurrentSession();
     }
@@ -30,7 +28,7 @@ public class DaoSupport {
 	protected <T> T get(Class<T> clazz, Integer id) {
         return (T) getSession().get(clazz, id);
     }
-
+    
     @SuppressWarnings("unchecked")
 	protected <T> List<T> findByProperty(Class<T> clazz, String property, Object value) {
         return getSession().createCriteria(clazz).add(eq(property, value)).list();

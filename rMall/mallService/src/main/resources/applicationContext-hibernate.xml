@@ -49,6 +49,18 @@
 				<prop key="hiberante.format_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 				<prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop>
+				<!-- 开启查询缓存 -->
+				<!-- <prop key="hibernate.cache.use_query_cache">true</prop> -->
+				<!-- 开启二级缓存 -->
+				<!-- <prop key="hibernate.cache.use_second_level_cache">true</prop> -->
+				<!-- 高速缓存提供程序 --> 
+				<!-- 由于spring也使用了Ehcache, 保证双方都使用同一个缓存管理器 -->
+				<!-- <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop> -->
+				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+                <prop key="hibernate.cache.use_structured_entries">true</prop>
+                <prop key="hibernate.cache.use_query_cache">true</prop>
 			</props>
 		</property>
 		<property name="mappingLocations">
@@ -95,6 +107,9 @@
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	<bean id="stationDao" class="ecommerce.rmall.dao.StationDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<bean id="productDao" class="ecommerce.rmall.dao.ProductDAO">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 </beans>

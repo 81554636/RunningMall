@@ -4,7 +4,8 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="ecommerce.rmall.domain.Product" table="rmall_product"> 
+    <class name="ecommerce.rmall.domain.Product" table="rmall_product">
+    	<cache usage="read-only"/>
         <id name="id" type="java.lang.Integer">
             <column name="id"/>
             <generator class="identity"/>
