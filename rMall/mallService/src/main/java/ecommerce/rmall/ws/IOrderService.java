@@ -1,5 +1,6 @@
 package ecommerce.rmall.ws;
 
+import javax.jws.WebService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -11,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import ecommerce.rmall.domain.Order;
 
+@WebService
 @Path("/Order")
 public interface IOrderService {
 
@@ -18,6 +20,7 @@ public interface IOrderService {
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	
 	Order Place(Order order, @QueryParam("customerID")int customerID);
 	
 	@GET
