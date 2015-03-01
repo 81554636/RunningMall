@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dwr>
+	<allow>
+		<convert match="ecommerce.rmall.portal.dwr.Message" converter="bean">
+			<param name="include" value="msg,time" />
+		</convert>
+		<create creator="spring" javascript="ChatService">
+			<param name="beanName" value="chatService" />
+		</create>
+	</allow>
+</dwr>  
