@@ -39,7 +39,6 @@ public class ChatMessageClient implements ApplicationListener<ChatMessageEvent>,
         	
             ScriptBuffer sb = new ScriptBuffer();
             String order = (String)event.getSource();
-            order = URLEncoder.encode(order);
             Customer customer = new Customer();
             customer.setAddress("虹梅路1801号");
             customer.setName("momo");
