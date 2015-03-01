@@ -14,25 +14,27 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<dwr.version>2.0.11-RELEASE</dwr.version>
-		<servlet.version>3.1.0</servlet.version>
+		<servlet.version>2.5</servlet.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 		</dependency>
-		<dependency>
-	        <groupId>org.springframework</groupId>
-	        <artifactId>spring-core</artifactId>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.springframework</groupId>
-	        <artifactId>spring-beans</artifactId>
-	    </dependency>
 	    <dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-jms</artifactId>
 		</dependency>
+
+  		<dependency>
+  			<groupId>org.apache.velocity</groupId>
+  			<artifactId>velocity</artifactId>
+  		</dependency>
+  		
+  		<dependency>
+  			<groupId>org.apache.velocity</groupId>
+  			<artifactId>velocity-tools</artifactId>
+  		</dependency>
 		
 		<dependency>
 		    <groupId>org.directwebremoting</groupId>
@@ -40,10 +42,15 @@
 		    <version>${dwr.version}</version>
 		</dependency>
 		
-		<dependency>
+		<!-- <dependency>
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>javax.servlet-api</artifactId>
 		    <version>${servlet.version}</version>
+		</dependency> -->
+		<dependency>
+    		<groupId>javax.servlet</groupId>
+    		<artifactId>servlet-api</artifactId>
+    		<version>2.5</version>
 		</dependency>
 	    
 	    <dependency>
