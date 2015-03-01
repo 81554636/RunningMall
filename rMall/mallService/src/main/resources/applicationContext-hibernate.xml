@@ -40,7 +40,7 @@
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource">
-			<ref local="dataSource" />
+			<ref bean="dataSource" />
 		</property>
 		<property name="hibernateProperties">
 			<props>
@@ -75,7 +75,7 @@
     </bean>
 
 	<aop:config proxy-target-class="true">
-        <aop:advisor pointcut="execution(* ecommerce.rmall.service.*Service.*(..))" advice-ref="txAdvice"/>
+        <aop:advisor pointcut="execution(* ecommerce.rmall.service.impl.*Service.*(..))" advice-ref="txAdvice"/>
     </aop:config>
     
     <tx:advice id="txAdvice" transaction-manager="transactionManager">

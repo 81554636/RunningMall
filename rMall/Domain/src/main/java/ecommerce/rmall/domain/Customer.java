@@ -14,7 +14,7 @@ public class Customer {
 	private int id;
 	private String name;
 	private String phone;
-	private String Address;
+	private String address;
 	@JsonIgnore
 	private Date createDate;
 	@JsonIgnore
@@ -39,11 +39,11 @@ public class Customer {
 	}
 
 	public String getAddress() {
-		return Address;
+		return address;
 	}
 
 	public void setAddress(String address) {
-		Address = address;
+		this.address = address;
 	}
 
 	public Date getCreateDate() {

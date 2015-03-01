@@ -9,7 +9,9 @@
 		<param-value>
 			classpath:applicationContext-spring.xml,
 			classpath:applicationContext-hibernate.xml,
-			classpath:applicationContext-cxf.xml</param-value>
+			classpath:applicationContext-message.xml,
+			classpath:applicationContext-cxf.xml
+		</param-value>
 	</context-param>
 
 	<listener>
