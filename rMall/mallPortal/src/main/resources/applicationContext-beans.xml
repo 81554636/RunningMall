@@ -13,4 +13,10 @@
 
 	<bean id="chatService" class="ecommerce.rmall.portal.dwr.ChatService"/>
 	<bean id="chatMessageClient" class="ecommerce.rmall.portal.dwr.ChatMessageClient"/>
+	
+	<bean id="orderService" class="ecommerce.rmall.service.impl.OrderService">
+		<property name="customerDao" ref="customerDao"/>
+		<property name="orderDao" ref="orderDao"/>
+		<property name="productDao" ref="productDao"/>
+	</bean>
 </beans>  

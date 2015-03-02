@@ -17,15 +17,65 @@
 		<servlet.version>2.5</servlet.version>
 	</properties>
 	<dependencies>
+		<!-- SPRING FRAMEWORK -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
 		</dependency>
 	    <dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-jms</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-jdbc</artifactId>
+		</dependency>
 
+		<!-- HIBERNATE -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.common</groupId>
+			<artifactId>hibernate-commons-annotations</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-ehcache</artifactId>
+	    </dependency>
+	    
+	    <!-- proxool -->  
+        <dependency>  
+            <groupId>com.cloudhopper.proxool</groupId>  
+            <artifactId>proxool</artifactId>  
+        </dependency>  
+        <dependency>  
+            <groupId>com.cloudhopper.proxool</groupId>  
+            <artifactId>proxool-cglib</artifactId>  
+        </dependency>
+        
+        <dependency>
+			<groupId>org.aspectj</groupId>
+		    <artifactId>aspectjweaver</artifactId>
+		</dependency>
+	    
   		<dependency>
   			<groupId>org.apache.velocity</groupId>
   			<artifactId>velocity</artifactId>
@@ -62,16 +112,27 @@
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-all</artifactId>
 		</dependency>
+		
+		<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>eCommerce</groupId>
-			<artifactId>Domain</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+        	<groupId>eCommerce</groupId>
+        	<artifactId>Domain</artifactId>
+        	<version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>eCommerce</groupId>
+        	<artifactId>Service</artifactId>
+        	<version>0.0.1-SNAPSHOT</version>
+        </dependency>
 	</dependencies>
 	<build>
 		<finalName>mallPortal</finalName>

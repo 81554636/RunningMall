@@ -14,6 +14,7 @@ import ecommerce.rmall.domain.Customer;
 import ecommerce.rmall.domain.Delivery;
 import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.OrderItem;
+import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.domain.Product;
 import ecommerce.rmall.message.MessageSender;
 import ecommerce.rmall.service.IOrderService;
@@ -77,5 +78,10 @@ public class OrderService implements IOrderService {
 	@Override
 	public Order query(int orderID) {
 		return this.orderDao.findByID(orderID);
+	}
+	
+	@Override
+	public Page<Order> queryWithPage(int pageNumber) {
+		return this.orderDao.findWithPage(pageNumber);
 	}
 }
