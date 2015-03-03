@@ -38,18 +38,21 @@ public class HelloController {
 	public String printWelcome(Model model, int pageNumber){
 		
 		Page<Order> page = this.orderService.queryWithPage(pageNumber);
+		model.addAttribute("STATUS_PENDING", "active");
 		model.addAttribute("page", page);
 		return "hello";
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/search")
-	public String search(){
+	public String search(Model model){
+		model.addAttribute("STATUS_SEARCH", "active");
 		return "search";
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/search")
 	public String search(Model model, String orderID){
 		Order order = this.orderService.query(Integer.parseInt(orderID));
+		model.addAttribute("STATUS_SEARCH", "active");
 		model.addAttribute("order", order);
 		return "search";
 	}

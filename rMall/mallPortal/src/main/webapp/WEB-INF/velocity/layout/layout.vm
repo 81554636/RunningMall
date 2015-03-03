@@ -18,21 +18,21 @@
 			<div class="navbar navbar-inverse">
 				<div class="navbar-inner">
 					<div class="container-fluid">
-						<a data-toggle="collapse" data-target=".navbar-responsive-collapse" class="btn btn-navbar"></a> <a href="#" class="brand">平台订单记录</a>
+						<a data-toggle="collapse" data-target=".navbar-responsive-collapse" class="btn btn-navbar"></a>
+						<a href="#" class="brand">平台订单记录</a>
 						<div class="nav-collapse collapse navbar-responsive-collapse">
 							<ul class="nav">
-								<li>
-									<a href="pendingOrder.html">待分配订单</a>
+								<li class="${STATUS_PENDING}">
+									<a href="first.do">待分配订单</a>
 								</li>
-								<li class="active">
+								<li>
 									<a href="order.html">已分配订单</a>
 								</li>
-								<li>
-									<a href="search.html">查询订单</a>
+								<li class="${STATUS_SEARCH}">
+									<a href="search.do">查询订单</a>
 								</li>
 							</ul>
 						</div>
-						
 					</div>
 				</div>
 			</div>

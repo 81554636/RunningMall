@@ -27,12 +27,8 @@
 		<tr class="success">
 			<td>$!{order.id}</td>
 			<td>$!{order.status}</td>
-			<td>
-				01/04/2012
-			</td>
-			<td>
-				ÒÑÍê³ÉÅÉËÍ
-			</td>
+			<td>01/04/2012</td>
+			<td>ÒÑÍê³ÉÅÉËÍ</td>
 			<td>
 				<button class="btn btn-small btn-danger disabled" type="button">È¡Ïû¶©µ¥</button>
 			</td>
