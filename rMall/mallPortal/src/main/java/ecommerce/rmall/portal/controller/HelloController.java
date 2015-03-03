@@ -1,6 +1,5 @@
 package ecommerce.rmall.portal.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
 import org.directwebremoting.Browser;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -38,21 +38,24 @@ public class HelloController {
 	public String printWelcome(Model model, int pageNumber){
 		
 		Page<Order> page = this.orderService.queryWithPage(pageNumber);
-		model.addAttribute("STATUS_PENDING", "active");
+		model.addAttribute("CURRENT", "PENDING");
 		model.addAttribute("page", page);
 		return "hello";
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/search")
 	public String search(Model model){
-		model.addAttribute("STATUS_SEARCH", "active");
+		
+		model.addAttribute("CURRENT", "SEARCH");
 		return "search";
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/search")
+	@ModelAttribute()
 	public String search(Model model, String orderID){
+		
+		model.addAttribute("CURRENT", "SEARCH");
 		Order order = this.orderService.query(Integer.parseInt(orderID));
-		model.addAttribute("STATUS_SEARCH", "active");
 		model.addAttribute("order", order);
 		return "search";
 	}

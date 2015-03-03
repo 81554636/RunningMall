@@ -22,13 +22,13 @@
 						<a href="#" class="brand">平台订单记录</a>
 						<div class="nav-collapse collapse navbar-responsive-collapse">
 							<ul class="nav">
-								<li class="${STATUS_PENDING}">
+								<li #if(${CURRENT}=="PENDING")class='active'#end>
 									<a href="first.do">待分配订单</a>
 								</li>
-								<li>
+								<li #if(${CURRENT}=="ASSIGNED")class='active'#end>
 									<a href="order.html">已分配订单</a>
 								</li>
-								<li class="${STATUS_SEARCH}">
+								<li #if(${CURRENT}=="SEARCH")class='active'#end>
 									<a href="search.do">查询订单</a>
 								</li>
 							</ul>
