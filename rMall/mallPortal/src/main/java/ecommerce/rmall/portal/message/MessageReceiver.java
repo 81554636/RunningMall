@@ -12,16 +12,16 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import ecommerce.rmall.domain.Order;
+import ecommerce.rmall.message.OrderConverter;
 import ecommerce.rmall.portal.dwr.ChatMessageEvent;
 
 public class MessageReceiver implements MessageListener, ApplicationContextAware {
 
 	private static Logger logger = LoggerFactory.getLogger(MessageReceiver.class);
+	
     private ApplicationContext ctx;
-    @Override
-    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
-        this.ctx = ctx;
-    }
+    @Override public void setApplicationContext(ApplicationContext ctx) throws BeansException { this.ctx = ctx; }
 
 	@Override
 	public void onMessage(Message message) {
@@ -41,21 +41,13 @@ public class MessageReceiver implements MessageListener, ApplicationContextAware
 		} else if(message instanceof ObjectMessage){
 			
 			ObjectMessage om = (ObjectMessage) message;
-	        try {  
-	            String key1 = om.getStringProperty("key1");  
-	              
-	            System.out.println(key1);  
-	              
-	            System.out.println("model:"+om.getJMSDeliveryMode());  
-	            System.out.println("destination:"+om.getJMSDestination());  
-	            System.out.println("type:"+om.getJMSType());  
-	            System.out.println("messageId:"+om.getJMSMessageID());  
-	            System.out.println("time:"+om.getJMSTimestamp());  
-	            System.out.println("expiredTime:"+om.getJMSExpiration());  
-	            System.out.println("priority:"+om.getJMSPriority());  
-	        } catch (JMSException e) {  
-	            e.printStackTrace();  
-	        }
+			try {
+				logger.debug("{ messageId:{}, destination:{} }", om.getJMSMessageID(), om.getJMSDestination());
+				//Order order = (Order)this.msgConvert.fromMessage(message);
+				
+			} catch (JMSException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 }

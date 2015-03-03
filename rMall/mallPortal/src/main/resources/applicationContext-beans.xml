@@ -13,6 +13,8 @@
 
 	<bean id="chatService" class="ecommerce.rmall.portal.dwr.ChatService"/>
 	<bean id="chatMessageClient" class="ecommerce.rmall.portal.dwr.ChatMessageClient"/>
+	<bean id="messagePush" class="ecommerce.rmall.portal.dwr.MessagePush"/>
+	<bean id="messagePushClient" class="ecommerce.rmall.portal.dwr.MessagePushClient"/>
 	
 	<bean id="orderService" class="ecommerce.rmall.service.impl.OrderService">
 		<property name="customerDao" ref="customerDao"/>

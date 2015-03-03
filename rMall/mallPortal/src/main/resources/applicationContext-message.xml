@@ -23,9 +23,12 @@
     
     <!-- PTP jms模板 -->  
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">  
-        <property name="connectionFactory" ref="queueConnectionFactory"/>  
-        <property name="defaultDestination" ref="destination" />  
-        <property name="pubSubDomain" value="false" />  
+        <property name="connectionFactory" ref="queueConnectionFactory"/>
+        <property name="defaultDestination" ref="destination"/>
+        <!-- <property name="messageConverter">
+        	<bean class="ecommerce.rmall.message.OrderConverter"/>
+        </property> -->
+        <property name="pubSubDomain" value="false" />
     </bean>
 
     <!-- 消息接收方 -->  

@@ -1,5 +1,12 @@
 package ecommerce.rmall.portal.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Collection;
+
+import org.directwebremoting.Browser;
+import org.directwebremoting.ScriptBuffer;
+import org.directwebremoting.ScriptSession;
+import org.directwebremoting.ScriptSessionFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -34,4 +41,47 @@ public class HelloController {
 		model.addAttribute("page", page);
 		return "hello";
 	}
+	
+	@RequestMapping(method=RequestMethod.POST, value="/send")
+	public String sendMessage(String user, String msg){
+		
+		//try {
+		//	String str = new String(msg.getBytes("iso-8859-1"),"UTF-8");
+			sendMessageAuto(user, msg);
+		///} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//}		
+		return "redirect:../index.html"; 
+	}
+	
+    public static void sendMessageAuto(String userid, String message) {  
+        
+        final String userId = userid;  
+  
+        final String autoMessage = "{userId:'ryo', message:'hello'}";  
+        final String OP_ID = "userId";
+        
+        Browser.withAllSessionsFiltered(
+        		new ScriptSessionFilter() {
+        			public boolean match(ScriptSession session) {
+        				if (session.getAttribute(OP_ID) == null)
+        					return false;
+        				else
+        					return session.getAttribute(OP_ID).equals(userId);
+        			}
+        		},
+        		new Runnable() {
+        			private ScriptBuffer script = new ScriptBuffer();
+        			public void run() {
+        				//script.appendCall("showMessage", autoMessage);
+        				script.appendScript("showMessage("+autoMessage+")");
+        				Collection<ScriptSession> sessions = Browser.getTargetSessions();
+        				for (ScriptSession scriptSession : sessions)
+        					scriptSession.addScript(script);
+  
+        			}
+        		});  
+  
+    }  
 }

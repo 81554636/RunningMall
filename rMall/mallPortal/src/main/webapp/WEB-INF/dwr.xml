@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dwr PUBLIC
+    "-//GetAhead Limited//DTD Direct Web Remoting 2.0//EN"
+    "http://getahead.ltd.uk/dwr/dwr20.dtd"> 
 <dwr>
 	<allow>
 		<convert match="ecommerce.rmall.portal.dwr.Message" converter="bean">
@@ -8,4 +10,11 @@
 			<param name="beanName" value="chatService" />
 		</create>
 	</allow>
+	
+	<allow>  
+        <create javascript="MessagePush" creator="spring">  
+            <!-- <param name="class" value="ecommerce.rmall.portal.dwr.MessagePush"/> -->  
+            <param name="beanName" value="messagePush" />
+        </create>  
+    </allow>  
 </dwr>  

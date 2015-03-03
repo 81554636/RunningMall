@@ -13,7 +13,7 @@
 	<name>mallPortal Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<dwr.version>2.0.11-RELEASE</dwr.version>
+		<dwr.version>3.0.0-rc3-RELEASE</dwr.version>
 		<servlet.version>2.5</servlet.version>
 	</properties>
 	<dependencies>

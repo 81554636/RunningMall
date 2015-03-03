@@ -6,8 +6,8 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement (name = "Order")
-public class Order {
-	
+public class Order{
+
 	private int id;
 	private String status;
 	private Date createDate;

@@ -15,8 +15,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk-version>1.6</jdk-version>
 		<junit-version>4.11</junit-version>
-		<spring.version>3.2.13.RELEASE</spring.version>
-		<cxf.version>2.7.12</cxf.version>
+		<spring.version>3.2.10.RELEASE</spring.version>
+		<cxf.version>2.7.15</cxf.version>
+		<!-- <cxf.version>3.0.4</cxf.version> -->
 		<jackson.version>1.8.4</jackson.version>
 		<hibernate.version>4.2.4.Final</hibernate.version>
 		<velocity.version>1.7</velocity.version>

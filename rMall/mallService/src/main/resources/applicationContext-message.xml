@@ -20,11 +20,14 @@
     <bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
         <constructor-arg value="mall-portal" />
     </bean>
-    
+
     <!-- PTP jms模板 -->  
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
         <property name="connectionFactory" ref="queueConnectionFactory"/>
         <property name="defaultDestination" ref="destination" />
+        <!-- <property name="messageConverter">
+        	<bean class="ecommerce.rmall.message.OrderConverter"/>
+        </property> -->
         <property name="pubSubDomain" value="false" />
     </bean>
     

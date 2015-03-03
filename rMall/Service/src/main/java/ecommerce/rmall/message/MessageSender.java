@@ -12,4 +12,8 @@ public class MessageSender {
 	public void sendMessage(String message){
 		this.jmsTemplate.convertAndSend(message);
 	}
+	
+	public void sendObject(Object object){
+		this.jmsTemplate.convertAndSend(object);
+	}
 }
