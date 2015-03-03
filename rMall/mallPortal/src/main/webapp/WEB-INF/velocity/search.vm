@@ -25,8 +25,8 @@
 	</thead>
 	<tbody>
 		<tr class="success">
-			<td>${order.id}</td>
-			<td>${order.status}</td>
+			<td>$!{order.id}</td>
+			<td>$!{order.status}</td>
 			<td>
 				01/04/2012
 			</td>
