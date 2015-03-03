@@ -42,6 +42,18 @@ public class HelloController {
 		return "hello";
 	}
 	
+	@RequestMapping(method=RequestMethod.GET, value="/search")
+	public String search(){
+		return "search";
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, value="/search")
+	public String search(Model model, String orderID){
+		Order order = this.orderService.query(Integer.parseInt(orderID));
+		model.addAttribute("order", order);
+		return "search";
+	}
+	
 	@RequestMapping(method=RequestMethod.POST, value="/send")
 	public String sendMessage(String user, String msg){
 		
