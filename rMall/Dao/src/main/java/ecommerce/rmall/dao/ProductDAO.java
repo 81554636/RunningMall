@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.hibernate.Query;
 
+import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.domain.Product;
 
-public class ProductDAO extends DaoSupport {
+public class ProductDAO extends DaoSupport implements IPagination<Product> {
 	
 	public Product findByID(int identity){
 		return super.get(Product.class, identity);
@@ -27,5 +28,15 @@ public class ProductDAO extends DaoSupport {
 		query.setCacheable(true);
     	query.setParameterList("pList", ids);
     	return query.list();
+	}
+
+	@Override
+	public Page<Product> findWithPage(int pageNumber) {
+		
+		Page<Product> page = new Page<Product>();
+		page.setCurrentPage(pageNumber);
+		List<Product> rtn = super.queryForList("from Product", new Object[]{}, page);
+		page.setDataList(rtn);
+		return page;
 	}
 }

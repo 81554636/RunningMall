@@ -5,7 +5,7 @@ import java.util.List;
 import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.Page;
 
-public class OrderDAO extends DaoSupport {
+public class OrderDAO extends DaoSupport implements IPagination<Order>{
 	
 	public void save(Order order){
 		super.save(order);
@@ -15,6 +15,7 @@ public class OrderDAO extends DaoSupport {
 		return super.get(Order.class, identity);
 	}
 	
+	@Override
 	public Page<Order> findWithPage(int pageNumber){
 		
 		Page<Order> page = new Page<Order>();

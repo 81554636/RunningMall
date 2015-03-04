@@ -69,11 +69,8 @@ public class OrderService implements IOrderService {
 			logger.info("send ORDER to DataBase");
 			this.orderDao.save(order);
 			
-			logger.info("send ORDER to MessageQueue as PlainText");
-			this.msgSender.sendMessage(new com.google.gson.Gson().toJson(order));
-			
-			//logger.info("send ORDER to MessageQueue as Object");
-			//this.msgSender.sendObject(order);
+			//logger.info("send ORDER to MessageQueue as PlainText");
+			//this.msgSender.sendMessage(new com.google.gson.Gson().toJson(order));
 		}
 		return order;
 	}

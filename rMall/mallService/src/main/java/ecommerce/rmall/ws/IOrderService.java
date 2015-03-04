@@ -20,7 +20,6 @@ public interface IOrderService {
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	
 	Order Place(Order order, @QueryParam("customerID")int customerID);
 	
 	@GET

@@ -1,7 +1,10 @@
 package ecommerce.rmall.domain;
 
 import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
+@XmlRootElement (name = "Page")
 public class Page<T> {
 
     private static final int DEFAULT_PAGE_SIZE = 10;
@@ -14,11 +17,11 @@ public class Page<T> {
     public List<T> getDataList() { return dataList; }
 	public void setDataList(List<T> dataList) { this.dataList = dataList; }
 	
+	public int getTotalCount(){ return this.totalCount; }
 	public void setTotalCount(int count){ this.totalCount = count; }
-    public int getTotalCount(){ return this.totalCount; }
     
-    public void setCurrentPage(int currentPage) { this.currentPage = currentPage; }
     public int getCurrentPage(){ return currentPage; }
+    public void setCurrentPage(int currentPage) { this.currentPage = currentPage; }
 	
     public void setPageSize(int pageSize) { this.pageSize = pageSize; }
 	public int getPageSize() { return pageSize; }

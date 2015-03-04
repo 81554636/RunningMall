@@ -12,6 +12,7 @@ public class Product {
 	private int id;
 	private String displayName;
 	private float price;
+	private String url;
 	@JsonIgnore
 	private Date createDate;
 	@JsonIgnore
@@ -31,6 +32,14 @@ public class Product {
 
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public float getPrice() {

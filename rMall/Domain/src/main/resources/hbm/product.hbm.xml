@@ -11,6 +11,7 @@
             <generator class="identity"/>
         </id>
         <property name="displayName" type="java.lang.String" column="displayName" length="64"/>
+        <property name="url" type="java.lang.String" column="url" length="256"/>
         <property name="price" type="float" column="price"/>        
         <property name="createDate" type="java.sql.Timestamp" column="createDate"/>
         <property name="lastUpdate" type="java.sql.Timestamp" column="lastUpdate"/>

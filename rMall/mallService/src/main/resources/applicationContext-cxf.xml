@@ -44,6 +44,9 @@
         			<ref bean="shipmentService"/>
         		</property>
         	</bean>
+        	<bean class="ecommerce.rmall.ws.restful.ProductService">
+        		<property name="productService" ref="productService"/>
+        	</bean>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
 		<!-- <bean class="org.apache.cxf.jaxrs.provider.JAXBElementProvider"/> -->
