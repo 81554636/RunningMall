@@ -42,21 +42,14 @@
 		<profile>
 			<id>local</id>
 			<properties>
-				<jdbc.Driver>com.mysql.jdbc.Driver</jdbc.Driver>
-				<jdbc.url><![CDATA[jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf-8]]></jdbc.url>
-				<jdbc.user>root</jdbc.user>
-				<jdbc.pass>123456</jdbc.pass>
+				<environment.path>local</environment.path>
 			</properties>
 		</profile>
 		
 		<profile>
 			<id>Product</id>
 			<properties>
-				<jdbc.Driver>com.mysql.jdbc.Driver</jdbc.Driver>
-				<!-- <jdbc.url>jdbc:mysql://localhost:3306/runningMall?useUnicode=true&amp;characterEncoding=utf-8</jdbc.url> -->
-				<jdbc.url><![CDATA[jdbc:mysql://localhost:3306/runningMall?useUnicode=true&amp;characterEncoding=utf-8]]></jdbc.url>
-				<jdbc.user>mallAdmin</jdbc.user>
-				<jdbc.pass>123456</jdbc.pass>
+				<environment.path>Product</environment.path>
 			</properties>
 		</profile>
 	</profiles>

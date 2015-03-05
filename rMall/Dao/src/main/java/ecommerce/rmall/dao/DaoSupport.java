@@ -61,35 +61,50 @@ public class DaoSupport {
      * @param page
      * @return
      */
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	protected <T> List<T> queryForList(String hql, Object[] params, Page<T> page) {  
     	  
-        generatePageTotalCount(hql, params, page);
-        Query query = sessionFactory.getCurrentSession().createQuery(hql);  
-        //setQueryParams(query, params);
-        for(int pos=0; pos<params.length; pos++)
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        Query queryCount = sessionFactory.getCurrentSession().createQuery("select count(id) " + hql);
+        for(int pos=0; pos<params.length; pos++){
         	query.setParameter(pos, params[pos]);
+        	queryCount.setParameter(pos, params[pos]);
+        }
+        
+        int totalCount = ((Long) queryCount.uniqueResult()).intValue();
+        page.setTotalCount(totalCount);
+        
         query.setFirstResult(page.getFirstIndex());  
-        query.setMaxResults(page.getPageSize());  
-        return query.list();  
+        query.setMaxResults(page.getPageSize());
+        
+        return query.list();
     }
     
-    /** 
-     * 该方法会改变参数page的totalCount字段 
-     *  
-     * @param originHql 原始hql语句 
-     * @param params 原始参数 
-     * @param page 页面对象 
-     */  
-    private void generatePageTotalCount(String originHql, Object[] params, Page page) {
-    	
-        String generatedCountHql = "select count(*) " + originHql;  
-        Query countQuery = sessionFactory.getCurrentSession().createQuery(generatedCountHql);  
-        //setQueryParams(countQuery, params);
-        for(int pos=0; pos<params.length; pos++)
-        	countQuery.setParameter(pos, params[pos]);
+	/***
+     * @param hql 举例:from Class where name=?
+     * @param params 
+     * @param page
+     * @return
+     */
+	@SuppressWarnings("unchecked")
+	protected <T> List<T> queryForListWithCache(String hql, Object[] params, Page<T> page) {  
+  	  
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setCacheable(true);
+        Query queryCount = sessionFactory.getCurrentSession().createQuery("select count(id) " + hql);
+        queryCount.setCacheable(true);
         
-        int totalCount = ((Long) countQuery.uniqueResult()).intValue();  
-        page.setTotalCount(totalCount);  
-    }  
+        for(int pos=0; pos<params.length; pos++){
+        	query.setParameter(pos, params[pos]);
+        	queryCount.setParameter(pos, params[pos]);
+        }
+        
+        int totalCount = ((Long) queryCount.uniqueResult()).intValue();
+        page.setTotalCount(totalCount);
+        
+        query.setFirstResult(page.getFirstIndex());  
+        query.setMaxResults(page.getPageSize());
+        
+        return query.list();
+    }
 }

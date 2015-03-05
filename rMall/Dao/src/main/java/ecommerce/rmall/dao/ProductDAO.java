@@ -35,7 +35,7 @@ public class ProductDAO extends DaoSupport implements IPagination<Product> {
 		
 		Page<Product> page = new Page<Product>();
 		page.setCurrentPage(pageNumber);
-		List<Product> rtn = super.queryForList("from Product", new Object[]{}, page);
+		List<Product> rtn = super.queryForListWithCache("from Product", new Object[]{}, page);
 		page.setDataList(rtn);
 		return page;
 	}
