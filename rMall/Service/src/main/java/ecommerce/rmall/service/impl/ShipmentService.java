@@ -6,6 +6,7 @@ import java.util.List;
 import ecommerce.rmall.dao.ShipmentDAO;
 import ecommerce.rmall.dao.StationDAO;
 import ecommerce.rmall.domain.Order;
+import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.domain.Shipment;
 import ecommerce.rmall.domain.Station;
 import ecommerce.rmall.service.IShipmentService;
@@ -45,8 +46,15 @@ public class ShipmentService implements IShipmentService {
 	public Shipment queryByID(int shipmentID) {
 		return this.shipDao.findByID(shipmentID);
 	}
+	
 	@Override
 	public List<Shipment> queryByStation(int stationID) {
 		return this.shipDao.findByStationID(stationID);
+	}
+	
+	@Override
+	public Page<Shipment> queryBySession(String sessionKey, int pageNumber) {
+		String hql = "from Shipment where sessionKey=?";
+		return this.shipDao.findByHQLWithPage(hql, new Object[]{sessionKey}, pageNumber);
 	}
 }

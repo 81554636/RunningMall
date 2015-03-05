@@ -24,4 +24,14 @@ public class OrderDAO extends DaoSupport implements IPagination<Order>{
 		page.setDataList(rtn);
 		return page;
 	}
+
+	@Override
+	public Page<Order> findByHQLWithPage(String hql, Object[] params, int pageNumber) {
+		
+		Page<Order> page = new Page<Order>();
+		page.setCurrentPage(pageNumber);
+		List<Order> rtn = super.queryForList(hql, params, page);
+		page.setDataList(rtn);
+		return page;
+	}
 }

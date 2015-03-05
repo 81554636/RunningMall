@@ -18,6 +18,7 @@
 		<spring.version>3.2.10.RELEASE</spring.version>
 		<cxf.version>2.7.15</cxf.version>
 		<!-- <cxf.version>3.0.4</cxf.version> -->
+		
 		<jackson.version>1.8.4</jackson.version>
 		<hibernate.version>4.2.4.Final</hibernate.version>
 		<velocity.version>1.7</velocity.version>

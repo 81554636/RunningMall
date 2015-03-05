@@ -9,7 +9,18 @@
             <column name="id"/>
             <generator class="identity"/>
         </id>
-        <property name="name" type="java.lang.String" column="name" length="64"/>
+        <property name="name" type="java.lang.String" column="displayName" length="64"/>
         <property name="createDate" type="java.sql.Timestamp" column="createDate"/>
+        
+        <!-- <property name="credential.username" type="java.lang.String" column="username" length="32"/>
+        <property name="credential.password" type="java.lang.String" column="password" length="32"/>
+        <property name="credential.sessionKey" type="java.lang.String" column="session" length="32"/>
+        <property name="credential.expireTime" type="java.sql.Timestamp" column="expire"/> -->
+        <component name="credential">
+        	<property name="username" type="java.lang.String" column="username" length="32"/>
+        	<property name="password" type="java.lang.String" column="password" length="32"/>
+        	<property name="sessionKey" type="java.lang.String" column="session" length="32"/>
+        	<property name="expireTime" type="java.sql.Timestamp" column="expire"/>
+        </component>
     </class>
 </hibernate-mapping>

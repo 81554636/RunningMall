@@ -39,4 +39,14 @@ public class ProductDAO extends DaoSupport implements IPagination<Product> {
 		page.setDataList(rtn);
 		return page;
 	}
+
+	@Override
+	public Page<Product> findByHQLWithPage(String hql, Object[] params, int pageNumber) {
+		
+		Page<Product> page = new Page<Product>();
+		page.setCurrentPage(pageNumber);
+		List<Product> rtn = super.queryForListWithCache("from Product", params, page);
+		page.setDataList(rtn);
+		return page;
+	}
 }

@@ -10,6 +10,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.Page;
 
 public class DaoSupport {

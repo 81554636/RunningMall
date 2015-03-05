@@ -11,6 +11,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import ecommerce.rmall.domain.Order;
+import ecommerce.rmall.domain.Page;
 
 @WebService
 @Path("/Order")
@@ -27,4 +28,10 @@ public interface IOrderService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	Order Query(@PathParam("orderID")int orderID);
+	
+	@GET
+	@Path("/search")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	Page<Order> Query(@QueryParam("phone") String phone, @QueryParam("pageNumber")int pageNumber);
 }

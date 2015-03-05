@@ -21,7 +21,7 @@ import ecommerce.rmall.service.IOrderService;
 
 public class OrderService implements IOrderService {
 
-	//private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+	private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 	
 	private CustomerDAO customerDao;
 	private OrderDAO orderDao;
@@ -40,6 +40,7 @@ public class OrderService implements IOrderService {
 	public void setMessageSender(MessageSender msgSender) {
 		this.msgSender = msgSender;
 	}
+	
 	@Override
 	public Order place(Delivery delivery, Set<OrderItem> items, int customerID) {
 
@@ -66,7 +67,7 @@ public class OrderService implements IOrderService {
 				order.getDetails().add(item);
 			}
 			
-			//logger.info("send ORDER to DataBase");
+			logger.info("send ORDER to DataBase");
 			this.orderDao.save(order);
 			
 			//logger.info("send ORDER to MessageQueue as PlainText");
@@ -83,5 +84,11 @@ public class OrderService implements IOrderService {
 	@Override
 	public Page<Order> queryWithPage(int pageNumber) {
 		return this.orderDao.findWithPage(pageNumber);
+	}
+	
+	@Override
+	public Page<Order> queryByPhoneWithPage(String phone, int pageNumber) {
+		String hql = "from Order where customer.phone=?";
+		return this.orderDao.findByHQLWithPage(hql, new Object[]{phone}, pageNumber);
 	}
 }
