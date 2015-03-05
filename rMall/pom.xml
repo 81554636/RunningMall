@@ -37,7 +37,30 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	
+	<profiles>
+		<profile>
+			<id>local</id>
+			<properties>
+				<jdbc.Driver>com.mysql.jdbc.Driver</jdbc.Driver>
+				<jdbc.url><![CDATA[jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf-8]]></jdbc.url>
+				<jdbc.user>root</jdbc.user>
+				<jdbc.pass>123456</jdbc.pass>
+			</properties>
+		</profile>
+		
+		<profile>
+			<id>Product</id>
+			<properties>
+				<jdbc.Driver>com.mysql.jdbc.Driver</jdbc.Driver>
+				<!-- <jdbc.url>jdbc:mysql://localhost:3306/runningMall?useUnicode=true&amp;characterEncoding=utf-8</jdbc.url> -->
+				<jdbc.url><![CDATA[jdbc:mysql://localhost:3306/runningMall?useUnicode=true&amp;characterEncoding=utf-8]]></jdbc.url>
+				<jdbc.user>mallAdmin</jdbc.user>
+				<jdbc.pass>123456</jdbc.pass>
+			</properties>
+		</profile>
+	</profiles>
+	
 	<dependencyManagement>
 		<dependencies>
 			<!-- CXF -->
@@ -163,12 +186,12 @@
 			<dependency><!-- SLF4j -->
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
-				<version>1.7.5</version>
+				<version>1.7.10</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
-				<version>1.7.5</version>
+				<version>1.7.10</version>
 			</dependency>
 			
 			<dependency><!-- JACKSON -->

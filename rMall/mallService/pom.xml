@@ -12,6 +12,17 @@
 	<packaging>war</packaging>
 	<name>mallService Maven Webapp</name>
 	<url>http://maven.apache.org</url>
+	
+	<build>
+		<finalName>mallService</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+	
 	<dependencies>
 		<!-- CXF -->
 		<dependency>
@@ -127,7 +138,4 @@
         	<version>0.0.1-SNAPSHOT</version>
         </dependency>
 	</dependencies>
-	<build>
-		<finalName>mallService</finalName>
-	</build>
 </project>

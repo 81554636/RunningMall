@@ -20,7 +20,7 @@
 	<!-- 数据源 -->
 	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
 		<property name="driver" value="${jdbc.driverClassName}" />
-		<property name="driverUrl" value="${jdbc.url}" />
+		<property name="driverUrl" value="${jdbc.URL}" />
 		<property name="user" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
 		<!-- proxool自动侦察各个连接状态的时间间隔(毫秒),侦察到空闲的连接就马上回收,超时的销毁 （默认30秒） -->

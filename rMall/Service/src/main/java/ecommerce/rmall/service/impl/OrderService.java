@@ -21,7 +21,7 @@ import ecommerce.rmall.service.IOrderService;
 
 public class OrderService implements IOrderService {
 
-	private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+	//private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 	
 	private CustomerDAO customerDao;
 	private OrderDAO orderDao;
@@ -66,7 +66,7 @@ public class OrderService implements IOrderService {
 				order.getDetails().add(item);
 			}
 			
-			logger.info("send ORDER to DataBase");
+			//logger.info("send ORDER to DataBase");
 			this.orderDao.save(order);
 			
 			//logger.info("send ORDER to MessageQueue as PlainText");

@@ -12,10 +12,22 @@
 	<packaging>war</packaging>
 	<name>mallPortal Maven Webapp</name>
 	<url>http://maven.apache.org</url>
+	
 	<properties>
 		<dwr.version>3.0.0-rc3-RELEASE</dwr.version>
 		<servlet.version>2.5</servlet.version>
 	</properties>
+	
+	<build>
+		<finalName>mallPortal</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+	
 	<dependencies>
 		<!-- SPRING FRAMEWORK -->
 		<dependency>
@@ -134,7 +146,4 @@
         	<version>0.0.1-SNAPSHOT</version>
         </dependency>
 	</dependencies>
-	<build>
-		<finalName>mallPortal</finalName>
-	</build>
 </project>

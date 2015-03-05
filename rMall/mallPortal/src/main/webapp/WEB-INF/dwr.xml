@@ -2,14 +2,14 @@
     "-//GetAhead Limited//DTD Direct Web Remoting 2.0//EN"
     "http://getahead.ltd.uk/dwr/dwr20.dtd"> 
 <dwr>
-	<allow>
+	<!-- <allow>
 		<convert match="ecommerce.rmall.portal.dwr.Message" converter="bean">
 			<param name="include" value="msg,time" />
 		</convert>
 		<create creator="spring" javascript="ChatService">
 			<param name="beanName" value="chatService" />
 		</create>
-	</allow>
+	</allow> -->
 	
 	<allow>  
         <create javascript="MessagePush" creator="spring">  

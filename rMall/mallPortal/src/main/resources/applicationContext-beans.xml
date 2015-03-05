@@ -11,8 +11,8 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd        
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">  
 
-	<bean id="chatService" class="ecommerce.rmall.portal.dwr.ChatService"/>
-	<bean id="chatMessageClient" class="ecommerce.rmall.portal.dwr.ChatMessageClient"/>
+	<!-- <bean id="chatService" class="ecommerce.rmall.portal.dwr.ChatService"/> -->
+	<!-- <bean id="chatMessageClient" class="ecommerce.rmall.portal.dwr.ChatMessageClient"/> -->
 	<bean id="messagePush" class="ecommerce.rmall.portal.dwr.MessagePush"/>
 	<bean id="messagePushClient" class="ecommerce.rmall.portal.dwr.MessagePushClient"/>
 	
