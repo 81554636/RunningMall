@@ -17,6 +17,14 @@ public interface IOrderService {
 	 * @return
 	 */
 	Order place(Delivery delivery, Set<OrderItem> items, int customerID);
+	
+	/***
+	 * 下订单(新註冊用戶/已知用戶信息【根據電話找到customer】)
+	 * @param delivery
+	 * @param items
+	 * @return
+	 */
+	Order place(Delivery delivery, Set<OrderItem> items);
 	/***
 	 * 订单查询(根据订单号)
 	 * @param orderID

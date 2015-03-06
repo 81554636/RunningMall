@@ -13,15 +13,21 @@ import javax.ws.rs.core.MediaType;
 import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.Page;
 
-@WebService
+@WebService(endpointInterface="ecommerce.rmall.webservice", serviceName="Order")
 @Path("/Order")
 public interface IOrderService {
-
+	
 	@POST
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	Order Place(Order order, @QueryParam("customerID")int customerID);
+	Order Place(Order order);
+
+	@POST
+	@Path("/Customer/{customerID}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	Order Place(Order order, @PathParam("customerID")int customerID);
 	
 	@GET
 	@Path("/{orderID}")

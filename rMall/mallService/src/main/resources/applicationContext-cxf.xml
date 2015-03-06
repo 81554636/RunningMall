@@ -32,20 +32,17 @@
     <jaxrs:server id="serviceContainer" address="/REST">
         <jaxrs:serviceBeans>
         	<bean class="ecommerce.rmall.ws.restful.OrderService">
-        		<property name="orderService">
-        			<ref bean="orderService"/>
-        		</property>
+        		<property name="orderService" ref="orderService"/>
         	</bean>
         	<bean class="ecommerce.rmall.ws.restful.ShipmentService">
-        		<property name="orderService">
-        			<ref bean="orderService"/>
-        		</property>
-        		<property name="shipmentService">
-        			<ref bean="shipmentService"/>
-        		</property>
+        		<property name="orderService" ref="orderService"/>
+        		<property name="shipmentService" ref="shipmentService"/>
         	</bean>
         	<bean class="ecommerce.rmall.ws.restful.ProductService">
         		<property name="productService" ref="productService"/>
+        	</bean>
+        	<bean class="ecommerce.rmall.ws.restful.StationService">
+        		<property name="stationService" ref="stationService"/>
         	</bean>
         </jaxrs:serviceBeans>
         <jaxrs:providers>

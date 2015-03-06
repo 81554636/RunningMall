@@ -10,7 +10,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.Page;
 
 public class DaoSupport {
@@ -33,16 +32,6 @@ public class DaoSupport {
         return (T) getSession().get(clazz, id);
     }
     
-    @SuppressWarnings("unchecked")
-	protected <T> List<T> findByProperty(Class<T> clazz, String property, Object value) {
-        return getSession().createCriteria(clazz).add(eq(property, value)).list();
-    }
-
-    @SuppressWarnings("unchecked")
-	protected <T> List<T> findAll(Class<T> clazz) {
-        return getSession().createCriteria(clazz).list();
-    }
-
     protected void update(Object obj) {
         getSession().update(obj);
     }
@@ -54,6 +43,25 @@ public class DaoSupport {
 
     protected void delete(Object obj) {
         getSession().delete(obj);
+    }
+    
+    @SuppressWarnings("unchecked")
+	protected <T> List<T> findByProperty(Class<T> clazz, String property, Object value) {
+        return getSession().createCriteria(clazz).add(eq(property, value)).list();
+    }
+
+    @SuppressWarnings("unchecked")
+	protected <T> List<T> findAll(Class<T> clazz) {
+        return getSession().createCriteria(clazz).list();
+    }
+    
+    @SuppressWarnings("unchecked")
+	protected <T> List<T> queryByHql(String hql, Object[] params){
+    	
+    	Query query = this.getSession().createQuery(hql);
+		for(int i=0; i<params.length; i++)
+			query.setParameter(i, params[i]);
+		return query.list();
     }
     
     /***

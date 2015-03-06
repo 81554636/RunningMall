@@ -19,6 +19,13 @@ public class OrderService implements ecommerce.rmall.ws.IOrderService {
 		Order newOrder = this.orderService.place(order.getDelivery(), order.getDetails(), customerID);
 		return newOrder;
 	}
+	
+	@Override
+	public Order Place(Order order) {
+		
+		Order newOrder = this.orderService.place(order.getDelivery(), order.getDetails());
+		return newOrder;
+	}
 
 	@Override
 	public Order Query(int orderID) {

@@ -42,6 +42,24 @@ public class OrderService implements IOrderService {
 	}
 	
 	@Override
+	public Order place(Delivery delivery, Set<OrderItem> items) {
+		
+		String findByPhone = "from Customer where phone=?";
+		Customer customer = this.customerDao.findByHQL(findByPhone, new Object[]{delivery.getPhone()});
+		if(null == customer){
+			
+			customer = new Customer();
+			customer.setAddress(delivery.getAddress());
+			customer.setCreateDate(new Date());
+			customer.setName(delivery.getName());
+			customer.setPhone(delivery.getPhone());
+			
+			customer = this.customerDao.save(customer);
+		}
+		return this.place(delivery, items, customer.getId());
+	}
+	
+	@Override
 	public Order place(Delivery delivery, Set<OrderItem> items, int customerID) {
 
 		Order order = new Order();
@@ -91,4 +109,5 @@ public class OrderService implements IOrderService {
 		String hql = "from Order where customer.phone=?";
 		return this.orderDao.findByHQLWithPage(hql, new Object[]{phone}, pageNumber);
 	}
+	
 }
