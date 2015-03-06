@@ -19,7 +19,7 @@
         <many-to-one name="delivery" column="deliverID" 
         	cascade="save-update" not-null="true"
         	class="ecommerce.rmall.domain.Delivery" lazy="false"/>
-        <set name="details" table="rmall_orderDetails" cascade="save-update" lazy="false">
+        <set name="details" table="rmall_shipDetails" cascade="save-update" lazy="false">
         	<key column="orderID"/>
         	<many-to-many class="ecommerce.rmall.domain.OrderItem" column="orderItemID"/>
         </set>
