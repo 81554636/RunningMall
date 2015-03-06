@@ -10,6 +10,7 @@
             <generator class="identity"/>
         </id>
         <property name="name" type="java.lang.String" column="name" length="64"/>
+        <property name="city" type="java.lang.String" column="city" length="32"/>
         <property name="phone" type="java.lang.String" column="phone" length="20"/>        
         <property name="address" type="java.lang.String" column="address" length="256"/>
         <property name="deliverDate" type="java.sql.Timestamp" column="deliverDate"/>

@@ -9,9 +9,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 /***
  * 收货信息
  * @author martin
- *
+ * province->city->county->area
  */
-
 @XmlRootElement (name = "Delivery")
 public class Delivery {
 
@@ -21,6 +20,14 @@ public class Delivery {
 	private String address;
 	private String phone;
 	private Date deliverDate;
+	private String city;
+	
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
 	
 	public Date getDeliverDate() {
 		return deliverDate;

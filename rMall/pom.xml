@@ -242,10 +242,10 @@
 		</dependencies>
 	</dependencyManagement>
 	<modules>
-		<module>mallService</module>
 		<module>Domain</module>
 		<module>Service</module>
 		<module>Dao</module>
+		<module>mallService</module>
 		<module>mallPortal</module>
 	</modules>
 </project>
