@@ -1,11 +1,13 @@
 package ecommerce.rmall.service.impl;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import ecommerce.rmall.dao.ShipmentDAO;
 import ecommerce.rmall.dao.StationDAO;
 import ecommerce.rmall.domain.Order;
+import ecommerce.rmall.domain.OrderItem;
 import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.domain.Shipment;
 import ecommerce.rmall.domain.Station;
@@ -33,9 +35,14 @@ public class ShipmentService implements IShipmentService {
 			shipment.setCreateDate(new Date());
 			shipment.setLastUpdate(new Date());
 			shipment.setDelivery(order.getDelivery());
-			shipment.setDetails(order.getDetails());
 			shipment.setStation(station);
 			shipment.setStatus("INIT");
+			shipment.setDetails(new HashSet<OrderItem>());
+			for(OrderItem item : order.getDetails()){
+				OrderItem newItem = new OrderItem();
+				newItem.setId(item.getId());
+				shipment.getDetails().add(newItem);
+			}
 			
 			shipDao.save(shipment);
 		}
