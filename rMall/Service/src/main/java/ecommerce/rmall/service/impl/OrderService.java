@@ -2,7 +2,6 @@ package ecommerce.rmall.service.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +41,7 @@ public class OrderService implements IOrderService {
 	}
 	
 	@Override
-	public Order place(Delivery delivery, Set<OrderItem> items) {
+	public Order place(Delivery delivery, List<OrderItem> items) {
 		
 		String findByPhone = "from Customer where phone=?";
 		Customer customer = this.customerDao.findByHQL(findByPhone, new Object[]{delivery.getPhone()});
@@ -60,7 +59,7 @@ public class OrderService implements IOrderService {
 	}
 	
 	@Override
-	public Order place(Delivery delivery, Set<OrderItem> items, int customerID) {
+	public Order place(Delivery delivery, List<OrderItem> items, int customerID) {
 
 		Order order = new Order();
 		Customer customer = this.customerDao.findByID(customerID);
@@ -69,10 +68,10 @@ public class OrderService implements IOrderService {
 			order.setCreateDate(new Date());
 			order.setLastUpdate(new Date());
 			order.setLastUpdateBy("SYSTEM");
-			order.setStatus("INIT");
+			order.setStatus("pending");
 			order.setCustomer(customer);
 			order.setDelivery(delivery);
-			order.setDetails(new java.util.HashSet<OrderItem>());
+			order.setDetails(new java.util.ArrayList<OrderItem>());
 			
 			int[] ids = new int[items.size()];
 			int index = 0;
@@ -109,5 +108,24 @@ public class OrderService implements IOrderService {
 		String hql = "from Order where customer.phone=?";
 		return this.orderDao.findByHQLWithPage(hql, new Object[]{phone}, pageNumber);
 	}
+	@Override
+	public Page<Order> queryPendingWithPage(int pageNumber) {
+		String hql = "from Order where status=?";
+		return this.orderDao.findByHQLWithPage(hql, new Object[]{"pending"}, pageNumber);
+	}
 	
+	@Override
+	public Page<Order> queryProcessingWithPage(int pageNumber) {
+		String hql = "from Order where status=?";
+		return this.orderDao.findByHQLWithPage(hql, new Object[]{"processing"}, pageNumber);
+	}
+	
+	@Override
+	public void cancel(int orderId) {
+		Order order = this.orderDao.findByID(orderId);
+		if(null != order){
+			order.setStatus("cancel");
+			this.orderDao.update(order);
+		}
+	}
 }

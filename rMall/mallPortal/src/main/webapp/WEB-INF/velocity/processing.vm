@@ -1,0 +1,53 @@
+<script src="http://code.jquery.com/jquery.js"></script>
+ <script src="js/bootstrap.min.js"></script>
+ <script>
+	$(function () {
+		$("[data-toggle='popover']").popover({
+			html:true, 
+			trigger:'hover'});
+	});
+ </script>
+
+<table class="table table-condensed">
+	<thead>
+		<tr>
+			<th>订单编号</th>
+			<th>下单日期</th>
+			<!--<th>操作</th>-->
+			<th>产品</th>
+			<th>数量</th>
+		</tr>
+	</thead>
+#foreach( $order in ${page.dataList})
+	<tbody>
+	#foreach( $orderItem in ${order.details} )
+		<tr class="success">
+			#if( $velocityCount == 1 )
+			<td rowspan="$!{order.details.size()}" title="订单详情" data-container="body" data-toggle="popover" data-content="$orderHelper.format($order)">
+				${order.id}
+			</td>
+			<td rowspan="$!{order.details.size()}">${order.createDate}</td>
+			<!--
+			<td rowspan="$!{order.details.size()}">
+				<button type="button" class="btn btn-small btn-danger">取消</button>
+				<button type="button" class="btn btn-small ">派送</button>
+			</td>
+			-->
+			#end
+			<td>${orderItem.product.displayName}</td>
+			<td>${orderItem.quantity}</td>
+		</tr>
+	#end
+	</tbody>
+#end
+</table>
+
+<div class="pagination">
+	<ul>
+		<li><a href="processingFirst.do">|<<</a></li>
+		<li><a href="processingPages.do?pageNumber=${page.previousPage}"><</a></li>
+		<li><a href="processingPages.do?pageNumber=${page.nextPage}">></a></li>
+		<li><a href="processingPages.do?pageNumber=${page.totalPage}">>>|</a></li>
+		<li><a href="#">第 ${page.currentPage}页 / 共 ${page.totalPage}页</a></li>
+	</ul>
+</div>

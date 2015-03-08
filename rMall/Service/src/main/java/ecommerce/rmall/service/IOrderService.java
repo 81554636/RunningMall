@@ -1,6 +1,6 @@
 package ecommerce.rmall.service;
 
-import java.util.Set;
+import java.util.List;
 
 import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.domain.Delivery;
@@ -16,7 +16,7 @@ public interface IOrderService {
 	 * @param customerID 客户标识
 	 * @return
 	 */
-	Order place(Delivery delivery, Set<OrderItem> items, int customerID);
+	Order place(Delivery delivery, List<OrderItem> items, int customerID);
 	
 	/***
 	 * 下订单(新註冊用戶/已知用戶信息【根據電話找到customer】)
@@ -24,7 +24,7 @@ public interface IOrderService {
 	 * @param items
 	 * @return
 	 */
-	Order place(Delivery delivery, Set<OrderItem> items);
+	Order place(Delivery delivery, List<OrderItem> items);
 	/***
 	 * 订单查询(根据订单号)
 	 * @param orderID
@@ -40,10 +40,29 @@ public interface IOrderService {
 	Page<Order> queryWithPage(int pageNumber);
 	
 	/***
+	 * 查询pending订单(分页)
+	 * @param pageNumber 1,2,3.....
+	 * @return
+	 */
+	Page<Order> queryPendingWithPage(int pageNumber);
+	/***
+	 * 查询processing订单(分页)
+	 * @param pageNumber 1,2,3.....
+	 * @return
+	 */
+	Page<Order> queryProcessingWithPage(int pageNumber);
+	
+	/***
 	 * 查询订单(分页),根据客户手机号查询
 	 * @param phone 客户注册时的手机号码
 	 * @param pageNumber 1,2,3......
 	 * @return
 	 */
 	Page<Order> queryByPhoneWithPage(String phone, int pageNumber);
+	
+	/***
+	 * 取消订单
+	 * @param orderId 
+	 */
+	void cancel(int orderId);
 }

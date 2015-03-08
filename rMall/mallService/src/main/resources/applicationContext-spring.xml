@@ -21,6 +21,7 @@
 	<bean id="shipmentService" class="ecommerce.rmall.service.impl.ShipmentService">
 		<property name="shipDao" ref="shipmentDao"/>
 		<property name="stationDao" ref="stationDao"/>
+		<property name="orderDao" ref="orderDao"/>
 	</bean>
 	
 	<bean id="productService" class="ecommerce.rmall.service.impl.ProductService">

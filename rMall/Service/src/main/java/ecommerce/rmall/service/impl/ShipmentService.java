@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import ecommerce.rmall.dao.OrderDAO;
 import ecommerce.rmall.dao.ShipmentDAO;
 import ecommerce.rmall.dao.StationDAO;
 import ecommerce.rmall.domain.Order;
@@ -17,12 +18,16 @@ public class ShipmentService implements IShipmentService {
 
 	private StationDAO stationDao;
 	private ShipmentDAO shipDao;
+	private OrderDAO orderDao;
 	
 	public void setStationDao(StationDAO stationDao) {
 		this.stationDao = stationDao;
 	}
 	public void setShipDao(ShipmentDAO shipDao) {
 		this.shipDao = shipDao;
+	}
+	public void setOrderDao(OrderDAO orderDao) {
+		this.orderDao = orderDao;
 	}
 	
 	@Override
@@ -44,7 +49,9 @@ public class ShipmentService implements IShipmentService {
 				shipment.getDetails().add(newItem);
 			}
 			
-			shipDao.save(shipment);
+			order.setStatus("processing");
+			this.orderDao.update(order);
+			this.shipDao.save(shipment);
 		}
 		return shipment;
 	}
@@ -61,7 +68,7 @@ public class ShipmentService implements IShipmentService {
 	
 	@Override
 	public Page<Shipment> queryBySession(String sessionKey, int pageNumber) {
-		String hql = "from Shipment where sessionKey=?";
+		String hql = "from Shipment where station.credential.sessionKey=?";
 		return this.shipDao.findByHQLWithPage(hql, new Object[]{sessionKey}, pageNumber);
 	}
 }

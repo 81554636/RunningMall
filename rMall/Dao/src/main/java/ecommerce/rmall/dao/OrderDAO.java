@@ -10,6 +10,9 @@ public class OrderDAO extends DaoSupport implements IPagination<Order>{
 	public void save(Order order){
 		super.save(order);
 	}
+	public void update(Order order){
+		super.update(order);
+	}
 	
 	public Order findByID(int identity){
 		return super.get(Order.class, identity);

@@ -13,13 +13,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.service.IOrderService;
 
 @Controller
-@RequestMapping("/welcome")
+@RequestMapping("/")
 public class HelloController {
 	
 	@Autowired()
@@ -29,18 +30,32 @@ public class HelloController {
 		this.orderService = orderService;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/first")
+	@RequestMapping(method=RequestMethod.GET, value="/pendingFirst")
 	public String printWelcome(Model model){
 		return this.printWelcome(model, 1);
 		
 	}
-	@RequestMapping(method=RequestMethod.GET, value="/pages")
+	@RequestMapping(method=RequestMethod.GET, value="/pendingPages")
 	public String printWelcome(Model model, int pageNumber){
 		
-		Page<Order> page = this.orderService.queryWithPage(pageNumber);
+		//Page<Order> page = this.orderService.queryWithPage(pageNumber);
+		Page<Order> page = this.orderService.queryPendingWithPage(pageNumber);
 		model.addAttribute("CURRENT", "PENDING");
 		model.addAttribute("page", page);
-		return "hello";
+		return "pending";
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value="/processingFirst")
+	public String initProcessing(Model model){
+		return queryProcessing(model, 1);
+	}
+	@RequestMapping(method=RequestMethod.GET, value="/processingPages")
+	public String queryProcessing(Model model, int pageNumber){
+		
+		Page<Order> page = this.orderService.queryProcessingWithPage(pageNumber);
+		model.addAttribute("CURRENT", "PROCESSING");
+		model.addAttribute("page", page);
+		return "processing";
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/search")
@@ -50,8 +65,8 @@ public class HelloController {
 		return "search";
 	}
 	
-	@RequestMapping(method=RequestMethod.POST, value="/search")
 	@ModelAttribute()
+	@RequestMapping(method=RequestMethod.POST, value="/search")
 	public String search(Model model, String orderID){
 		
 		model.addAttribute("CURRENT", "SEARCH");
@@ -59,6 +74,13 @@ public class HelloController {
 		model.addAttribute("order", order);
 		return "search";
 	}
+	
+	@RequestMapping(method=RequestMethod.POST, value="/cancel")
+	@ResponseBody
+    public String cancelOrder(Integer id) {
+		this.orderService.cancel(id);
+        return "SUCCESS";
+    } 
 	
 	@RequestMapping(method=RequestMethod.POST, value="/send")
 	public String sendMessage(String user, String msg){
