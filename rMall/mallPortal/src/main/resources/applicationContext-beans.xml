@@ -21,4 +21,8 @@
 		<property name="orderDao" ref="orderDao"/>
 		<property name="productDao" ref="productDao"/>
 	</bean>
-</beans>  
+	
+	<bean id="stationService" class="ecommerce.rmall.service.impl.StationService">
+		<property name="stationDao" ref="stationDao"/>
+	</bean>
+</beans>

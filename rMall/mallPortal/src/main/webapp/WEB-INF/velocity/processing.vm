@@ -8,7 +8,7 @@
 	});
  </script>
 
-<table class="table table-condensed">
+<table class="table table-condensed table-hover">
 	<thead>
 		<tr>
 			<th>订单编号</th>
@@ -21,7 +21,7 @@
 #foreach( $order in ${page.dataList})
 	<tbody>
 	#foreach( $orderItem in ${order.details} )
-		<tr class="success">
+		<tr>
 			#if( $velocityCount == 1 )
 			<td rowspan="$!{order.details.size()}" title="订单详情" data-container="body" data-toggle="popover" data-content="$orderHelper.format($order)">
 				${order.id}
@@ -42,7 +42,7 @@
 #end
 </table>
 
-<div class="pagination">
+<div class="pagination pagination-right">
 	<ul>
 		<li><a href="processingFirst.do">|<<</a></li>
 		<li><a href="processingPages.do?pageNumber=${page.previousPage}"><</a></li>

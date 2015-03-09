@@ -1,6 +1,7 @@
 package ecommerce.rmall.portal.controller;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.directwebremoting.Browser;
 import org.directwebremoting.ScriptBuffer;
@@ -17,7 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.Page;
+import ecommerce.rmall.domain.Shipment;
+import ecommerce.rmall.domain.Station;
 import ecommerce.rmall.service.IOrderService;
+import ecommerce.rmall.service.IStationService;
+import ecommerce.rmall.ws.IShipmentService;
 
 @Controller
 @RequestMapping("/")
@@ -30,6 +35,20 @@ public class HelloController {
 		this.orderService = orderService;
 	}
 	
+	@Autowired()
+	@Qualifier("stationService")
+	private IStationService stationService;
+	public void setStationService(IStationService service){
+		this.stationService = service;
+	}
+	
+	@Autowired()
+	@Qualifier("shipmentEndpoint")
+	private IShipmentService shipmentService;
+	public void setStationService(IShipmentService service){
+		this.shipmentService = service;
+	}
+	
 	@RequestMapping(method=RequestMethod.GET, value="/pendingFirst")
 	public String printWelcome(Model model){
 		return this.printWelcome(model, 1);
@@ -37,11 +56,13 @@ public class HelloController {
 	}
 	@RequestMapping(method=RequestMethod.GET, value="/pendingPages")
 	public String printWelcome(Model model, int pageNumber){
-		
-		//Page<Order> page = this.orderService.queryWithPage(pageNumber);
+
 		Page<Order> page = this.orderService.queryPendingWithPage(pageNumber);
+		List<Station> stations = this.stationService.listAll();
+		
 		model.addAttribute("CURRENT", "PENDING");
 		model.addAttribute("page", page);
+		model.addAttribute("stations", stations);
 		return "pending";
 	}
 	
@@ -80,18 +101,19 @@ public class HelloController {
     public String cancelOrder(Integer id) {
 		this.orderService.cancel(id);
         return "SUCCESS";
-    } 
+    }
 	
+	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET}, value="/dispatch")
+	@ResponseBody
+	public String dispatchOrder(int orderID, int stationID){
+		Shipment shipment = this.shipmentService.dispatch(orderID, stationID);
+		return "SUCCESS";
+	}
+
 	@RequestMapping(method=RequestMethod.POST, value="/send")
 	public String sendMessage(String user, String msg){
 		
-		//try {
-		//	String str = new String(msg.getBytes("iso-8859-1"),"UTF-8");
-			sendMessageAuto(user, msg);
-		///} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		//}		
+		sendMessageAuto(user, msg);
 		return "redirect:../index.html"; 
 	}
 	

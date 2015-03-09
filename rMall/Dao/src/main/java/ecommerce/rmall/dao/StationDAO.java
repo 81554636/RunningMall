@@ -22,4 +22,8 @@ public class StationDAO extends DaoSupport {
 		else
 			return null;
 	}
+	
+	public List<Station> listByHQL(String hql, Object[] params){
+		return super.queryByHql(hql, params);
+	}
 }

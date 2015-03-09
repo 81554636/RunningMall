@@ -10,7 +10,8 @@
 		<param-value>
 			classpath:applicationContext-beans.xml,
 			classpath:applicationContext-message.xml,
-			classpath:applicationContext-hibernate.xml
+			classpath:applicationContext-hibernate.xml,
+			classpath:applicationContext-cxf.xml
 		</param-value>
 	</context-param>
 	<!-- Log4j配置 -->

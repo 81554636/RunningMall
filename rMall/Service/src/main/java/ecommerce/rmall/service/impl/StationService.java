@@ -1,5 +1,6 @@
 package ecommerce.rmall.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import ecommerce.rmall.dao.StationDAO;
@@ -28,4 +29,8 @@ public class StationService implements IStationService {
 		return station;
 	}
 
+	@Override
+	public List<Station> listAll() {
+		return this.stationDao.listByHQL("from Station", new Object[]{});
+	}
 }

@@ -18,7 +18,7 @@ public interface IShipmentService {
 	@POST
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_FORM_URLENCODED})
 	Shipment dispatch(@QueryParam("order")int orderID, @QueryParam("station")int stationid);
 	
 	@GET

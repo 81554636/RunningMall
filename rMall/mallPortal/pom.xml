@@ -84,6 +84,35 @@
 			<artifactId>jackson-jaxrs</artifactId>
 		</dependency>
 		
+		<dependency>  
+	        <groupId>org.codehaus.jackson</groupId>  
+	        <artifactId>jackson-core-asl</artifactId>  
+	        <version>1.8.4</version>  
+	    </dependency>  
+	    <dependency>  
+	        <groupId>org.codehaus.jackson</groupId>  
+	        <artifactId>jackson-mapper-asl</artifactId>  
+	        <version>1.8.4</version>  
+	    </dependency>
+	    
+	    <!-- CXF -->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-rs-extension-providers</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+		</dependency>  
+    
 		<!-- HIBERNATE -->
 		<dependency>
 			<groupId>org.hibernate</groupId>

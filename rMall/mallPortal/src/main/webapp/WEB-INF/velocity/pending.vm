@@ -2,12 +2,74 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap-confirmation.js"></script>
 <script src="js/bootbox.js"></script>
- <script>
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/css/select2.min.css" rel="stylesheet" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/js/select2.min.js"></script>
+
+<style type="text/css">
+table:nth-child(odd){
+	class="info"
+}
+table:nth-child(even){
+	class="warning"
+}
+</style>
+
+<script>
+var Example = (function() {
+	"use strict";
+	var elem,
+	hideHandler,
+	that = {};
+	
+	that.init = function(options) {
+        elem = $(options.selector);
+    };
+    that.show = function(text) {
+        clearTimeout(hideHandler);
+
+        elem.find("span").html(text);
+        elem.delay(200).fadeIn().delay(4000).fadeOut();
+    };
+
+    return that;
+}());
+
+function onModalOK(){
+	var stationID = $('#dispatch_stationID').val();
+	var orderID = $('#dispatch_orderID').val();
+	var obj = $.ajax({
+		url    : "dispatch.do",
+		async  : false,
+		data   : {orderID : orderID, stationID : stationID},
+		success: function(data){
+			if('SUCCESS' == data){
+				//alert($('tr[orderid='+ orderID + ']').html());
+				$('tr[orderid='+ orderID + ']').remove();
+			}
+		}
+	});
+	//$.post("dispatch.do", {orderID : orderID, stationID : stationID}, function(result){return result;});
+}
+
 	$(function () {
+		Example.init({ "selector": ".bb-alert" });
+		Example.show('text');
+		
+		$(".js-example-basic-single").select2();
+		
 		$("[data-toggle='popover']").popover({
 			html:true,
 			title:'订单详情',
-			trigger:'hover'});
+			trigger:'hover'
+		});
+		
+		$(".dispatch").click(function(){
+			
+			var orderID = $(this).parents("tr").attr("orderID");
+			$('#myModal #dispatch_orderID').val(orderID);
+			$('#myModal').modal();
+		});
 
 		$("[data-toggle='confirm']").click(function(){
 			var row = $(this).parents(".success").parent();
@@ -25,8 +87,8 @@
 		});
 	});
  </script>
-
-<table class="table table-condensed">
+    
+<table class="table table-condensed table-hover">
 	<thead>
 		<tr>
 			<th>订单编号</th>
@@ -39,7 +101,7 @@
 #foreach( $order in ${page.dataList})
 	<tbody>
 	#foreach( $orderItem in ${order.details} )
-		<tr class="success" orderID="${order.id}">
+		<tr orderID="${order.id}">
 			#if( $velocityCount == 1 )
 			<td rowspan="$!{order.details.size()}" data-container="body" data-toggle="popover" data-content="$orderHelper.format($order)">
 				${order.id}
@@ -47,7 +109,7 @@
 			<td rowspan="$!{order.details.size()}">${order.createDate}</td>
 			<td rowspan="$!{order.details.size()}">
 				<button type="button" class="btn btn-small btn-danger" data-toggle="confirm">取消</button>
-				<button type="button" class="btn btn-small ">派送</button>
+				<button type="button" class="btn btn-small dispatch">派送</button>
 			</td>
 			#end
 			<td>${orderItem.product.displayName}</td>
@@ -58,7 +120,7 @@
 #end
 </table>
 
-<div class="pagination">
+<div class="pagination pagination-right">
 	<ul>
 		<li><a href="pendingFirst.do">|<<</a></li>
 		<li><a href="pendingPages.do?pageNumber=${page.previousPage}"><</a></li>
@@ -68,20 +130,30 @@
 	</ul>
 </div>
 
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">加载模态框</button>  
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">  
-  <div class="modal-dialog">  
-    <div class="modal-content">  
-      <div class="modal-header">  
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>  
-        <h4 class="modal-title">Modal title</h4>  
-      </div>  
-      <div class="modal-body">
-      </div>  
-      <div class="modal-footer">  
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>  
-      </div>  
-    </div><!-- /.modal-content -->  
-  </div><!-- /.modal-dialog -->  
-</div><!-- /.modal --> 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">选择配送小站</h4>
+			</div>
+			<div class="modal-body" style="height:100px;">
+<input type="hidden" id="dispatch_orderID"/>
+<select class="js-example-basic-single" id="dispatch_stationID">
+#foreach($station in ${stations})
+	<option value="${station.id}">${station.name}</option>
+#end
+</select>
+
+      		</div>
+      		<div class="modal-footer">
+      			<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="onModalOK();">Ok</button>
+      		</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="bb-alert alert alert-info" style="display:none;">
+    <span>The examples populate this alert with dummy content</span>
+</div> 

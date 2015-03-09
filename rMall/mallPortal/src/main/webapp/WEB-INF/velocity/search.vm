@@ -18,7 +18,7 @@
 		<tr class="success">
 			<td rowspan='${row}'>$!{order.id}</td>
 			<td rowspan='${row}'>$!{order.createDate}</td>
-			<td rowspan='${row}'>$!{order.status}</td>
+			<td rowspan='${row}'><button class="btn btn-small btn-info disabled">$!{order.status}</button></td>
 			<td rowspan='${row}'>
 				<button class="btn btn-small btn-danger disabled" type="button">取消订单</button>
 			</td>
