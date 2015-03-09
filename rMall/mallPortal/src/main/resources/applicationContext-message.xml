@@ -9,16 +9,20 @@
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd        
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd        
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd        
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">  
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+          
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+  		<property name="locations" value="classpath:application.properties"/> 
+	</bean>
 	
 	<bean id="queueConnectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">  
-        <property name="brokerURL" value="tcp://127.0.0.1:61616" />
+        <property name="brokerURL" value="${message.Queue}" />
         <property name="useAsyncSend" value="true" />
     </bean>
     
     <!-- 定义消息队列 -->  
     <bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
-        <constructor-arg value="mall-portal" />
+        <constructor-arg value="rmall.placeOrder" />
     </bean>
     
     <!-- PTP jms模板 -->  

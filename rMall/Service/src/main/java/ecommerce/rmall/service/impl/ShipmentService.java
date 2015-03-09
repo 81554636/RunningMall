@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ecommerce.rmall.dao.OrderDAO;
 import ecommerce.rmall.dao.ShipmentDAO;
 import ecommerce.rmall.dao.StationDAO;
@@ -12,10 +15,13 @@ import ecommerce.rmall.domain.OrderItem;
 import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.domain.Shipment;
 import ecommerce.rmall.domain.Station;
+import ecommerce.rmall.message.MessageSender;
 import ecommerce.rmall.service.IShipmentService;
 
 public class ShipmentService implements IShipmentService {
 
+	private static final Logger logger = LoggerFactory.getLogger(ShipmentService.class);
+	
 	private StationDAO stationDao;
 	private ShipmentDAO shipDao;
 	private OrderDAO orderDao;
@@ -28,6 +34,11 @@ public class ShipmentService implements IShipmentService {
 	}
 	public void setOrderDao(OrderDAO orderDao) {
 		this.orderDao = orderDao;
+	}
+	
+	private MessageSender messageSender;
+	public void setMessageSender(MessageSender sender){
+		this.messageSender = sender;
 	}
 	
 	@Override
@@ -49,9 +60,13 @@ public class ShipmentService implements IShipmentService {
 				shipment.getDetails().add(newItem);
 			}
 			
+			logger.info("persistence ORDER & SHIPMENT to Database");
 			order.setStatus("processing");
 			this.orderDao.update(order);
 			this.shipDao.save(shipment);
+			
+			//logger.info("send ORDER to MessageQueue as PlainText");
+			//this.messageSender.sendMessage(new com.google.gson.Gson().toJson(order));
 		}
 		return shipment;
 	}

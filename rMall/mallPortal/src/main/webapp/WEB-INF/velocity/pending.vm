@@ -6,15 +6,6 @@
 <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/css/select2.min.css" rel="stylesheet" />
 <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/js/select2.min.js"></script>
 
-<style type="text/css">
-table:nth-child(odd){
-	class="info"
-}
-table:nth-child(even){
-	class="warning"
-}
-</style>
-
 <script>
 var Example = (function() {
 	"use strict";
@@ -29,13 +20,24 @@ var Example = (function() {
         clearTimeout(hideHandler);
 
         elem.find("span").html(text);
-        elem.delay(200).fadeIn().delay(4000).fadeOut();
+        //elem.delay(200).fadeIn().delay(4000).fadeOut();
+        elem.delay(200).fadeIn();
     };
+    that.hide = function(){
+    	elem.delay(200).fadeOut();
+    }
 
     return that;
 }());
 
+function showMessage(msg) {
+
+	var alert = "新订单{ 订单编号:" + msg.id + ", 下单时间:" + msg.createDate + " }到达, 请及时处理!!!";
+	Example.show(alert);
+}
+
 function onModalOK(){
+
 	var stationID = $('#dispatch_stationID').val();
 	var orderID = $('#dispatch_orderID').val();
 	var obj = $.ajax({
@@ -49,12 +51,11 @@ function onModalOK(){
 			}
 		}
 	});
-	//$.post("dispatch.do", {orderID : orderID, stationID : stationID}, function(result){return result;});
 }
 
 	$(function () {
+
 		Example.init({ "selector": ".bb-alert" });
-		Example.show('text');
 		
 		$(".js-example-basic-single").select2();
 		
@@ -87,7 +88,14 @@ function onModalOK(){
 		});
 	});
  </script>
-    
+
+<div class="bb-alert alert alert-danger" style="display:none;">
+	<span></span>
+    <button type="button" class="close" aria-hidden="true" onclick="Example.hide();">
+		&times;
+   </button>
+</div>
+
 <table class="table table-condensed table-hover">
 	<thead>
 		<tr>
@@ -153,7 +161,3 @@ function onModalOK(){
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-<div class="bb-alert alert alert-info" style="display:none;">
-    <span>The examples populate this alert with dummy content</span>
-</div> 

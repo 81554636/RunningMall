@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-  </head>
-<body>
+  	<head>
+	    <title></title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <!-- Bootstrap -->
+	    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	    
+	    <script type="text/javascript" src="dwr/engine.js"></script>
+		<script type="text/javascript" src="dwr/util.js"></script>
+		<script type="text/javascript" src="dwr/interface/MessagePush.js"></script>
+  	</head>
+<body onload="dwr.engine.setActiveReverseAjax(true);dwr.engine.setNotifyServerOnPageUnload(true);">
 	<div class="container-fluid">
 	<div class="row-fluid">
 		<div class="span2"></div>
