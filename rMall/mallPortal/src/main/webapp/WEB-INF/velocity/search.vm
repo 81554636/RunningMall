@@ -1,8 +1,16 @@
+<script src="/js/jqBootstrapValidation.js"></script>
+<script>
+	$(function(){
+		$("input,select,textarea").not("[type=submit]").jqBootstrapValidation(); 
+	});
+</script>
+
 <form class="form-search form-inline" action="search.do" method="POST">
-	<input class="input-medium search-query" type="text" name="orderID" placeholder="订单编号"/>
+	<input class="input-medium search-query" type="text" name="orderID"
+	 	placeholder="订单编号" required data-validation-required-message="You must agree to the terms and conditions"/>
 	<button type="submit" class="btn">查询</button>
 </form>
-			 
+	 
 <table class="table table-condensed">
 	<thead>
 		<tr>
@@ -19,9 +27,7 @@
 			<td rowspan='${row}'>$!{order.id}</td>
 			<td rowspan='${row}'>$!{order.createDate}</td>
 			<td rowspan='${row}'><button class="btn btn-small btn-info disabled">$!{order.status}</button></td>
-			<td rowspan='${row}'>
-				<button class="btn btn-small btn-danger disabled" type="button">取消订单</button>
-			</td>
+			<td rowspan='${row}'><button class="btn btn-small btn-danger disabled" type="button">取消订单</button></td>
 			<td></td>
 		</tr>
 		#foreach($orderItem in $order.details)

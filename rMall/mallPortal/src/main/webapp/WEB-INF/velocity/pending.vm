@@ -1,57 +1,56 @@
 <script src="http://code.jquery.com/jquery.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/bootstrap-confirmation.js"></script>
 <script src="js/bootbox.js"></script>
 
 <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
 <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/js/select2.min.js"></script>
 
 <script>
-var Example = (function() {
-	"use strict";
-	var elem,
-	hideHandler,
-	that = {};
+	var Example = (function() {
+		"use strict";
+		var elem,
+		hideHandler,
+		that = {};
+		
+		that.init = function(options) {
+	        elem = $(options.selector);
+	    };
+	    that.show = function(text) {
+	        
+	        clearTimeout(hideHandler);
+	        elem.find("span").html(text);
+	        elem.delay(200).fadeIn();
+	    };
+	    that.hide = function(){
+	    	elem.delay(200).fadeOut();
+	    }
 	
-	that.init = function(options) {
-        elem = $(options.selector);
-    };
-    that.show = function(text) {
-        clearTimeout(hideHandler);
+	    return that;
+	}());
 
-        elem.find("span").html(text);
-        //elem.delay(200).fadeIn().delay(4000).fadeOut();
-        elem.delay(200).fadeIn();
-    };
-    that.hide = function(){
-    	elem.delay(200).fadeOut();
-    }
+	function showMessage(msg) {
+	
+		var alert = "新订单{ 订单编号:" + msg.id + ", 下单时间:" + msg.createDate + " }到达, 请及时处理!!!";
+		Example.show(alert);
+	}
 
-    return that;
-}());
-
-function showMessage(msg) {
-
-	var alert = "新订单{ 订单编号:" + msg.id + ", 下单时间:" + msg.createDate + " }到达, 请及时处理!!!";
-	Example.show(alert);
-}
-
-function onModalOK(){
-
-	var stationID = $('#dispatch_stationID').val();
-	var orderID = $('#dispatch_orderID').val();
-	var obj = $.ajax({
-		url    : "dispatch.do",
-		async  : false,
-		data   : {orderID : orderID, stationID : stationID},
-		success: function(data){
-			if('SUCCESS' == data){
-				//alert($('tr[orderid='+ orderID + ']').html());
-				$('tr[orderid='+ orderID + ']').remove();
+	function onModalOK(){
+	
+		var stationID = $('#dispatch_stationID').val();
+		var orderID = $('#dispatch_orderID').val();
+		var obj = $.ajax({
+			url    : "dispatch.do",
+			async  : false,
+			data   : {orderID : orderID, stationID : stationID},
+			success: function(data){
+				if('SUCCESS' == data){
+					//alert($('tr[orderid='+ orderID + ']').html());
+					$('tr[orderid='+ orderID + ']').remove();
+				}
 			}
-		}
-	});
-}
+		});
+	}
 
 	$(function () {
 
@@ -73,9 +72,9 @@ function onModalOK(){
 		});
 
 		$("[data-toggle='confirm']").click(function(){
-			var row = $(this).parents(".success").parent();
-			var orderID = $(this).parents(".success").attr("orderID");
-			bootbox.confirm("Are you sure?", function(result) {
+			var row = $(this).parents("tr").parent();
+			var orderID = $(this).parents("tr").attr("orderID");
+			bootbox.confirm("取消订单, 是否继续?", function(result) {
 				console.log("cancel order{id : " + orderID + ", userResponse : " + result + "}");
 				if(true == result){
 					$.post('cancel.do', {id : orderID}, function(data){
@@ -87,7 +86,34 @@ function onModalOK(){
 			}); 
 		});
 	});
- </script>
+</script>
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">订单配送</h4>
+         </div>
+         <div class="modal-body">
+<input type="hidden" id="dispatch_orderID"/>
+选择配送小站
+<select class="js-example-basic-single" id="dispatch_stationID">
+#foreach($station in ${stations})
+<option value="${station.id}">${station.name}</option>
+#end
+</select>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="onModalOK();">配送</button>
+         </div>
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <div class="bb-alert alert alert-danger" style="display:none;">
 	<span></span>
@@ -95,6 +121,7 @@ function onModalOK(){
 		&times;
    </button>
 </div>
+
 
 <table class="table table-condensed table-hover">
 	<thead>
@@ -137,27 +164,3 @@ function onModalOK(){
 		<li><a href="#">第 ${page.currentPage}页 / 共 ${page.totalPage}页</a></li>
 	</ul>
 </div>
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-				<h4 class="modal-title">选择配送小站</h4>
-			</div>
-			<div class="modal-body" style="height:100px;">
-<input type="hidden" id="dispatch_orderID"/>
-<select class="js-example-basic-single" id="dispatch_stationID">
-#foreach($station in ${stations})
-	<option value="${station.id}">${station.name}</option>
-#end
-</select>
-
-      		</div>
-      		<div class="modal-footer">
-      			<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-      			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="onModalOK();">Ok</button>
-      		</div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
