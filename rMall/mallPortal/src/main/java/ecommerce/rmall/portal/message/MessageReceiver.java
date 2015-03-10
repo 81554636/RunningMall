@@ -12,8 +12,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import ecommerce.rmall.domain.Order;
-import ecommerce.rmall.message.OrderConverter;
 import ecommerce.rmall.portal.dwr.ChatMessageEvent;
 
 public class MessageReceiver implements MessageListener, ApplicationContextAware {
@@ -43,7 +41,6 @@ public class MessageReceiver implements MessageListener, ApplicationContextAware
 			ObjectMessage om = (ObjectMessage) message;
 			try {
 				logger.debug("{ messageId:{}, destination:{} }", om.getJMSMessageID(), om.getJMSDestination());
-				//Order order = (Order)this.msgConvert.fromMessage(message);
 				
 			} catch (JMSException e1) {
 				e1.printStackTrace();

@@ -42,11 +42,18 @@ public class HelloController {
 		this.stationService = service;
 	}
 	
-	@Autowired()
+	@Autowired
 	@Qualifier("shipmentEndpoint")
-	private IShipmentService shipmentService;
-	public void setStationService(IShipmentService service){
-		this.shipmentService = service;
+	private IShipmentService shipmentEndpoint;
+	public void setStationEndpoint(IShipmentService endpoint){
+		this.shipmentEndpoint = endpoint;
+	}
+	
+	@Autowired
+	@Qualifier("orderEndpoint")
+	private ecommerce.rmall.ws.IOrderService orderEndpoint;
+	public void setStationEndpoint(ecommerce.rmall.ws.IOrderService endpoint){
+		this.orderEndpoint = endpoint;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/pendingFirst")
@@ -101,17 +108,19 @@ public class HelloController {
 	@RequestMapping(method=RequestMethod.POST, value="/cancel")
 	@ResponseBody
     public String cancelOrder(Integer id) {
-		this.orderService.cancel(id);
+		this.orderEndpoint.Cancel(id);
+		//this.orderService.cancel(id);
         return "SUCCESS";
     }
 	
 	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET}, value="/dispatch")
 	@ResponseBody
 	public String dispatchOrder(int orderID, int stationID){
-		Shipment shipment = this.shipmentService.dispatch(orderID, stationID);
+		Shipment shipment = this.shipmentEndpoint.dispatch(orderID, stationID);
 		return "SUCCESS";
 	}
 
+	// +++++++++ FOR TEST ONLY ++++++++++ //
 	@RequestMapping(method=RequestMethod.POST, value="/send")
 	public String sendMessage(String user, String msg){
 		
@@ -145,7 +154,6 @@ public class HelloController {
         					scriptSession.addScript(script);
   
         			}
-        		});  
-  
+        		});
     }  
 }

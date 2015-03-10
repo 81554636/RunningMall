@@ -65,8 +65,8 @@ public class ShipmentService implements IShipmentService {
 			this.orderDao.update(order);
 			this.shipDao.save(shipment);
 			
-			//logger.info("send ORDER to MessageQueue as PlainText");
-			//this.messageSender.sendMessage(new com.google.gson.Gson().toJson(order));
+			logger.info("send SHIPMENT to MessageQueue as PlainText");
+			this.messageSender.sendMessage(new com.google.gson.Gson().toJson(shipment));
 		}
 		return shipment;
 	}

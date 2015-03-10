@@ -21,22 +21,34 @@
     </bean>
     
     <!-- 定义消息队列 -->
-    <bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
+    <bean id="destination.place" class="org.apache.activemq.command.ActiveMQQueue">
         <constructor-arg value="rmall.placeOrder" />
     </bean>
+    <bean id="destination.dispatch" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="rmall.distribution" />
+    </bean>
 
+	<!-- +++++++++ PLACE ORDER +++++++++ -->
     <!-- PTP jms模板 -->  
-    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+    <bean id="jmsTemplate.place" class="org.springframework.jms.core.JmsTemplate">
         <property name="connectionFactory" ref="queueConnectionFactory"/>
-        <property name="defaultDestination" ref="destination" />
-        <!-- <property name="messageConverter">
-        	<bean class="ecommerce.rmall.message.OrderConverter"/>
-        </property> -->
+        <property name="defaultDestination" ref="destination.place"/>        
         <property name="pubSubDomain" value="false" />
     </bean>
-    
     <!-- 消息发送方 -->
-    <bean id="messageSender" class="ecommerce.rmall.message.MessageSender">
-    	<property name="jmsTemplate" ref="jmsTemplate"/>
+    <bean id="messageSender.place" class="ecommerce.rmall.message.MessageSender">
+    	<property name="jmsTemplate" ref="jmsTemplate.place"/>
+    </bean>
+    
+    <!-- +++++++++ DISTRIBUTION +++++++++ -->
+    <!-- PTP jms模板 -->  
+    <bean id="jmsTemplate.dispatch" class="org.springframework.jms.core.JmsTemplate">  
+        <property name="connectionFactory" ref="queueConnectionFactory"/>
+        <property name="defaultDestination" ref="destination.dispatch"/>
+        <property name="pubSubDomain" value="false" />
+    </bean>
+    <!-- 消息发送方 -->
+    <bean id="messageSender.dispatch" class="ecommerce.rmall.message.MessageSender">
+    	<property name="jmsTemplate" ref="jmsTemplate.dispatch"/>
     </bean>
 </beans>  

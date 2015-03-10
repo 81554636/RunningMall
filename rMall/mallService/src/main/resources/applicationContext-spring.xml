@@ -15,13 +15,14 @@
 		<property name="customerDao" ref="customerDao"/>
 		<property name="orderDao" ref="orderDao"/>
 		<property name="productDao" ref="productDao"/>
-		<property name="messageSender" ref="messageSender"/>
+		<property name="messageSender" ref="messageSender.place"/>
 	</bean>
 	
 	<bean id="shipmentService" class="ecommerce.rmall.service.impl.ShipmentService">
 		<property name="shipDao" ref="shipmentDao"/>
 		<property name="stationDao" ref="stationDao"/>
 		<property name="orderDao" ref="orderDao"/>
+		<property name="messageSender" ref="messageSender.dispatch"/>
 	</bean>
 	
 	<bean id="productService" class="ecommerce.rmall.service.impl.ProductService">

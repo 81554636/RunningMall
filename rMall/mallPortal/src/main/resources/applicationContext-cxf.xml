@@ -32,7 +32,12 @@
     <!-- RESTFUL/SOAP CXF CLIENT -->
     <jaxrs:client id="shipmentEndpoint" serviceClass="ecommerce.rmall.ws.IShipmentService"
 		address="${ws.endpoint.shipment}">
-		
+		<jaxrs:providers>
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+        </jaxrs:providers>
+	</jaxrs:client>
+	<jaxrs:client id="orderEndpoint" serviceClass="ecommerce.rmall.ws.IOrderService"
+		address="${ws.endpoint.shipment}">
 		<jaxrs:providers>
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
         </jaxrs:providers>

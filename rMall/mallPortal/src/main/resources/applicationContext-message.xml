@@ -21,27 +21,17 @@
     </bean>
     
     <!-- 定义消息队列 -->  
-    <bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
+    <bean id="destination.place" class="org.apache.activemq.command.ActiveMQQueue">
         <constructor-arg value="rmall.placeOrder" />
     </bean>
-    
-    <!-- PTP jms模板 -->  
-    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">  
-        <property name="connectionFactory" ref="queueConnectionFactory"/>
-        <property name="defaultDestination" ref="destination"/>
-        <!-- <property name="messageConverter">
-        	<bean class="ecommerce.rmall.message.OrderConverter"/>
-        </property> -->
-        <property name="pubSubDomain" value="false" />
-    </bean>
-
+	<!-- +++++++++ RECEIVER +++++++++ -->
     <!-- 消息接收方 -->  
     <bean id="messageReceiver" class="ecommerce.rmall.portal.message.MessageReceiver"/>
     
     <!-- 消息监听容器 -->
     <bean id="listenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">    
         <property name="connectionFactory" ref="queueConnectionFactory" />    
-        <property name="destination" ref="destination" />    
+        <property name="destination" ref="destination.place" />    
         <property name="messageListener" ref="messageReceiver" />    
     </bean>
 </beans>  
