@@ -92,7 +92,9 @@ public class HelloController {
 		
 		model.addAttribute("CURRENT", "SEARCH");
 		Order order = this.orderService.query(Integer.parseInt(orderID));
+		List<Station> stations = this.stationService.listAll();
 		model.addAttribute("order", order);
+		model.addAttribute("stations", stations);
 		return "search";
 	}
 	

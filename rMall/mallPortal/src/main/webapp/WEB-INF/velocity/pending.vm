@@ -1,38 +1,17 @@
 <script src="http://code.jquery.com/jquery.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootbox.js"></script>
+<script src="js/messageTips.js"></script>
 
 <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/css/select2.min.css" rel="stylesheet" />
-<link rel="stylesheet" type="text/css" href="css/main.css" />
+<!--<link rel="stylesheet" type="text/css" href="css/main.css" />-->
 <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/js/select2.min.js"></script>
 
 <script>
-	var Example = (function() {
-		"use strict";
-		var elem,
-		hideHandler,
-		that = {};
-		
-		that.init = function(options) {
-	        elem = $(options.selector);
-	    };
-	    that.show = function(text) {
-	        
-	        clearTimeout(hideHandler);
-	        elem.find("span").html(text);
-	        elem.delay(200).fadeIn();
-	    };
-	    that.hide = function(){
-	    	elem.delay(200).fadeOut();
-	    }
-	
-	    return that;
-	}());
-
 	function showMessage(msg) {
 	
 		var alert = "新订单{ 订单编号:" + msg.id + ", 下单时间:" + msg.createDate + " }到达, 请及时处理!!!";
-		Example.show(alert);
+		messageTips.show(alert);
 	}
 
 	function onModalOK(){
@@ -54,7 +33,7 @@
 
 	$(function () {
 
-		Example.init({ "selector": ".bb-alert" });
+		messageTips.init({"selector":".bb-alert"});
 		
 		$(".js-example-basic-single").select2();
 		
@@ -89,7 +68,7 @@
 </script>
 
 
-<!-- 模态框（Modal） -->
+<!-- 派送模态框（Modal） -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
    aria-labelledby="myModalLabel" aria-hidden="true">
    <div class="modal-dialog">
@@ -109,20 +88,19 @@
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="onModalOK();">配送</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="onModalOK();">确定</button>
          </div>
       </div><!-- /.modal-content -->
    </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<!-- 新订单提示 -->
 <div class="bb-alert alert alert-danger" style="display:none;">
-	<span></span>
-    <button type="button" class="close" aria-hidden="true" onclick="Example.hide();">
-		&times;
-   </button>
+	<button type="button" class="close" aria-hidden="true" onclick="messageTips.hide();">&times;</button>
+	<span></span><a href="pendingFirst.do">刷新</a>
 </div>
 
-
+<div class="table-responsive">
 <table class="table table-condensed table-hover">
 	<thead>
 		<tr>
@@ -144,7 +122,7 @@
 			<td rowspan="$!{order.details.size()}">${order.createDate}</td>
 			<td rowspan="$!{order.details.size()}">
 				<button type="button" class="btn btn-small btn-danger" data-toggle="confirm">取消</button>
-				<button type="button" class="btn btn-small dispatch">派送</button>
+				<button type="button" class="btn btn-small btn-info dispatch">配送</button>
 			</td>
 			#end
 			<td>${orderItem.product.displayName}</td>
@@ -154,6 +132,7 @@
 	</tbody>
 #end
 </table>
+</div>
 
 <div class="pagination pagination-right">
 	<ul>

@@ -1,12 +1,31 @@
 <script src="http://code.jquery.com/jquery.js"></script>
- <script src="js/bootstrap.min.js"></script>
- <script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/messageTips.js"></script>
+
+<script>
 	$(function () {
+		
+		messageTips.init({ "selector":".bb-alert" });
+		
 		$("[data-toggle='popover']").popover({
-			html:true, 
-			trigger:'hover'});
+			html:true,
+			title:'订单详情',
+			trigger:'hover'
+		});
 	});
- </script>
+	
+	function showMessage(msg) {
+	
+		var alert = "新订单{ 订单编号:" + msg.id + ", 下单时间:" + msg.createDate + " }到达, 请及时处理!!!";
+		messageTips.show(alert);
+	}
+</script>
+
+<!-- 新订单提示 -->
+<div class="bb-alert alert alert-danger" style="display:none;">
+	<button type="button" class="close" aria-hidden="true" onclick="messageTips.hide();">&times;</button>
+	<span></span><a href="pendingFirst.do">刷新</a>
+</div>
 
 <table class="table table-condensed table-hover">
 	<thead>
@@ -23,7 +42,7 @@
 	#foreach( $orderItem in ${order.details} )
 		<tr>
 			#if( $velocityCount == 1 )
-			<td rowspan="$!{order.details.size()}" title="订单详情" data-container="body" data-toggle="popover" data-content="$orderHelper.format($order)">
+			<td rowspan="$!{order.details.size()}" data-container="body" data-toggle="popover" data-content="$orderHelper.format($order)">
 				${order.id}
 			</td>
 			<td rowspan="$!{order.details.size()}">${order.createDate}</td>

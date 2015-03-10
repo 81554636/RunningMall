@@ -110,13 +110,13 @@ public class OrderService implements IOrderService {
 	}
 	@Override
 	public Page<Order> queryPendingWithPage(int pageNumber) {
-		String hql = "from Order where status=?";
+		String hql = "from Order where status=? order by id desc";
 		return this.orderDao.findByHQLWithPage(hql, new Object[]{"pending"}, pageNumber);
 	}
 	
 	@Override
 	public Page<Order> queryProcessingWithPage(int pageNumber) {
-		String hql = "from Order where status=?";
+		String hql = "from Order where status=? order by id desc";
 		return this.orderDao.findByHQLWithPage(hql, new Object[]{"processing"}, pageNumber);
 	}
 	
