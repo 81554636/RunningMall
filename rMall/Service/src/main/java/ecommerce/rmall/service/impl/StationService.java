@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ecommerce.rmall.dao.StationDAO;
+import ecommerce.rmall.domain.Channel;
 import ecommerce.rmall.domain.Station;
 import ecommerce.rmall.service.IStationService;
 
@@ -32,5 +33,23 @@ public class StationService implements IStationService {
 	@Override
 	public List<Station> listAll() {
 		return this.stationDao.listByHQL("from Station", new Object[]{});
+	}
+
+	@Override
+	public Station updateChannelInfo(String sessionKey, long channelID, String userID, String osType){
+		
+		String hql = "from Station where credential.sessionKey=?";
+		Station station = this.stationDao.findByHQL(hql, new Object[]{sessionKey});
+		if( null != station ){
+			Channel channel = station.getChannel() == null ? new Channel() : station.getChannel();
+			channel.setChannelID(channelID);
+			channel.setUserID(userID);
+			channel.setOsType(osType);
+			station.setChannel(channel);
+			this.stationDao.update(station);
+			return station;
+		} else{
+			return null;
+		}
 	}
 }

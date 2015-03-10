@@ -16,4 +16,10 @@ public class StationService implements ecommerce.rmall.ws.IStationService {
 		return rtn;
 	}
 
+	@Override
+	public String updateChannel(String sessionKey, long channelID, String userID, String osType) {
+		Station rtn = this.service.updateChannelInfo(sessionKey, channelID, userID, osType);
+		return null;
+	}
+
 }

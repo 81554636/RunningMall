@@ -16,7 +16,7 @@ public class StationDAO extends DaoSupport {
 	
 	public Station findByHQL(String hql, Object[] params){
 		
-		List<Station> result = super.queryByHql(hql, params);
+		List<Station> result = this.listByHQL(hql, params);
 		if(null != result && result.size() > 0)
 			return result.get(0);
 		else

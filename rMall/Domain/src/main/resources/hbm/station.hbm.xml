@@ -19,5 +19,11 @@
         	<property name="sessionKey" type="java.lang.String" column="sessionkey" length="64"/>
         	<property name="expireTime" type="java.sql.Timestamp" column="expire"/>
         </component>
+        
+        <component name="channel">
+        	<property name="channelID" type="java.lang.Long" column="channelID"/>
+        	<property name="userID" type="java.lang.String" column="userID" length="32"/>
+        	<property name="osType" type="java.lang.String" column="osType" length="8"/>
+        </component>
     </class>
 </hibernate-mapping>

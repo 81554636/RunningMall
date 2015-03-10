@@ -12,7 +12,14 @@ public class Station {
 	private String name;
 	private String city;
 	private Credential credential;
+	private Channel channel;
 	
+	public Channel getChannel() {
+		return channel;
+	}
+	public void setChannel(Channel channel) {
+		this.channel = channel;
+	}
 	public String getCity() {
 		return city;
 	}

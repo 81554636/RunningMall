@@ -8,4 +8,5 @@ public interface IStationService {
 	
 	Station queryByCredential(String username, String password);
 	List<Station> listAll();
+	Station updateChannelInfo(String sessionKey, long channelID, String userID, String osType);
 }

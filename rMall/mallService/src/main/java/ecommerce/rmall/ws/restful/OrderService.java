@@ -38,4 +38,9 @@ public class OrderService implements ecommerce.rmall.ws.IOrderService {
 		Page<Order> rtn = this.orderService.queryByPhoneWithPage(phone, pageNumber);
 		return rtn;
 	}
+
+	@Override
+	public void Cancel(int orderID) {
+		this.orderService.cancel(orderID);
+	}
 }
