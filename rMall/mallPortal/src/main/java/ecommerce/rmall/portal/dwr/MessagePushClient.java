@@ -9,10 +9,12 @@ import org.directwebremoting.ScriptSession;
 import org.directwebremoting.ScriptSessionFilter;
 import org.springframework.context.ApplicationListener;
 
-public class MessagePushClient implements ApplicationListener<ChatMessageEvent>{
+import ecommerce.rmall.job.OrderNotification;
+
+public class MessagePushClient implements ApplicationListener<OrderNotification>{
 
 	@Override
-	public void onApplicationEvent(ChatMessageEvent event) {
+	public void onApplicationEvent(OrderNotification event) {
 		sendMessageAuto(null, (String)event.getSource());
 	}
 	

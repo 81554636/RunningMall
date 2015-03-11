@@ -22,16 +22,22 @@
     
     <!-- 定义消息队列 -->  
     <bean id="destination.place" class="org.apache.activemq.command.ActiveMQQueue">
-        <constructor-arg value="rmall.placeOrder" />
+        <constructor-arg value="${message.Queue.Destination.Order}" />
     </bean>
+    
 	<!-- +++++++++ RECEIVER +++++++++ -->
     <!-- 消息接收方 -->  
-    <bean id="messageReceiver" class="ecommerce.rmall.portal.message.MessageReceiver"/>
+    <!-- <bean id="messageReceiver" class="ecommerce.rmall.portal.message.MessageReceiver"/> -->
+    <bean id="orderReceiver" class="ecommerce.rmall.message.MessageReceiver">
+    	<property name="job">
+    		<bean class="ecommerce.rmall.job.ProcessOrder"/>
+    	</property>
+    </bean>
     
     <!-- 消息监听容器 -->
     <bean id="listenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">    
         <property name="connectionFactory" ref="queueConnectionFactory" />    
         <property name="destination" ref="destination.place" />    
-        <property name="messageListener" ref="messageReceiver" />    
+        <property name="messageListener" ref="orderReceiver" />    
     </bean>
 </beans>  

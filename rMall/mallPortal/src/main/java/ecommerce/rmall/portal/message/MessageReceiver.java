@@ -12,14 +12,15 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import ecommerce.rmall.portal.dwr.ChatMessageEvent;
+import ecommerce.rmall.job.OrderNotification;
 
 public class MessageReceiver implements MessageListener, ApplicationContextAware {
 
 	private static Logger logger = LoggerFactory.getLogger(MessageReceiver.class);
 	
     private ApplicationContext ctx;
-    @Override public void setApplicationContext(ApplicationContext ctx) throws BeansException { this.ctx = ctx; }
+    @Override
+    public void setApplicationContext(ApplicationContext ctx) throws BeansException { this.ctx = ctx; }
 
 	@Override
 	public void onMessage(Message message) {
@@ -30,7 +31,7 @@ public class MessageReceiver implements MessageListener, ApplicationContextAware
 			try {
 				logger.debug("{ messageId:{}, destination:{} }", om.getJMSMessageID(), om.getJMSDestination());
 	            String content = om.getText();
-	            this.ctx.publishEvent(new ChatMessageEvent(content));
+	            this.ctx.publishEvent(new OrderNotification(content));
 
 	        } catch (JMSException e) {  
 	            e.printStackTrace();  

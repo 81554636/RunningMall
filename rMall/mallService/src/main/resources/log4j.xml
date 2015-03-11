@@ -24,6 +24,10 @@
 		<level value="DEBUG" />
 	</logger>
 	
+	<logger name="ecommerce.rmall.job">
+		<level value="DEBUG" />
+	</logger>
+	
 	<root>
 		<priority value="INFO" />
 		<appender-ref ref="CONSOLE" />

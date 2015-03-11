@@ -17,7 +17,8 @@
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 
-<!--     <cxf:bus>
+<!--
+	<cxf:bus>
         <cxf:outInterceptors>
         	<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>
         </cxf:outInterceptors>
@@ -25,19 +26,20 @@
             <bean class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
         </cxf:inInterceptors>
     </cxf:bus> 
- -->
+-->
 	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
     <!-- RESTFUL CXF SERVER -->
+    <!-- ... -->
     
     <!-- RESTFUL/SOAP CXF CLIENT -->
     <jaxrs:client id="shipmentEndpoint" serviceClass="ecommerce.rmall.ws.IShipmentService"
-		address="${ws.endpoint.shipment}">
+		address="${ws.endpoint}">
 		<jaxrs:providers>
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
         </jaxrs:providers>
 	</jaxrs:client>
 	<jaxrs:client id="orderEndpoint" serviceClass="ecommerce.rmall.ws.IOrderService"
-		address="${ws.endpoint.shipment}">
+		address="${ws.endpoint}">
 		<jaxrs:providers>
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
         </jaxrs:providers>

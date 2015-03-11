@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>eCommerce</groupId>
@@ -19,7 +18,7 @@
 		<cxf.version>2.7.15</cxf.version>
 		<!-- <cxf.version>3.0.4</cxf.version> -->
 		
-		<jackson.version>1.8.4</jackson.version>
+		<jackson.version>1.9.13</jackson.version>
 		<hibernate.version>4.2.4.Final</hibernate.version>
 		<velocity.version>1.7</velocity.version>
 		<velocity.tools.version>2.0</velocity.tools.version>
@@ -191,13 +190,18 @@
 			<dependency><!-- JACKSON -->
 				<groupId>org.codehaus.jackson</groupId>
 				<artifactId>jackson-jaxrs</artifactId>
-				<version>1.9.13</version>
+				<version>${jackson.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.codehaus.jackson</groupId>
 				<artifactId>jackson-core-asl</artifactId>
-				<version>1.9.13</version>
+				<version>${jackson.version}</version>
 			</dependency>
+			<dependency>
+	        	<groupId>org.codehaus.jackson</groupId>  
+	        	<artifactId>jackson-mapper-asl</artifactId>  
+	        	<version>${jackson.version}</version>  
+	    	</dependency>
 
 			<dependency>
 				<groupId>com.cloudhopper.proxool</groupId>
@@ -247,5 +251,6 @@
 		<module>Dao</module>
 		<module>mallService</module>
 		<module>mallPortal</module>
-	</modules>
+    <module>BaiduPush</module>
+  </modules>
 </project>

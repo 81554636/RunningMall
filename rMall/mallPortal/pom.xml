@@ -79,6 +79,7 @@
 		    <artifactId>spring-jdbc</artifactId>
 		</dependency>
 		
+		<!-- JACKSON -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-jaxrs</artifactId>
@@ -86,13 +87,11 @@
 		
 		<dependency>  
 	        <groupId>org.codehaus.jackson</groupId>  
-	        <artifactId>jackson-core-asl</artifactId>  
-	        <version>1.8.4</version>  
+	        <artifactId>jackson-core-asl</artifactId>
 	    </dependency>  
-	    <dependency>  
+	    <dependency>
 	        <groupId>org.codehaus.jackson</groupId>  
-	        <artifactId>jackson-mapper-asl</artifactId>  
-	        <version>1.8.4</version>  
+	        <artifactId>jackson-mapper-asl</artifactId>
 	    </dependency>
 	    
 	    <!-- CXF -->
