@@ -1,4 +1,4 @@
-<script src="http://code.jquery.com/jquery.js"></script>
+<script src="js/jquery.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/messageTips.js"></script>
 
@@ -7,9 +7,15 @@
 		
 		messageTips.init({ "selector":".bb-alert" });
 		
-		$("[data-toggle='popover']").popover({
+		$("[data-toggle='popover_order']").popover({
 			html:true,
 			title:'订单详情',
+			trigger:'hover'
+		});
+		
+		$("[data-toggle='popover_ship']").popover({
+			html:true,
+			title:'配送信息',
 			trigger:'hover'
 		});
 	});
@@ -32,7 +38,7 @@
 		<tr>
 			<th>订单编号</th>
 			<th>下单日期</th>
-			<!--<th>操作</th>-->
+			<th>状态</th>
 			<th>产品</th>
 			<th>数量</th>
 		</tr>
@@ -42,16 +48,14 @@
 	#foreach( $orderItem in ${order.details} )
 		<tr>
 			#if( $velocityCount == 1 )
-			<td rowspan="$!{order.details.size()}" data-container="body" data-toggle="popover" data-content="$orderHelper.format($order)">
+			<td rowspan="$!{order.details.size()}" data-container="body" data-toggle="popover_order" data-content="$orderHelper.format($order)">
 				${order.id}
 			</td>
 			<td rowspan="$!{order.details.size()}">${order.createDate}</td>
-			<!--
-			<td rowspan="$!{order.details.size()}">
-				<button type="button" class="btn btn-small btn-danger">取消</button>
-				<button type="button" class="btn btn-small ">派送</button>
+			<td rowspan="$!{order.details.size()}" 
+				data-container="body" data-toggle="popover_ship" data-content="$orderHelper.format($!{order.shipment})">
+				<button type="button" class="btn btn-small btn-info disabled">$!{order.status}</button>
 			</td>
-			-->
 			#end
 			<td>${orderItem.product.displayName}</td>
 			<td>${orderItem.quantity}</td>

@@ -8,25 +8,27 @@
         <id name="id" type="java.lang.Integer">
             <column name="id"/>
             <generator class="identity"/>
-        </id>
+        </id>        
+        <property name="status" type="java.lang.String" column="status"/>
         <property name="createDate" type="java.sql.Timestamp" column="createDate"/>
         <property name="lastUpdate" type="java.sql.Timestamp" column="lastUpdate"/>
         <property name="lastUpdateBy" type="java.lang.String" column="updateBy"/>
-        <property name="status" type="java.lang.String" column="status"/>
+        
         <many-to-one name="customer" column="customerID" 
         	cascade="save-update" not-null="true"
         	class="ecommerce.rmall.domain.Customer" lazy="false"/>
+        	
         <many-to-one name="delivery" column="deliverID" 
         	cascade="save-update" not-null="true"
         	class="ecommerce.rmall.domain.Delivery" lazy="false"/>
-        <!-- <set name="details" table="rmall_orderDetails" cascade="save-update" lazy="false">
-        	<key column="orderID"/>
-        	<many-to-many class="ecommerce.rmall.domain.OrderItem" column="orderItemID"/>
-        </set> -->
+
         <list name="details" table="rmall_orderDetails" cascade="save-update" lazy="false">
         	<key column="orderID"/>
         	<index column="[index]" type="string"/>  
         	<many-to-many class="ecommerce.rmall.domain.OrderItem" column="orderItemID"/>
         </list>
+        
+        <many-to-one name="shipment" column="shipID" not-null="false"
+        	class="ecommerce.rmall.domain.Shipment" lazy="false"/>
     </class>
 </hibernate-mapping>

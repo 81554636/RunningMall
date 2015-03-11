@@ -2,7 +2,6 @@ package ecommerce.rmall.domain;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -17,7 +16,14 @@ public class Order{
 	private Customer customer;
 	private Delivery delivery;
 	private List<OrderItem> details;
+	private Shipment shipment;
 	
+	public Shipment getShipment() {
+		return shipment;
+	}
+	public void setShipment(Shipment shipment) {
+		this.shipment = shipment;
+	}
 	public List<OrderItem> getDetails() {
 		return details;
 	}

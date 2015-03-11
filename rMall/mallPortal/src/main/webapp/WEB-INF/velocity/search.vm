@@ -1,4 +1,4 @@
-<script src="http://code.jquery.com/jquery.js"></script>
+<script src="js/jquery.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootbox.js"></script>
 <script src="js/jqBootstrapValidation.js"></script>
@@ -36,9 +36,15 @@
 		
 		$("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
 		
-		$("[data-toggle='popover']").popover({
+		$("[data-toggle='popover_order']").popover({
 			html:true,
 			title:'订单详情',
+			trigger:'hover'
+		});
+		
+		$("[data-toggle='popover_ship']").popover({
+			html:true,
+			title:'配送信息',
 			trigger:'hover'
 		});
 		
@@ -70,8 +76,7 @@
 </script>
 
 <!-- 派送模态框（Modal） -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
-   aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
    <div class="modal-dialog">
       <div class="modal-content">
          <div class="modal-header">
@@ -121,11 +126,16 @@
 #set( $row = $!{order.details.size()} + 1 )
 	<tbody>
 		<tr class="success" orderID="${order.id}">
-			<td rowspan='$!{row}' data-container="body" data-toggle="popover" data-content="$orderHelper.format($order)">$!{order.id}</td>
+			<td rowspan='$!{row}' data-container="body" data-toggle="popover_order" data-content="$orderHelper.format($order)">$!{order.id}</td>
 			<td rowspan='$!{row}'>$!{order.createDate}</td>
 			<td rowspan='$!{row}'>
-				#if($!{order.status} == 'pending' || $!{order.status} == 'processing')
+				#if($!{order.status} == 'pending')
 					<button class="btn btn-small btn-info disabled" id="btnStatus">$!{order.status}</button>
+				#elseif($!{order.status} == 'processing')
+					<button class="btn btn-small btn-info disabled" id="btnStatus" 
+						data-container="body" data-toggle="popover_ship" data-content="$!{orderHelper.format($!{order.shipment})}">
+					$!{order.status}
+					</button>
 				#elseif($!{order.status} == 'cancel')
 					<button class="btn btn-small btn-danger disabled" id="btnStatus">$!{order.status}</button>
 				#elseif($!{order.status} == 'finish')
