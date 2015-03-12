@@ -20,8 +20,8 @@ public interface IOrderService {
 	
 	@POST
 	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces({MediaType.APPLICATION_JSON})
+	@Consumes({MediaType.APPLICATION_JSON})
 	Order Place(Order order);
 
 	@POST
@@ -35,6 +35,12 @@ public interface IOrderService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	void Cancel(@PathParam("orderID")int orderID);
+	
+	@PUT
+	@Path("/{orderID}/finish")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	void Finish(@PathParam("orderID")int orderID);
 	
 	@GET
 	@Path("/{orderID}")

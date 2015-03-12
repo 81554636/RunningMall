@@ -37,4 +37,13 @@ public class OrderDAO extends DaoSupport implements IPagination<Order>{
 		page.setDataList(rtn);
 		return page;
 	}
+	
+	public Order findByHQL(String hql, Object[] params){
+		
+		List<Order> result = super.queryByHql(hql, params);
+		if(null != result && result.size()>0)
+			return (Order)result.get(0);
+		else
+			return null;
+	}
 }

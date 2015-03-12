@@ -36,4 +36,9 @@ public class ShipmentService implements IShipmentService {
 	public Page<Shipment> queryByStation(String sessionKey, int pageNumber) {
 		return this.shipmentServ.queryBySession(sessionKey, pageNumber);
 	}
+
+	@Override
+	public void finish(int shipmentID, String accessCode) {
+		this.shipmentServ.finish(shipmentID);
+	}
 }

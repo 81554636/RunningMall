@@ -43,4 +43,9 @@ public class OrderService implements ecommerce.rmall.ws.IOrderService {
 	public void Cancel(int orderID) {
 		this.orderService.cancel(orderID);
 	}
+	
+	@Override
+	public void Finish(int orderID) {
+		this.orderService.finish(orderID);
+	}
 }

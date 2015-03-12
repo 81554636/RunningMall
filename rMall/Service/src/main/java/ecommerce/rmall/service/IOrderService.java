@@ -65,4 +65,9 @@ public interface IOrderService {
 	 * @param orderId 
 	 */
 	void cancel(int orderId);
+	/***
+	 * 终结订单
+	 * @param orderId 
+	 */
+	void finish(int orderId);
 }

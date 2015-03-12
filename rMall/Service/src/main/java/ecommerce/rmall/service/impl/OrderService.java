@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import ecommerce.rmall.dao.CustomerDAO;
 import ecommerce.rmall.dao.OrderDAO;
 import ecommerce.rmall.dao.ProductDAO;
+import ecommerce.rmall.dao.ShipmentDAO;
 import ecommerce.rmall.domain.Customer;
 import ecommerce.rmall.domain.Delivery;
 import ecommerce.rmall.domain.Order;
@@ -25,6 +26,7 @@ public class OrderService implements IOrderService {
 	private CustomerDAO customerDao;
 	private OrderDAO orderDao;
 	private ProductDAO productDao;
+	private ShipmentDAO shipmentDao;
 	public void setCustomerDao(CustomerDAO customerDao) {
 		this.customerDao = customerDao;
 	}
@@ -33,6 +35,9 @@ public class OrderService implements IOrderService {
 	}
 	public void setProductDao(ProductDAO productDao) {
 		this.productDao = productDao;
+	}
+	public void setShipmentDao(ShipmentDAO shipmentDao){
+		this.shipmentDao = shipmentDao;
 	}
 	
 	private MessageSender msgSender;
@@ -122,9 +127,22 @@ public class OrderService implements IOrderService {
 	
 	@Override
 	public void cancel(int orderId) {
+		
 		Order order = this.orderDao.findByID(orderId);
 		if(null != order){
 			order.setStatus("cancel");
+			this.orderDao.update(order);
+		}
+	}
+	
+	@Override
+	public void finish(int orderId) {
+		
+		Order order = this.orderDao.findByID(orderId);
+		if(null != order){
+			order.setStatus("finish");
+			order.getShipment().setStatus("finish");
+			this.shipmentDao.update(order.getShipment());
 			this.orderDao.update(order);
 		}
 	}

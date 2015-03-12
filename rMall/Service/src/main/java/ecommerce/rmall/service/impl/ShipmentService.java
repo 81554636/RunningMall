@@ -75,17 +75,41 @@ public class ShipmentService implements IShipmentService {
 	
 	@Override
 	public Shipment queryByID(int shipmentID) {
+		
 		return this.shipDao.findByID(shipmentID);
 	}
 	
 	@Override
 	public List<Shipment> queryByStation(int stationID) {
+		
 		return this.shipDao.findByStationID(stationID);
 	}
 	
 	@Override
 	public Page<Shipment> queryBySession(String sessionKey, int pageNumber) {
+		
 		String hql = "from Shipment where station.credential.sessionKey=?";
 		return this.shipDao.findByHQLWithPage(hql, new Object[]{sessionKey}, pageNumber);
+	}
+	
+	@Override
+	public void finish(int shipmentID) {
+		
+		Shipment shipment = this.shipDao.findByID(shipmentID);
+		if(null != shipment){
+			Order order = this.orderDao.findByHQL("from Order where shipment=?", new Object[]{shipment});
+			shipment.setStatus("finish");
+			if( null != order ){
+				order.setStatus("finish");
+				this.orderDao.update(order);
+			}
+			this.shipDao.update(shipment);
+		}
+	}	
+	@Override
+	public void finish(int shipmentID, String accessCode) {
+		
+		//TODO:这里需要校验accessCode与Order.accessCode是否一致
+		this.finish(shipmentID);
 	}
 }

@@ -11,4 +11,6 @@ public interface IShipmentService {
 	Shipment queryByID(int shipmentID);
 	List<Shipment> queryByStation(int stationID);
 	Page<Shipment> queryBySession(String sessionKey, int pageNumber);
+	void finish(int shipmentID);
+	void finish(int shipmentID, String accessCode);
 }

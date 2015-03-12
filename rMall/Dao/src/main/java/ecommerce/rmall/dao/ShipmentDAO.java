@@ -13,6 +13,10 @@ public class ShipmentDAO extends DaoSupport implements IPagination<Shipment>{
 		super.save(shipment);
 	}
 	
+	public void update(Shipment shipment){
+		super.update(shipment);
+	}
+	
 	public Shipment findByID(int identity){
 		return super.get(Shipment.class, identity);
 	}
