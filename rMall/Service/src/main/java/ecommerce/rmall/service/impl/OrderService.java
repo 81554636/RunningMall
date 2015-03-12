@@ -141,8 +141,10 @@ public class OrderService implements IOrderService {
 		Order order = this.orderDao.findByID(orderId);
 		if(null != order){
 			order.setStatus("finish");
-			order.getShipment().setStatus("finish");
-			this.shipmentDao.update(order.getShipment());
+			if(order.getStatus().equals("processing") && null != order.getShipment()){
+				order.getShipment().setStatus("finish");
+				this.shipmentDao.update(order.getShipment());
+			}
 			this.orderDao.update(order);
 		}
 	}
