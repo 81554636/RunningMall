@@ -56,7 +56,10 @@
     <!-- 消息接收方 -->  
     <bean id="shipmentReceiver" class="ecommerce.rmall.message.MessageReceiver">
     	<property name="job">
-    		<bean class="ecommerce.rmall.job.ProcessShipment"/>
+    		<bean class="ecommerce.rmall.job.ProcessShipment">
+    			<property name="apiKey" value="${baidu.apiKey}"/>
+    			<property name="secretKey" value="${baidu.secretKey}"/>
+    		</bean>
     	</property>
     </bean>
     

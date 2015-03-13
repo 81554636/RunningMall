@@ -21,6 +21,10 @@ public class ProcessShipment implements IJob {
 	private static Logger logger = LoggerFactory.getLogger(ProcessShipment.class);
 
 	private Gson jsonConvert = new Gson();
+	private String apiKey;
+	private String secretKey;
+	public void setApiKey(String val){ this.apiKey = val; }
+	public void setSecretKey(String val){ this.secretKey = val; }
 
 	@Override
 	public void execute(String content) {
@@ -28,8 +32,10 @@ public class ProcessShipment implements IJob {
 		Shipment ship = this.jsonConvert.fromJson(content, Shipment.class);
 
 		// 1. 设置developer平台的ApiKey/SecretKey
-		String apiKey = "u3an5YDSjcaujWqjHhpX9okM";
-		String secretKey = "z4XIGTaaMUmcYVGjObRApaOwOzjGfhqR";
+		//String apiKey = "u3an5YDSjcaujWqjHhpX9okM";
+		//String secretKey = "z4XIGTaaMUmcYVGjObRApaOwOzjGfhqR";
+		String apiKey = this.apiKey;
+		String secretKey = this.secretKey;
 		ChannelKeyPair pair = new ChannelKeyPair(apiKey, secretKey);
 		logger.debug("baidu developer { apiKey : {}, secretKey : {} }", apiKey, secretKey);
 
@@ -54,10 +60,14 @@ public class ProcessShipment implements IJob {
 				request.setChannelId(station.getChannel().getChannelID());
 				request.setUserId(station.getChannel().getUserID());
 				
-				request.setMessage("new SHIPMENT{ id: " + ship.getId() + "}");
+				String msg = String.format("{id:%d}", ship.getId());
+				request.setMessage(msg);
 				
-				logger.debug("baidu message request={ os:{}, channel:{}L, userId:{} }", 
-						station.getChannel().getOsType(), station.getChannel().getChannelID(), station.getChannel().getUserID());
+				logger.debug("baidu message request={ os:{}, channel:{}L, userId:{}, msg:{} }", 
+						station.getChannel().getOsType(), 
+						station.getChannel().getChannelID(), 
+						station.getChannel().getUserID(),
+						msg);
 
 				// 5. 调用pushMessage接口
 				PushUnicastMessageResponse response = channelClient.pushUnicastMessage(request);
