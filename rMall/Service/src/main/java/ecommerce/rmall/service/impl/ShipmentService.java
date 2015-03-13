@@ -88,7 +88,7 @@ public class ShipmentService implements IShipmentService {
 	@Override
 	public Page<Shipment> queryBySession(String sessionKey, int pageNumber) {
 		
-		String hql = "from Shipment where station.credential.sessionKey=?";
+		String hql = "from Shipment where station.credential.sessionKey=? order by id desc";
 		return this.shipDao.findByHQLWithPage(hql, new Object[]{sessionKey}, pageNumber);
 	}
 	
@@ -105,7 +105,8 @@ public class ShipmentService implements IShipmentService {
 			}
 			this.shipDao.update(shipment);
 		}
-	}	
+	}
+
 	@Override
 	public void finish(int shipmentID, String accessCode) {
 		

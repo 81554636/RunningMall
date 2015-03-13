@@ -110,7 +110,7 @@ public class OrderService implements IOrderService {
 	
 	@Override
 	public Page<Order> queryByPhoneWithPage(String phone, int pageNumber) {
-		String hql = "from Order where customer.phone=?";
+		String hql = "from Order where customer.phone=? order by id desc";
 		return this.orderDao.findByHQLWithPage(hql, new Object[]{phone}, pageNumber);
 	}
 	@Override
@@ -129,7 +129,7 @@ public class OrderService implements IOrderService {
 	public void cancel(int orderId) {
 		
 		Order order = this.orderDao.findByID(orderId);
-		if(null != order){
+		if(null != order && "pending".equals(order.getStatus())){
 			order.setStatus("cancel");
 			this.orderDao.update(order);
 		}

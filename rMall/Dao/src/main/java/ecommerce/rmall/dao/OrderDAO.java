@@ -23,7 +23,7 @@ public class OrderDAO extends DaoSupport implements IPagination<Order>{
 		
 		Page<Order> page = new Page<Order>();
 		page.setCurrentPage(pageNumber);
-		List<Order> rtn = super.queryForList("from Order", new Object[]{}, page);
+		List<Order> rtn = super.queryForList("from Order order by id desc", new Object[]{}, page);
 		page.setDataList(rtn);
 		return page;
 	}
