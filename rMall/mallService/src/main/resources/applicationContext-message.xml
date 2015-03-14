@@ -21,8 +21,12 @@
     </bean>
     
     <!-- 定义消息队列 -->
+    <!-- 
     <bean id="destination.place" class="org.apache.activemq.command.ActiveMQQueue">
         <constructor-arg value="${message.Queue.Destination.Order}" />
+    </bean>-->
+    <bean id="destination.place"  class="org.apache.activemq.command.ActiveMQTopic">  
+          <constructor-arg value="${message.Queue.Destination.Order}"/>  
     </bean>
     <bean id="destination.dispatch" class="org.apache.activemq.command.ActiveMQQueue">
         <constructor-arg value="${message.Queue.Destination.Ship}" />

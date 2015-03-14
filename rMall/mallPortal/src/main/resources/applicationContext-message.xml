@@ -21,9 +21,15 @@
     </bean>
     
     <!-- 定义消息队列 -->  
-    <bean id="destination.place" class="org.apache.activemq.command.ActiveMQQueue">
+    <!--
+	<bean id="destination.place" class="org.apache.activemq.command.ActiveMQQueue">
         <constructor-arg value="${message.Queue.Destination.Order}" />
     </bean>
+    -->
+
+    <bean id="destination.place"  class="org.apache.activemq.command.ActiveMQTopic">  
+          <constructor-arg value="${message.Queue.Destination.Order}"/>  
+    </bean>  
     
 	<!-- +++++++++ RECEIVER +++++++++ -->
     <!-- 消息接收方 -->  

@@ -35,6 +35,25 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+
+<plugin>
+	<groupId>org.jboss.as.plugins</groupId>
+	<artifactId>jboss-as-maven-plugin</artifactId>
+	<version>7.1.1.Final</version>
+	<configuration>
+		<hostname>127.0.0.1</hostname>
+		<port>9999</port>
+		<username>admin</username>
+		<password>123456</password>
+		<filename>../../mallService/target/mallService.war</filename>
+		<domain>
+			<server-groups>
+				<server-group>cluster</server-group>
+			</server-groups>
+		</domain>
+	</configuration>
+</plugin>
+
 		</plugins>
 	</build>
 	
