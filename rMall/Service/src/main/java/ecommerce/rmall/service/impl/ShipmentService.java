@@ -17,6 +17,7 @@ import ecommerce.rmall.domain.Shipment;
 import ecommerce.rmall.domain.Station;
 import ecommerce.rmall.message.MessageSender;
 import ecommerce.rmall.service.IShipmentService;
+import ecommerce.rmall.utils.RandomCode;
 
 public class ShipmentService implements IShipmentService {
 
@@ -53,6 +54,7 @@ public class ShipmentService implements IShipmentService {
 			shipment.setDelivery(order.getDelivery());
 			shipment.setStation(station);
 			shipment.setStatus("INIT");
+			shipment.setAccessCode(RandomCode.obtainRandomCode());
 			shipment.setDetails(new HashSet<OrderItem>());
 			for(OrderItem item : order.getDetails()){
 				OrderItem newItem = new OrderItem();
@@ -108,9 +110,20 @@ public class ShipmentService implements IShipmentService {
 	}
 
 	@Override
-	public void finish(int shipmentID, String accessCode) {
-		
-		//TODO:这里需要校验accessCode与Order.accessCode是否一致
-		this.finish(shipmentID);
+	public void finish(int shipmentID, String accessCode) throws Exception {
+
+		Shipment shipment = this.shipDao.findByID(shipmentID);
+		if(null != shipment && shipment.getAccessCode().equals(accessCode)){
+			
+			Order order = this.orderDao.findByHQL("from Order where shipment=?", new Object[]{shipment});
+			shipment.setStatus("finish");
+			if( null != order ){
+				
+				order.setStatus("finish");
+				this.orderDao.update(order);
+			}
+			this.shipDao.update(shipment);
+		} else
+			throw new Exception("Invalid Access Code");
 	}
 }

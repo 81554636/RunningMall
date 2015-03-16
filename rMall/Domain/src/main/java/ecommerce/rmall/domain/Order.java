@@ -17,7 +17,7 @@ public class Order{
 	private Delivery delivery;
 	private List<OrderItem> details;
 	private Shipment shipment;
-	
+
 	public Shipment getShipment() {
 		return shipment;
 	}

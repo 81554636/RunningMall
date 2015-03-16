@@ -38,7 +38,13 @@ public class ShipmentService implements IShipmentService {
 	}
 
 	@Override
-	public void finish(int shipmentID, String accessCode) {
-		this.shipmentServ.finish(shipmentID);
+	public String finish(int shipmentID, String accessCode) {
+		
+		try {
+			this.shipmentServ.finish(shipmentID, accessCode);
+			return "SUCCESS";
+		} catch (Exception e) {
+			return e.getMessage();
+		}
 	}
 }

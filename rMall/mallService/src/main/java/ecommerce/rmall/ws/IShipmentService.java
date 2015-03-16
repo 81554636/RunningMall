@@ -32,7 +32,7 @@ public interface IShipmentService {
 	@Path("/{shipmentID}/finish")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	void finish(@PathParam("shipmentID")int shipmentID, @QueryParam("accessCode")String accessCode);
+	String finish(@PathParam("shipmentID")int shipmentID, @QueryParam("accessCode")String accessCode);
 	
 	@GET
 	@Path("/search")

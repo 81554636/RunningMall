@@ -1,5 +1,6 @@
 package ecommerce.rmall.ws.restful;
 
+import ecommerce.rmall.domain.Channel;
 import ecommerce.rmall.domain.Station;
 import ecommerce.rmall.service.IStationService;
 
@@ -19,7 +20,14 @@ public class StationService implements ecommerce.rmall.ws.IStationService {
 	@Override
 	public String updateChannel(String sessionKey, long channelID, String userID, String osType) {
 		Station rtn = this.service.updateChannelInfo(sessionKey, channelID, userID, osType);
-		return null;
+		return "SUCCESS";
+	}
+
+	@Override
+	public String updateChannel(String sessionKey, Channel channel) {
+		Station rtn = this.service.updateChannelInfo(sessionKey, 
+				channel.getChannelID(), channel.getUserID(), channel.getOsType());
+		return "SUCCESS";
 	}
 
 }

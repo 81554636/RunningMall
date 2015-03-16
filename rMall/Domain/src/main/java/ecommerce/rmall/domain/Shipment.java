@@ -16,6 +16,14 @@ public class Shipment {
 	private Station station;
 	private Delivery delivery;
 	private Set<OrderItem> details;
+	private String accessCode;
+	
+	public String getAccessCode() {
+		return accessCode;
+	}
+	public void setAccessCode(String accessCode) {
+		this.accessCode = accessCode;
+	}
 	
 	public int getId() {
 		return id;
