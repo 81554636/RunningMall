@@ -10,7 +10,6 @@
             <generator class="identity"/>
         </id>
         <property name="status" type="java.lang.String" column="status"/>
-        <property name="accessCode" type="java.lang.String" column="accessCode" length="12"/>
         <many-to-one name="station" column="stationID" not-null="true"
         	class="ecommerce.rmall.domain.Station" lazy="false"/>
         <many-to-one name="delivery" column="deliverID" not-null="true"

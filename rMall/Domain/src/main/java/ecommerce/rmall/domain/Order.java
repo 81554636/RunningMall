@@ -17,6 +17,14 @@ public class Order{
 	private Delivery delivery;
 	private List<OrderItem> details;
 	private Shipment shipment;
+	private String accessCode;
+	
+	public String getAccessCode() {
+		return accessCode;
+	}
+	public void setAccessCode(String accessCode) {
+		this.accessCode = accessCode;
+	}
 
 	public Shipment getShipment() {
 		return shipment;

@@ -54,7 +54,6 @@ public class ShipmentService implements IShipmentService {
 			shipment.setDelivery(order.getDelivery());
 			shipment.setStation(station);
 			shipment.setStatus("INIT");
-			shipment.setAccessCode(RandomCode.obtainRandomCode());
 			shipment.setDetails(new HashSet<OrderItem>());
 			for(OrderItem item : order.getDetails()){
 				OrderItem newItem = new OrderItem();
@@ -67,6 +66,7 @@ public class ShipmentService implements IShipmentService {
 			
 			order.setStatus("processing");
 			order.setShipment(shipment);
+			order.setAccessCode(RandomCode.obtainRandomCode());
 			this.orderDao.update(order);
 			
 			logger.info("send SHIPMENT to MessageQueue as PlainText");
@@ -113,17 +113,18 @@ public class ShipmentService implements IShipmentService {
 	public void finish(int shipmentID, String accessCode) throws Exception {
 
 		Shipment shipment = this.shipDao.findByID(shipmentID);
-		if(null != shipment && shipment.getAccessCode().equals(accessCode)){
+		if(null != shipment){
 			
 			Order order = this.orderDao.findByHQL("from Order where shipment=?", new Object[]{shipment});
 			shipment.setStatus("finish");
-			if( null != order ){
+			if( null != order && order.getAccessCode().equals(accessCode)){
 				
 				order.setStatus("finish");
 				this.orderDao.update(order);
+			} else {
+				throw new Exception("Invalid Access Code");
 			}
 			this.shipDao.update(shipment);
-		} else
-			throw new Exception("Invalid Access Code");
+		}	
 	}
 }
