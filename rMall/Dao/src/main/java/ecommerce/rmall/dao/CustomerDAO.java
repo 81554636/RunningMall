@@ -15,9 +15,9 @@ public class CustomerDAO extends DaoSupport {
 		return customer;
 	}
 	
-	public Customer findByHQL(String hql, Object[] params){
+	public Customer findByHQL(String hql, String[] params, Object[] values){
 		
-		List<Customer> result = super.queryByHql(hql, params);
+		List<Customer> result = super.queryByHql(hql, params, values);
 		if(null != result && result.size()>0)
 			return (Customer)result.get(0);
 		else

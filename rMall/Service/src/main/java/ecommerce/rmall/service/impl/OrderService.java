@@ -48,8 +48,8 @@ public class OrderService implements IOrderService {
 	@Override
 	public Order place(Delivery delivery, List<OrderItem> items) {
 		
-		String findByPhone = "from Customer where phone=?";
-		Customer customer = this.customerDao.findByHQL(findByPhone, new Object[]{delivery.getPhone()});
+		String findByPhone = "from Customer where phone=:phone";
+		Customer customer = this.customerDao.findByHQL(findByPhone, new String[]{"phone"}, new Object[]{delivery.getPhone()});
 		if(null == customer){
 			
 			customer = new Customer();
