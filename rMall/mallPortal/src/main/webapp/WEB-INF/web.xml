@@ -86,7 +86,7 @@
     </filter-mapping>
 
 	<welcome-file-list>
-		<welcome-file>Order/pendingFirst.do</welcome-file>
+		<welcome-file>/Order/pendingFirst.do</welcome-file>
 	</welcome-file-list>
 	<login-config>
 		<auth-method>BASIC</auth-method>
