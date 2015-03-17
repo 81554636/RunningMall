@@ -63,7 +63,7 @@ public class OrderController {
 	@RequestMapping(method=RequestMethod.GET, value="/processingPages")
 	public String processingPage(Model model, int pageNumber){
 		
-		Page<Order> page = this.service.queryProcessingWithPage(0);
+		Page<Order> page = this.service.queryProcessingWithPage(pageNumber);
 		List<Station> stations = this.stationService.listAll();
 		
 		model.addAttribute("CURRENT", "PROCESSING");
