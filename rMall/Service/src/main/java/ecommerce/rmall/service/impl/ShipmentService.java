@@ -127,15 +127,16 @@ public class ShipmentService implements IShipmentService {
 		if(null != shipment){
 			
 			Order order = this.orderDao.findByHQL("from Order where shipment=:shipment", new String[]{"shipment"}, new Object[]{shipment});
-			shipment.setStatus("finish");
 			if( null != order && order.getAccessCode().equals(accessCode)){
+				
+				shipment.setStatus("finish");
+				this.shipDao.update(shipment);
 				
 				order.setStatus("finish");
 				this.orderDao.update(order);
 			} else {
 				throw new Exception("Invalid Access Code");
 			}
-			this.shipDao.update(shipment);
 		}	
 	}
 }
