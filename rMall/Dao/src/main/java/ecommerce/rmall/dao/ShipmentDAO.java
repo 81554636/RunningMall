@@ -34,17 +34,18 @@ public class ShipmentDAO extends DaoSupport implements IPagination<Shipment>{
 		
 		Page<Shipment> page = new Page<Shipment>();
 		page.setCurrentPage(pageNumber);
-		List<Shipment> rtn = super.queryForList("from Shipment", new Object[]{}, page);
+		List<Shipment> rtn = super.queryForList("from Shipment", new String[]{}, new Object[]{}, page);
 		page.setDataList(rtn);
 		return page;
 	}
 
 	@Override
-	public Page<Shipment> findByHQLWithPage(String hql, Object[] params, int pageNumber) {
+	public Page<Shipment> findByHQLWithPage(String hql, 
+			String[] params, Object[] values, int pageNumber) {
 		
 		Page<Shipment> page = new Page<Shipment>();
 		page.setCurrentPage(pageNumber);
-		List<Shipment> rtn = super.queryForList(hql, params, page);
+		List<Shipment> rtn = super.queryForList(hql, params, values, page);
 		page.setDataList(rtn);
 		return page;
 	}

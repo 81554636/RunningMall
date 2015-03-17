@@ -2,7 +2,6 @@ package ecommerce.rmall.service.impl;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,16 +81,28 @@ public class ShipmentService implements IShipmentService {
 	}
 	
 	@Override
-	public List<Shipment> queryByStation(int stationID) {
-		
-		return this.shipDao.findByStationID(stationID);
+	public Page<Shipment> queryWithPage(int pageNumber){
+		return this.shipDao.findWithPage(pageNumber);
 	}
 	
 	@Override
-	public Page<Shipment> queryBySession(String sessionKey, int pageNumber) {
+	public Page<Shipment> queryBySessionWithPage(String sessionKey, int pageNumber) {
 		
-		String hql = "from Shipment where station.credential.sessionKey=? order by id desc";
-		return this.shipDao.findByHQLWithPage(hql, new Object[]{sessionKey}, pageNumber);
+		String hql = "from Shipment where station.credential.sessionKey=:sessionKey order by id desc";
+		return this.shipDao.findByHQLWithPage(hql, 
+				new String[]{"sessionKey"}, 
+				new Object[]{sessionKey}, 
+				pageNumber);
+	}
+	
+	@Override
+	public Page<Shipment> queryByNameWithPage(String name, int pageNumber) {
+		
+		String hql = "from Shipment where station.name=:station_name order by id desc";
+		return this.shipDao.findByHQLWithPage(hql, 
+				new String[]{"station"}, 
+				new Object[]{name}, 
+				pageNumber);
 	}
 	
 	@Override
@@ -99,7 +110,7 @@ public class ShipmentService implements IShipmentService {
 		
 		Shipment shipment = this.shipDao.findByID(shipmentID);
 		if(null != shipment){
-			Order order = this.orderDao.findByHQL("from Order where shipment=?", new Object[]{shipment});
+			Order order = this.orderDao.findByHQL("from Order where shipment=shipment", new String[]{"shipment"}, new Object[]{shipment});
 			shipment.setStatus("finish");
 			if( null != order ){
 				order.setStatus("finish");
@@ -115,7 +126,7 @@ public class ShipmentService implements IShipmentService {
 		Shipment shipment = this.shipDao.findByID(shipmentID);
 		if(null != shipment){
 			
-			Order order = this.orderDao.findByHQL("from Order where shipment=?", new Object[]{shipment});
+			Order order = this.orderDao.findByHQL("from Order where shipment=:shipment", new String[]{"shipment"}, new Object[]{shipment});
 			shipment.setStatus("finish");
 			if( null != order && order.getAccessCode().equals(accessCode)){
 				

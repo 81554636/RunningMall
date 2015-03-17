@@ -1,10 +1,10 @@
-<script src="js/jquery.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/bootbox.js"></script>
-<script src="js/messageTips.js"></script>
+<script src="../js/jquery.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/bootbox.js"></script>
+<script src="../js/messageTips.js"></script>
 
-<link href="css/select2.min.css" rel="stylesheet" />
-<script src="js/select2.min.js"></script>
+<link href="../css/select2.min.css" rel="stylesheet" />
+<script src="../js/select2.min.js"></script>
 
 <script>
 	function showMessage(msg) {
@@ -25,6 +25,7 @@
 				if('SUCCESS' == data){
 					//alert($('tr[orderid='+ orderID + ']').html());
 					$('tr[orderid='+ orderID + ']').remove();
+				} else {
 				}
 			}
 		});

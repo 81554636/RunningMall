@@ -18,8 +18,8 @@ public class StationService implements IStationService {
 	@Override
 	public Station queryByCredential(String username, String password) {
 		
-		String hql = "from Station where credential.username=?";
-		Station station = this.stationDao.findByHQL(hql, new Object[]{username});
+		String hql = "from Station where credential.username=:username";
+		Station station = this.stationDao.findByHQL(hql, new String[]{"username"}, new Object[]{username});
 		if(null != station){
 			if(station.getCredential().getPassword().equals(password)){
 				String sessionKey = UUID.randomUUID().toString();
@@ -32,14 +32,14 @@ public class StationService implements IStationService {
 
 	@Override
 	public List<Station> listAll() {
-		return this.stationDao.listByHQL("from Station", new Object[]{});
+		return this.stationDao.listByHQL("from Station", new String[]{}, new Object[]{});
 	}
 
 	@Override
 	public Station updateChannelInfo(String sessionKey, long channelID, String userID, String osType){
 		
-		String hql = "from Station where credential.sessionKey=?";
-		Station station = this.stationDao.findByHQL(hql, new Object[]{sessionKey});
+		String hql = "from Station where credential.sessionKey=:sessionKey";
+		Station station = this.stationDao.findByHQL(hql, new String[]{"sessionKey"}, new Object[]{sessionKey});
 		if( null != station ){
 			Channel channel = station.getChannel() == null ? new Channel() : station.getChannel();
 			channel.setChannelID(channelID);

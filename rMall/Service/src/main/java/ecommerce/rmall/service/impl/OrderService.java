@@ -110,19 +110,31 @@ public class OrderService implements IOrderService {
 	
 	@Override
 	public Page<Order> queryByPhoneWithPage(String phone, int pageNumber) {
-		String hql = "from Order where customer.phone=? order by id desc";
-		return this.orderDao.findByHQLWithPage(hql, new Object[]{phone}, pageNumber);
+		String hql = "from Order where customer.phone=:phone order by id desc";
+		return this.orderDao.findByHQLWithPage(
+				hql, 
+				new String[]{"phone"}, 
+				new Object[]{phone}, 
+				pageNumber);
 	}
 	@Override
 	public Page<Order> queryPendingWithPage(int pageNumber) {
-		String hql = "from Order where status=? order by id desc";
-		return this.orderDao.findByHQLWithPage(hql, new Object[]{"pending"}, pageNumber);
+		String hql = "from Order where status=:status order by id desc";
+		return this.orderDao.findByHQLWithPage(
+				hql, 
+				new String[]{"status"}, 
+				new Object[]{"pending"}, 
+				pageNumber);
 	}
 	
 	@Override
 	public Page<Order> queryProcessingWithPage(int pageNumber) {
-		String hql = "from Order where status=? order by id desc";
-		return this.orderDao.findByHQLWithPage(hql, new Object[]{"processing"}, pageNumber);
+		String hql = "from Order where status=:status order by id desc";
+		return this.orderDao.findByHQLWithPage(
+				hql, 
+				new String[]{"status"}, 
+				new Object[]{"processing"}, 
+				pageNumber);
 	}
 	
 	@Override

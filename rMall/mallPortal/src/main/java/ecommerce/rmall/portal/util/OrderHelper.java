@@ -43,6 +43,8 @@ public class OrderHelper {
 				sb.append(String.format("    姓名 : %s<br/>", order.getDelivery().getName()));
 				sb.append(String.format("    电话 : %s<br/>", order.getDelivery().getPhone()));
 				sb.append(String.format("    地址 : %s<br/>", order.getDelivery().getAddress()));
+				if(order.getAccessCode() != null)
+					sb.append(String.format("  验证码 : <B>%s</B><br/>", order.getAccessCode()));
 			sb.append("</pre></address>");
 			return sb.toString();
 		} else

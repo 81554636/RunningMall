@@ -14,16 +14,16 @@ public class StationDAO extends DaoSupport {
 		return super.get(Station.class, identity);
 	}
 	
-	public Station findByHQL(String hql, Object[] params){
+	public Station findByHQL(String hql, String[] params, Object[] values){
 		
-		List<Station> result = this.listByHQL(hql, params);
+		List<Station> result = this.listByHQL(hql, params, values);
 		if(null != result && result.size() > 0)
 			return result.get(0);
 		else
 			return null;
 	}
 	
-	public List<Station> listByHQL(String hql, Object[] params){
-		return super.queryByHql(hql, params);
+	public List<Station> listByHQL(String hql, String[] params, Object[] values){
+		return super.queryByHql(hql, params, values);
 	}
 }

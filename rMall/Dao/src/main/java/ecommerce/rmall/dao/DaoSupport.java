@@ -56,11 +56,11 @@ public class DaoSupport {
     }
     
     @SuppressWarnings("unchecked")
-	protected <T> List<T> queryByHql(String hql, Object[] params){
+	protected <T> List<T> queryByHql(String hql, String[] params, Object[] values){
     	
     	Query query = this.getSession().createQuery(hql);
 		for(int i=0; i<params.length; i++)
-			query.setParameter(i, params[i]);
+			query.setParameter(params[i], values[i]);
 		return query.list();
     }
     
@@ -71,13 +71,13 @@ public class DaoSupport {
      * @return
      */
 	@SuppressWarnings("unchecked")
-	protected <T> List<T> queryForList(String hql, Object[] params, Page<T> page) {  
+	protected <T> List<T> queryForList(String hql, String[] params, Object[] values, Page<T> page) {  
     	  
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         Query queryCount = sessionFactory.getCurrentSession().createQuery("select count(id) " + hql);
         for(int pos=0; pos<params.length; pos++){
-        	query.setParameter(pos, params[pos]);
-        	queryCount.setParameter(pos, params[pos]);
+        	query.setParameter(params[pos], values[pos]);
+        	queryCount.setParameter(params[pos], values[pos]);
         }
         
         int totalCount = ((Long) queryCount.uniqueResult()).intValue();
@@ -96,7 +96,7 @@ public class DaoSupport {
      * @return
      */
 	@SuppressWarnings("unchecked")
-	protected <T> List<T> queryForListWithCache(String hql, Object[] params, Page<T> page) {  
+	protected <T> List<T> queryForListWithCache(String hql, String[] params, Object[] values, Page<T> page) {  
   	  
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setCacheable(true);
@@ -104,8 +104,8 @@ public class DaoSupport {
         queryCount.setCacheable(true);
         
         for(int pos=0; pos<params.length; pos++){
-        	query.setParameter(pos, params[pos]);
-        	queryCount.setParameter(pos, params[pos]);
+        	query.setParameter(params[pos], values[pos]);
+        	queryCount.setParameter(params[pos], values[pos]);
         }
         
         int totalCount = ((Long) queryCount.uniqueResult()).intValue();
