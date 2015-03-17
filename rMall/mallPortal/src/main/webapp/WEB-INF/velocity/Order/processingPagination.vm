@@ -1,6 +1,7 @@
-<script src="../js/jquery.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/messageTips.js"></script>
+#set( $ContextPath = ${request.contextPath} )
+<script src="${ContextPath}/js/jquery.js"></script>
+<script src="${ContextPath}/js/bootstrap.min.js"></script>
+<script src="${ContextPath}/js/messageTips.js"></script>
 
 <script>
 	$(function () {
