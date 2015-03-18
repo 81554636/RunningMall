@@ -16,8 +16,6 @@
 	<build>
 		<finalName>mallService</finalName>
 		<plugins>
-		
-		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -47,6 +45,46 @@
 							</resources>
 						</configuration>
 						<inherited></inherited>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.jboss.as.plugins</groupId>
+				<artifactId>jboss-as-maven-plugin</artifactId>
+				<version>7.1.1.Final</version>
+				<configuration>
+					<hostname>${jboss.host}</hostname>
+					<port>9999</port>
+					<username>${jboss.username}</username>
+					<password>${jboss.password}</password>
+					<filename>../../mallService/target/mallService.war</filename>
+					<domain>
+						<server-groups>
+							<server-group>main-server-group</server-group>
+						</server-groups>
+					</domain>
+				</configuration>
+				<executions>
+					<!-- Undeploy the application on clean -->
+					<execution>
+						<id>undeploy</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>undeploy</goal>
+						</goals>
+						<configuration>
+							<ignoreMissingDeployment>true</ignoreMissingDeployment>
+						</configuration>
+					</execution>
+
+					<!-- Deploy the application on install -->
+					<execution>
+						<id>deploy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
