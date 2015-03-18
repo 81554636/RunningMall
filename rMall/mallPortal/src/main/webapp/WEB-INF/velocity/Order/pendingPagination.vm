@@ -4,8 +4,13 @@
 <script src="${ContextPath}/js/bootbox.js"></script>
 <script src="${ContextPath}/js/messageTips.js"></script>
 
+<!--
 <link href="${ContextPath}/css/select2.min.css" rel="stylesheet" />
 <script src="${ContextPath}/js/select2.min.js"></script>
+-->
+
+<link href="${ContextPath}/css/bootstrap-select.min.css" rel="stylesheet" />
+<script src="${ContextPath}/js/bootstrap-select.min.js"></script>
 
 <script>
 	function showMessage(msg) {
@@ -16,6 +21,7 @@
 
 	function onModalOK(){
 	
+		$('#myModal').width("100px");
 		var stationID = $('#dispatch_stationID').val();
 		var orderID = $('#dispatch_orderID').val();
 		var obj = $.ajax({
@@ -36,7 +42,8 @@
 
 		messageTips.init({"selector":".bb-alert"});
 		
-		$(".js-example-basic-single").select2();
+		//$(".js-example-basic-single").select2();
+		$(".selectpicker").selectpicker();
 		
 		$("[data-toggle='popover']").popover({
 			html:true,
@@ -46,6 +53,11 @@
 		
 		$(".dispatch").click(function(){
 			
+			var city = $(this).attr('city');
+			var cityID = $('option[city="' + city + '"]').val();
+			$('.selectpicker').val(cityID);
+			$('.selectpicker').selectpicker('render');
+			$('#myModal').width("600px");
 			var orderID = $(this).parents("tr").attr("orderID");
 			$('#myModal #dispatch_orderID').val(orderID);
 			$('#myModal').modal();
@@ -71,19 +83,19 @@
 
 <!-- 派送模态框（Modal） -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
-   aria-labelledby="myModalLabel" aria-hidden="true">
+   aria-labelledby="myModalLabel" aria-hidden="true" style="width:100px;">
    <div class="modal-dialog">
       <div class="modal-content">
          <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h4 class="modal-title" id="myModalLabel">订单配送</h4>
          </div>
-         <div class="modal-body">
+         <div class="modal-body" style="height:150px;"> 
 <input type="hidden" id="dispatch_orderID"/>
 选择配送小站
-<select class="js-example-basic-single" id="dispatch_stationID">
+<select class="selectpicker" data-size="5" id="dispatch_stationID" data-live-search="true">
 #foreach($station in ${stations})
-<option value="${station.id}">${station.name}</option>
+<option value="${station.id}" data-subtext="${station.name}" city="${station.name}">${station.name}</option>
 #end
 </select>
          </div>
@@ -123,7 +135,7 @@
 			<td rowspan="$!{order.details.size()}">${order.createDate}</td>
 			<td rowspan="$!{order.details.size()}">
 				<button type="button" class="btn btn-small btn-danger" data-toggle="confirm">取消</button>
-				<button type="button" class="btn btn-small btn-info dispatch">配送</button>
+				<button type="button" class="btn btn-small btn-info dispatch" city="${order.delivery.city}">配送</button>
 			</td>
 			#end
 			<td>${orderItem.product.displayName}</td>
