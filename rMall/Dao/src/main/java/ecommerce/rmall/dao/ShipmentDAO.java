@@ -34,7 +34,7 @@ public class ShipmentDAO extends DaoSupport implements IPagination<Shipment>{
 		
 		Page<Shipment> page = new Page<Shipment>();
 		page.setCurrentPage(pageNumber);
-		List<Shipment> rtn = super.queryForList("from Shipment", new String[]{}, new Object[]{}, page);
+		List<Shipment> rtn = super.queryForList("from Shipment order by id desc", new String[]{}, new Object[]{}, page);
 		page.setDataList(rtn);
 		return page;
 	}
