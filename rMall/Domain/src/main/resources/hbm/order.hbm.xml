@@ -9,7 +9,14 @@
             <column name="id"/>
             <generator class="identity"/>
         </id>        
-        <property name="status" type="java.lang.String" column="status"/>
+        <property name="status" type="java.lang.String" column="status" length="16"/>
+        <property name="orderStatus" column="ostatus" length="16">
+	        <type name="org.hibernate.type.EnumType">
+	            <param name="enumClass">ecommerce.rmall.domain.OrderStatus</param>
+	            <param name="useNamed">true</param>
+	            <param name="type">12</param><!-- VARCHAR -->         
+	        </type>
+        </property>
         <property name="accessCode" type="java.lang.String" column="accessCode" length="12"/>
         
         <many-to-one name="customer" column="customerID" 

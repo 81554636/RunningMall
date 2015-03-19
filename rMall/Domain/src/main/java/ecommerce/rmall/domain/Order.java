@@ -19,6 +19,14 @@ public class Order{
 	private Shipment shipment;
 	private String accessCode;
 	
+	private OrderStatus orderStatus;
+	public void setOrderStatus(OrderStatus status){
+		this.orderStatus = status;
+	}
+	public OrderStatus getOrderStatus(){
+		return this.orderStatus;
+	}
+	
 	public String getAccessCode() {
 		return accessCode;
 	}
