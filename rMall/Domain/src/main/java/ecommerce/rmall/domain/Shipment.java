@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Shipment {
 
 	private int id;
-	private String status;
+	private ShipmentStatus status;
 	private Date createDate;
 	private Date lastUpdate;
 	private String lastUpdateBy;
@@ -25,11 +25,11 @@ public class Shipment {
 		this.id = id;
 	}
 
-	public String getStatus() {
+	public ShipmentStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(ShipmentStatus status) {
 		this.status = status;
 	}
 

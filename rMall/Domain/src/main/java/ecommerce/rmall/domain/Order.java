@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Order{
 
 	private int id;
-	private String status;
 	private Date createDate;
 	private Date lastUpdate;
 	private String lastUpdateBy;
@@ -20,10 +19,10 @@ public class Order{
 	private String accessCode;
 	
 	private OrderStatus orderStatus;
-	public void setOrderStatus(OrderStatus status){
+	public void setStatus(OrderStatus status){
 		this.orderStatus = status;
 	}
-	public OrderStatus getOrderStatus(){
+	public OrderStatus getStatus(){
 		return this.orderStatus;
 	}
 	
@@ -71,12 +70,7 @@ public class Order{
 	public void setDelivery(Delivery delivery) {
 		this.delivery = delivery;
 	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
+
 	public Date getLastUpdate() {
 		return lastUpdate;
 	}

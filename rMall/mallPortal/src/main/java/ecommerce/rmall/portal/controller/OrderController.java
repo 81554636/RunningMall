@@ -1,5 +1,6 @@
 package ecommerce.rmall.portal.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ecommerce.rmall.domain.CountByDate;
 import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.domain.Shipment;
@@ -85,6 +87,11 @@ public class OrderController {
 		return "Order/search";
 	}
 	
+	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET}, value="/stastic")
+	public String stastic(){
+		return "Order/stastic";
+	}
+	
 	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET}, value="/dispatch")
 	@ResponseBody
 	public String dispatchOrder(int orderID, int stationID){
@@ -95,5 +102,41 @@ public class OrderController {
 				shipment.getStation().getName(),
 				shipment.getDelivery().getName());
 		return "SUCCESS";
+	}
+	
+	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET}, value="/countByDate")
+	@ResponseBody
+	public List<Object> countByDate(){
+		List<CountByDate> rtn = this.service.countByDate();
+		List<Integer> data = new ArrayList<Integer>();
+		List<String> categories = new ArrayList<String>();
+		Serie serie = new Serie("Order");
+		for(CountByDate item : rtn){
+			data.add(item.getCount());
+			categories.add(item.getDate());
+		}
+		serie.setData(data);
+		
+		List<Object> series = new ArrayList<Object>();
+		series.add(serie);
+		
+		List<Object> result = new ArrayList<Object>();
+		result.add(categories);
+		result.add(series);
+		
+		return result;
+	}
+	
+	static public class Serie{
+		
+		public Serie(String name){
+			this.name = name;
+		}
+		private String name;
+		private List<Integer> data;
+		
+		public String getName(){return this.name;}
+		public List<Integer> getData(){return this.data;}
+		public void setData(List<Integer> data){this.data = data;}
 	}
 }

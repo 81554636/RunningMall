@@ -10,6 +10,7 @@ import ecommerce.rmall.dao.CustomerDAO;
 import ecommerce.rmall.dao.OrderDAO;
 import ecommerce.rmall.dao.ProductDAO;
 import ecommerce.rmall.dao.ShipmentDAO;
+import ecommerce.rmall.domain.CountByDate;
 import ecommerce.rmall.domain.Customer;
 import ecommerce.rmall.domain.Delivery;
 import ecommerce.rmall.domain.Order;
@@ -17,6 +18,7 @@ import ecommerce.rmall.domain.OrderItem;
 import ecommerce.rmall.domain.OrderStatus;
 import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.domain.Product;
+import ecommerce.rmall.domain.ShipmentStatus;
 import ecommerce.rmall.message.MessageSender;
 import ecommerce.rmall.service.IOrderService;
 
@@ -74,8 +76,7 @@ public class OrderService implements IOrderService {
 			order.setCreateDate(new Date());
 			order.setLastUpdate(new Date());
 			order.setLastUpdateBy("SYSTEM");
-			order.setStatus("pending");
-			order.setOrderStatus(OrderStatus.PENDING);
+			order.setStatus(OrderStatus.PENDING);
 			order.setCustomer(customer);
 			order.setDelivery(delivery);
 			order.setDetails(new java.util.ArrayList<OrderItem>());
@@ -125,7 +126,7 @@ public class OrderService implements IOrderService {
 		return this.orderDao.findByHQLWithPage(
 				hql, 
 				new String[]{"status"}, 
-				new Object[]{"pending"}, 
+				new Object[]{OrderStatus.PENDING}, 
 				pageNumber);
 	}
 	
@@ -135,7 +136,7 @@ public class OrderService implements IOrderService {
 		return this.orderDao.findByHQLWithPage(
 				hql, 
 				new String[]{"status"}, 
-				new Object[]{"processing"}, 
+				new Object[]{OrderStatus.PROCESSING}, 
 				pageNumber);
 	}
 	
@@ -143,8 +144,8 @@ public class OrderService implements IOrderService {
 	public void cancel(int orderId) {
 		
 		Order order = this.orderDao.findByID(orderId);
-		if(null != order && "pending".equals(order.getStatus())){
-			order.setStatus("cancel");
+		if(null != order && OrderStatus.PENDING==order.getStatus()){
+			order.setStatus(OrderStatus.CANCEL);
 			this.orderDao.update(order);
 		}
 	}
@@ -155,12 +156,16 @@ public class OrderService implements IOrderService {
 		Order order = this.orderDao.findByID(orderId);
 		if(null != order){
 
-			if(order.getStatus().equals("processing") && null != order.getShipment()){
-				order.getShipment().setStatus("finish");
+			if(OrderStatus.PROCESSING == order.getStatus() && null != order.getShipment()){
+				order.getShipment().setStatus(ShipmentStatus.FINISH);
 				this.shipmentDao.update(order.getShipment());
 			}
-			order.setStatus("finish");
+			order.setStatus(OrderStatus.FINISH);
 			this.orderDao.update(order);
 		}
+	}
+	@Override
+	public List<CountByDate> countByDate() {
+		return this.orderDao.count();
 	}
 }

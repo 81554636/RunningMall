@@ -2,6 +2,7 @@ package ecommerce.rmall.service;
 
 import java.util.List;
 
+import ecommerce.rmall.domain.CountByDate;
 import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.domain.Delivery;
 import ecommerce.rmall.domain.Order;
@@ -70,4 +71,6 @@ public interface IOrderService {
 	 * @param orderId 
 	 */
 	void finish(int orderId);
+	
+	List<CountByDate> countByDate();
 }

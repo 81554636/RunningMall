@@ -9,8 +9,8 @@
             <column name="id"/>
             <generator class="identity"/>
         </id>        
-        <property name="status" type="java.lang.String" column="status" length="16"/>
-        <property name="orderStatus" column="ostatus" length="16">
+        <!-- <property name="status" type="java.lang.String" column="status" length="16"/> -->
+        <property name="status" column="status" length="16">
 	        <type name="org.hibernate.type.EnumType">
 	            <param name="enumClass">ecommerce.rmall.domain.OrderStatus</param>
 	            <param name="useNamed">true</param>
@@ -40,4 +40,9 @@
         <property name="lastUpdate" type="java.sql.Timestamp" column="lastUpdate"/>
         <property name="lastUpdateBy" type="java.lang.String" column="updateBy"/>
     </class>
+    <sql-query name="countGroupByDate">
+		<![CDATA[
+		select count(id),str_to_date(createDate,'%Y-%m-%d') time from rmall_order group by time order by time;
+		]]>
+	</sql-query>
 </hibernate-mapping>

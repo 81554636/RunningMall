@@ -1,7 +1,11 @@
 package ecommerce.rmall.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Query;
+
+import ecommerce.rmall.domain.CountByDate;
 import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.Page;
 
@@ -49,5 +53,19 @@ public class OrderDAO extends DaoSupport implements IPagination<Order>{
 			return (Order)result.get(0);
 		else
 			return null;
+	}
+	
+	public List<CountByDate> count(){
+		
+		List<CountByDate> rtn = new ArrayList<CountByDate>();
+		Query query = super.getSession().getNamedQuery("countGroupByDate");
+		List<Object[]> result = query.list();
+		for(int i=0; i<result.size(); i++){
+			Object[] objs = (Object[])result.get(i);
+			int count = ((java.math.BigInteger)objs[0]).intValue();
+			String date = ((java.util.Date)objs[1]).toString();
+			rtn.add(new CountByDate(count, date));
+		}
+		return rtn;
 	}
 }

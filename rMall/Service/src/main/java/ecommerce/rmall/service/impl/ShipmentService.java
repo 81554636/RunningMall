@@ -11,8 +11,10 @@ import ecommerce.rmall.dao.ShipmentDAO;
 import ecommerce.rmall.dao.StationDAO;
 import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.OrderItem;
+import ecommerce.rmall.domain.OrderStatus;
 import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.domain.Shipment;
+import ecommerce.rmall.domain.ShipmentStatus;
 import ecommerce.rmall.domain.Station;
 import ecommerce.rmall.message.MessageSender;
 import ecommerce.rmall.service.IShipmentService;
@@ -52,7 +54,8 @@ public class ShipmentService implements IShipmentService {
 			shipment.setLastUpdate(new Date());
 			shipment.setDelivery(order.getDelivery());
 			shipment.setStation(station);
-			shipment.setStatus("INIT");
+			//shipment.setStatus("INIT");
+			shipment.setStatus(ShipmentStatus.INIT);
 			shipment.setDetails(new HashSet<OrderItem>());
 			for(OrderItem item : order.getDetails()){
 				OrderItem newItem = new OrderItem();
@@ -63,7 +66,8 @@ public class ShipmentService implements IShipmentService {
 			logger.info("persistence ORDER & SHIPMENT to Database");
 			this.shipDao.save(shipment);
 			
-			order.setStatus("processing");
+			//order.setStatus("processing");
+			order.setStatus(OrderStatus.PROCESSING);
 			order.setShipment(shipment);
 			order.setAccessCode(RandomCode.obtainRandomCode());
 			this.orderDao.update(order);
@@ -111,9 +115,11 @@ public class ShipmentService implements IShipmentService {
 		Shipment shipment = this.shipDao.findByID(shipmentID);
 		if(null != shipment){
 			Order order = this.orderDao.findByHQL("from Order where shipment=shipment", new String[]{"shipment"}, new Object[]{shipment});
-			shipment.setStatus("finish");
+			//shipment.setStatus("finish");
+			shipment.setStatus(ShipmentStatus.FINISH);
 			if( null != order ){
-				order.setStatus("finish");
+				//order.setStatus("finish");
+				order.setStatus(OrderStatus.FINISH);
 				this.orderDao.update(order);
 			}
 			this.shipDao.update(shipment);
@@ -129,10 +135,12 @@ public class ShipmentService implements IShipmentService {
 			Order order = this.orderDao.findByHQL("from Order where shipment=:shipment", new String[]{"shipment"}, new Object[]{shipment});
 			if( null != order && order.getAccessCode().equals(accessCode)){
 				
-				shipment.setStatus("finish");
+				//shipment.setStatus("finish");
+				shipment.setStatus(ShipmentStatus.FINISH);
 				this.shipDao.update(shipment);
 				
-				order.setStatus("finish");
+				//order.setStatus("finish");
+				order.setStatus(OrderStatus.FINISH);
 				this.orderDao.update(order);
 			} else {
 				throw new Exception("Invalid Access Code");
