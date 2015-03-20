@@ -28,6 +28,9 @@
     <bean id="destination.place"  class="org.apache.activemq.command.ActiveMQTopic">  
           <constructor-arg value="${message.Queue.Destination.Order}"/>  
     </bean>
+    <bean id="destination.auto" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="mall.autoDistribution" />
+    </bean>
     <bean id="destination.dispatch" class="org.apache.activemq.command.ActiveMQQueue">
         <constructor-arg value="${message.Queue.Destination.Ship}" />
     </bean>
@@ -42,6 +45,16 @@
     <!-- 消息发送方 -->
     <bean id="messageSender.place" class="ecommerce.rmall.message.MessageSender">
     	<property name="jmsTemplate" ref="jmsTemplate.place"/>
+    </bean>
+    
+    <bean id="jmsTemplate.auto" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="queueConnectionFactory"/>
+        <property name="defaultDestination" ref="destination.auto"/>        
+        <property name="pubSubDomain" value="false" />
+    </bean>
+    <!-- 消息发送方 -->
+    <bean id="messageSender.auto" class="ecommerce.rmall.message.MessageSender">
+    	<property name="jmsTemplate" ref="jmsTemplate.auto"/>
     </bean>
     
     <!-- +++++++++ DISTRIBUTION SENDER +++++++++ -->
@@ -68,9 +81,26 @@
     </bean>
     
     <!-- 消息监听容器 -->
-    <bean id="listenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">    
+    <bean id="shipmentListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">    
         <property name="connectionFactory" ref="queueConnectionFactory" />    
         <property name="destination" ref="destination.dispatch" />    
         <property name="messageListener" ref="shipmentReceiver" />    
+    </bean>
+    
+    <!-- +++++++++ DISTRIBUTION RECEIVER +++++++++ -->
+    <!-- 消息接收方 -->  
+    <bean id="orderReceiver" class="ecommerce.rmall.message.MessageReceiver">
+    	<property name="job">
+    		<bean class="ecommerce.rmall.job.DispatchAutobots">
+    			<property name="shipmentService" ref="shipmentService"/>
+    		</bean>
+    	</property>
+    </bean>
+    
+    <!-- 消息监听容器 -->
+    <bean id="orderListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">    
+        <property name="connectionFactory" ref="queueConnectionFactory" />    
+        <property name="destination" ref="destination.auto" />    
+        <property name="messageListener" ref="orderReceiver" />    
     </bean>
 </beans>  

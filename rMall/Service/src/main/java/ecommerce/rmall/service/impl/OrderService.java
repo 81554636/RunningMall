@@ -23,6 +23,7 @@ public class OrderService implements IOrderService {
 
 	private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 	
+	// ++++++++++ DAO ++++++++++ //
 	private CustomerDAO customerDao;
 	private OrderDAO orderDao;
 	private ProductDAO productDao;
@@ -40,9 +41,15 @@ public class OrderService implements IOrderService {
 		this.shipmentDao = shipmentDao;
 	}
 	
+	// ++++++++++ Message QUEUE ++++++++++ //
 	private MessageSender msgSender;
 	public void setMessageSender(MessageSender msgSender) {
 		this.msgSender = msgSender;
+	}
+	
+	private MessageSender msgAutoDispatch;
+	public void setMessageDispatch(MessageSender msgSender){
+		this.msgAutoDispatch = msgSender;
 	}
 	
 	@Override
@@ -92,8 +99,11 @@ public class OrderService implements IOrderService {
 			logger.info("persistence ORDER to DataBase");
 			this.orderDao.save(order);
 			
-			logger.info("send ORDER to MessageQueue as PlainText");
+			logger.info("send ORDER to MessageQueue as PlainText [notify browser user]");
 			this.msgSender.sendMessage(new com.google.gson.Gson().toJson(order));
+			
+			logger.info("send ORDER to MessageQueue as PlainText [automatic distribution]");
+			this.msgAutoDispatch.sendMessage(new com.google.gson.Gson().toJson(order));
 		}
 		return order;
 	}

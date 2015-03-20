@@ -139,4 +139,44 @@ public class ShipmentService implements IShipmentService {
 			}
 		}	
 	}
+	
+	@Override
+	public Shipment dispatch(Order order) {
+
+		Shipment shipment = null;
+		if(null != order && null != order.getDelivery().getCity()){
+			String city = order.getDelivery().getCity();
+			Station station = this.stationDao.findByHQL("from Station where city=:city", 
+					new String[]{"city"}, new Object[]{city});
+			
+			if(null != station){
+				
+				shipment = new Shipment();
+				shipment.setCreateDate(new Date());
+				shipment.setLastUpdate(new Date());
+				shipment.setDelivery(order.getDelivery());
+				shipment.setStation(station);
+				shipment.setStatus("INIT");
+				shipment.setDetails(new HashSet<OrderItem>());
+				for(OrderItem item : order.getDetails()){
+					OrderItem newItem = new OrderItem();
+					newItem.setId(item.getId());
+					shipment.getDetails().add(newItem);
+				}
+				
+				logger.info("persistence ORDER & SHIPMENT to Database");
+				this.shipDao.save(shipment);
+				
+				order.setStatus("processing");
+				order.setShipment(shipment);
+				order.setAccessCode(RandomCode.obtainRandomCode());
+				this.orderDao.update(order);
+				
+				logger.info("send SHIPMENT to MessageQueue as PlainText");
+				this.messageSender.sendMessage(new com.google.gson.Gson().toJson(shipment));
+			}
+		}
+
+		return shipment;
+	}
 }

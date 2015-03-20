@@ -17,6 +17,7 @@
 		<property name="productDao" ref="productDao"/>
 		<property name="shipmentDao" ref="shipmentDao"/>
 		<property name="messageSender" ref="messageSender.place"/>
+		<property name="messageDispatch" ref="messageSender.auto"/>
 	</bean>
 	
 	<bean id="shipmentService" class="ecommerce.rmall.service.impl.ShipmentService">
