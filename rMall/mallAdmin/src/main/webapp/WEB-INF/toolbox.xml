@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolbox>
+	<tool>
+		<key>import</key>
+		<scope>request</scope>
+		<class>org.apache.velocity.tools.view.tools.ImportTool</class>
+	</tool>
+
+	<tool>
+		<key>orderHelper</key>
+		<scope>request</scope>
+		<class>ecommerce.rmall.admin.util.OrderHelper</class>
+	</tool>
+</toolbox>

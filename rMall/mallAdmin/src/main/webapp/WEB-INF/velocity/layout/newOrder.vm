@@ -1,0 +1,126 @@
+<script>
+	function onPlus(e){
+		var input = $(e).parent().find("input");
+		input.val(Number(input.val())+1);
+	}
+	function onMinus(e){
+		var input = $(e).parent().find("input");
+		if(input.val()>0)
+			input.val(Number(input.val())-1);
+	}
+	function clean(){
+		$('#uname').val('');
+		$('#uphone').val('');
+		$('#uaddress').val('');
+		
+		$(".thumbnails").find("input").each(function(){
+
+			var product = $(this);
+			product.val(0);
+		});
+	}
+	function onCancel(){
+		clean();
+		var target = $("#new-order").toggleClass('hidden');
+	}
+	function onCreateOrder(){
+
+		var cityID = $('#ucity').val();
+		var city = $('select>option[value=' + cityID + ']').attr('city');
+		var order = {
+			customer:{
+				name   : $('#uname').val(),
+				phone  : $('#uphone').val(),
+				address: $('#uaddress').val(),
+			},
+			delivery:{
+				name   : $('#uname').val(),
+				phone  : $('#uphone').val(),
+				address: $('#uaddress').val(),
+				city   : city
+			},
+			details:[]
+		};
+		
+		$(".thumbnails").find("input").each(function(){
+		
+			var product = $(this);
+			var orderItem = {
+				product : {id:product.attr("id")},
+				price : product.attr("price"),
+				quantity : product.val()
+			};
+			order.details.push(orderItem);
+		});
+		
+		var obj = $.ajax({
+			type : "POST",
+			url    : "create.do",
+			contentType:"application/json",
+			dataType:"json",
+			async  : false,
+			data   : JSON.stringify(order),
+			success: function(data){
+				alert(data);
+			}
+		});
+		
+		clean();
+	}
+</script>
+
+<div id="new-order" class="form-horizontal hidden">
+	<fieldset>
+		<legend>创建订单</legend>
+		<div class="row">
+		<div class="span5">
+			<div class="control-group">
+				<label class="control-label" for="uname">联系人</label>
+				<div class="controls"><input id="uname" class"input-xlarge" type="text"></div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="uphone">联系电话</label>
+				<div class="controls"><input id="uphone" class"input-xlarge" type="text"></div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="uaddress">联系地址</label>
+				<div class="controls"><input id="uaddress" class"input-xlarge" type="text"></div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="ucity">城市</label>
+				<div class="controls">
+					<select id="ucity" class="selectpicker" data-size="5" id="dispatch_stationID" data-live-search="true">
+					#foreach($station in ${stations})
+					<option value="${station.id}" data-subtext="${station.name}" city="${station.name}">${station.name}</option>
+					#end
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+				<button class="btn btn-primary" onclick="onCreateOrder();">确定</button>
+				<button class="btn" onclick="onCancel();">取消</button>
+				</div>
+			</div>
+		</div><!-- <div class="span5"> -->
+		<div class="span4">
+			<ul class="thumbnails">
+			#foreach(${product} in ${products})
+				<li class="span2">
+					<div class="thumbnail">
+						<img src="${product.url}">
+						<div class="caption" align="center">
+							${product.displayName}<br>
+							<i class="icon-plus" style="cursor:pointer" onclick="return onPlus(this);"></i>
+							<input type="text" id="${product.id}" price="${product.price}" size="2" style="width:20px;" value="0"/>
+							<i class="icon-minus" style="cursor:pointer" onclick="return onMinus(this);"></i>
+						</div>
+					</div>
+				</li>
+			#end
+			</ul>
+		</div><!-- <div class="span4"> -->
+		</div><!-- <div class="row"> -->
+	</fieldset>
+</div>
+	

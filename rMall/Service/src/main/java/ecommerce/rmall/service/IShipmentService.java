@@ -12,6 +12,7 @@ public interface IShipmentService {
 	Page<Shipment> queryBySessionWithPage(String sessionKey, int pageNumber);
 	Page<Shipment> queryByNameWithPage(String name, int pageNumber);
 	
+	void notify(int shipmentID);
 	void finish(int shipmentID);
 	void finish(int shipmentID, String accessCode) throws Exception;
 }

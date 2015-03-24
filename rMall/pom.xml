@@ -242,11 +242,11 @@
 		<module>Domain</module>
 		<module>Service</module>
 		<module>Dao</module>
-		<module>mallService</module>
-		<module>mallPortal</module>
 		<module>BaiduPush</module>
+		<module>mallAdmin</module>
+		<module>mallService</module>
 	</modules>
-	
+
 	<build>
 		<plugins>
 			<plugin>

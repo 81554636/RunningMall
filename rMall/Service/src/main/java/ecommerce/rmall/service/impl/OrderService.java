@@ -10,6 +10,7 @@ import ecommerce.rmall.dao.CustomerDAO;
 import ecommerce.rmall.dao.OrderDAO;
 import ecommerce.rmall.dao.ProductDAO;
 import ecommerce.rmall.dao.ShipmentDAO;
+import ecommerce.rmall.dao.StationDAO;
 import ecommerce.rmall.domain.CountByDate;
 import ecommerce.rmall.domain.Customer;
 import ecommerce.rmall.domain.Delivery;
@@ -18,9 +19,12 @@ import ecommerce.rmall.domain.OrderItem;
 import ecommerce.rmall.domain.OrderStatus;
 import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.domain.Product;
+import ecommerce.rmall.domain.Shipment;
 import ecommerce.rmall.domain.ShipmentStatus;
+import ecommerce.rmall.domain.Station;
 import ecommerce.rmall.message.MessageSender;
 import ecommerce.rmall.service.IOrderService;
+import ecommerce.rmall.service.IShipmentService;
 
 public class OrderService implements IOrderService {
 
@@ -30,6 +34,10 @@ public class OrderService implements IOrderService {
 	private OrderDAO orderDao;
 	private ProductDAO productDao;
 	private ShipmentDAO shipmentDao;
+	private StationDAO stationDao;
+	public void setStationDao(StationDAO dao){
+		this.stationDao = dao;
+	}
 	public void setCustomerDao(CustomerDAO customerDao) {
 		this.customerDao = customerDao;
 	}
@@ -41,6 +49,11 @@ public class OrderService implements IOrderService {
 	}
 	public void setShipmentDao(ShipmentDAO shipmentDao){
 		this.shipmentDao = shipmentDao;
+	}
+	
+	private IShipmentService shipmentService;
+	public void setShipmentService(IShipmentService service){
+		this.shipmentService = service;
 	}
 	
 	private MessageSender msgSender;
@@ -61,9 +74,62 @@ public class OrderService implements IOrderService {
 			customer.setName(delivery.getName());
 			customer.setPhone(delivery.getPhone());
 			
+			logger.info("persistence CUSTOMER to DataBase");
 			customer = this.customerDao.save(customer);
 		}
 		return this.place(delivery, items, customer.getId());
+	}
+	
+	@Override
+	public Order placeAndDistribute(Delivery delivery, List<OrderItem> items) {
+		
+		String findByPhone = "from Customer where phone=:phone";
+		Customer customer = this.customerDao.findByHQL(findByPhone, new String[]{"phone"}, new Object[]{delivery.getPhone()});
+		if(null == customer){//创建客户
+			
+			customer = new Customer();
+			customer.setAddress(delivery.getAddress());
+			customer.setCreateDate(new Date());
+			customer.setName(delivery.getName());
+			customer.setPhone(delivery.getPhone());
+			
+			logger.info("persistence CUSTOMER to DataBase");
+			customer = this.customerDao.save(customer);
+		}
+		
+		//创建订单
+		Order order = new Order();
+		order.setCreateDate(new Date());
+		order.setLastUpdate(new Date());
+		order.setLastUpdateBy("SYSTEM");
+		order.setStatus(OrderStatus.PENDING);
+		order.setCustomer(customer);
+		order.setDelivery(delivery);
+		order.setDetails(new java.util.ArrayList<OrderItem>());
+		
+		int[] ids = new int[items.size()];
+		int index = 0;
+		for(OrderItem item:items)
+			ids[index++] = item.getProduct().getId();
+		List<Product> products = this.productDao.findByIDs(ids);
+		index = 0;
+		for(OrderItem item : items){
+			item.setProduct(products.get(index++));
+			order.getDetails().add(item);
+		}
+		
+		logger.info("persistence ORDER to DataBase");
+		this.orderDao.save(order);
+		
+		String hql = "from Station where city=:city";
+		Station station = this.stationDao.findByHQL(hql, new String[]{"city"}, new Object[]{delivery.getCity()});
+		if(null != station){//找到相应小站
+			Shipment ship = this.shipmentService.dispatch(order, station.getId());
+		} else {//没找到小站
+			logger.info("send ORDER to MessageQueue as PlainText");
+			this.msgSender.sendMessage(new com.google.gson.Gson().toJson(order));
+		}
+		return order;
 	}
 	
 	@Override

@@ -47,4 +47,11 @@ public class ShipmentService implements IShipmentService {
 			return e.getMessage();
 		}
 	}
+
+	@Override
+	public String notify(int shipmentID) {
+		
+		this.shipmentServ.notify(shipmentID);
+		return "SUCCESS";
+	}
 }

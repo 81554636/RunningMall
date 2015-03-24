@@ -147,4 +147,14 @@ public class ShipmentService implements IShipmentService {
 			}
 		}	
 	}
+	@Override
+	public void notify(int shipmentID) {
+		
+		Shipment shipment = this.shipDao.findByID(shipmentID);
+		if(null != shipment){
+			
+			logger.info("send SHIPMENT to MessageQueue as PlainText");
+			this.messageSender.sendMessage(new com.google.gson.Gson().toJson(shipment));
+		}
+	}
 }

@@ -26,6 +26,15 @@ public interface IOrderService {
 	 * @return
 	 */
 	Order place(Delivery delivery, List<OrderItem> items);
+	
+	/***
+	 * 下订单(新註冊用戶/已知用戶信息【根據電話找到customer】), 并根据Delivery.city分配到相应station
+	 * @param delivery
+	 * @param items
+	 * @return
+	 */
+	Order placeAndDistribute(Delivery delivery, List<OrderItem> items);
+	
 	/***
 	 * 订单查询(根据订单号)
 	 * @param orderID

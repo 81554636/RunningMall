@@ -1,0 +1,119 @@
+<script>
+	$(function(){
+		$("[data-toggle='popover']").popover({
+			html:true,
+			title:'订单详情',
+			trigger:'hover'
+		});
+	});
+</script>
+<div class="row">
+	#parse("/layout/sidebar.vm")
+	<div class="span9">
+		<!--
+		<h1>Dashboard</h1>
+		<div class="well summary">
+			<ul>
+				<li><a href="#"><span class="count">3</span> Pending</a></li>
+				<li><a href="#"><span class="count">27</span> Processing</a></li>
+				<li class="last"><a href="#"><span class="count">5</span> Files</a></li>
+			</ul>
+		</div>
+		-->
+		
+		<h2>Pending Orders</h2>
+		<table class="table table-bordered table-striped  table-condensed table-hover">
+			<thead>
+				<tr>
+					<th>订单编号</th>
+					<th>下单日期</th>
+					<th>Type</th>
+					<th>Date</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td data-container="body" data-toggle="popover" 
+						data-content="<address><pre>订单编号 : 13<br/>客户信息 : <br/>    姓名 : wang<br/>    电话 : 13516780101<br/><br/>商品项 : <br/>    wine红酒 * 1<br/>    kiwi奇异果 * 2<br/><br/>送货信息 : <br/>    姓名 : wang<br/>    电话 : 13516780101<br/>    地址 : 万享路115<br/></pre></address>">Nike.com Redesign</td>
+					<td >Monsters Inc</td>
+					<td >New Task</td>
+					<td >
+						<a href="#" class="btn btn-info">
+							<i class="icon-refresh icon-white"></i>配送
+						</a>
+						<a href="#" class="btn btn-danger">
+							<i class="icon-minus icon-white"></i>取消
+						</a>
+					</td>
+					<td>
+						<table>
+							<tr>
+								<td>kiwi猕猴桃</td>
+								<td>5</td>
+							</tr>
+							<tr>
+								<td>wine红酒</td>
+								<td>5</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>Nike.com Redesign</td>
+					<td>Monsters Inc</td>
+					<td>New Task</td>
+					<td>4 days ago</td>
+					<td>
+						<div>kiwi弥胡桃</div>
+						<div>wine红酒</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Nike.com Redesign</td>
+					<td>Monsters Inc</td>
+					<td>New Message</td>
+					<td>5 days ago</td>
+					<td><a href="#" class="view-link">View</a></td>
+				</tr>
+				<tr>
+					<td>Nike.com Redesign</td>
+					<td>Monsters Inc</td>
+					<td>New Task</td>
+					<td>4 days ago</td>
+					<td><a href="#" class="view-link">View</a></td>
+				</tr>
+				<tr>
+					<td>Nike.com Redesign</td>
+					<td>Monsters Inc</td>
+					<td>New Message</td>
+					<td>5 days ago</td>
+					<td><a href="#" class="view-link">View</a></td>
+				</tr>
+				
+			</tbody>
+		</table>
+		
+		<div class="pagination">
+			<ul>
+				<li class="disabled"><a href="#">&laquo;</a></li>
+				<li class="active"><a href="#">1</a></li>
+				<li><a href="#">2</a></li>
+				<li><a href="#">3</a></li>
+				<li><a href="#">4</a></li>
+				<li><a href="#">&raquo;</a></li>
+			</ul>
+		</div>
+		
+		<ul class="pager">
+			<li class="next">
+				<a href="activity.htm">More &rarr;</a>
+			</li>
+		</ul>
+        <ul class="pager">
+			<li class="next">
+				More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
+			</li>
+		</ul>
+	</div>
+</div>

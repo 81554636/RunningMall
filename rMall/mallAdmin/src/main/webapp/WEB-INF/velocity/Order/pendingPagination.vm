@@ -1,0 +1,158 @@
+#set( $ContextPath = ${request.contextPath} )
+<script src="${ContextPath}/js/jquery.js"></script>
+<script src="${ContextPath}/js/bootstrap.min.js"></script>
+<script src="${ContextPath}/js/bootbox.js"></script>
+<script src="${ContextPath}/js/messageTips.js"></script>
+
+<!--
+<link href="${ContextPath}/css/select2.min.css" rel="stylesheet" />
+<script src="${ContextPath}/js/select2.min.js"></script>
+-->
+
+<link href="${ContextPath}/css/bootstrap-select.min.css" rel="stylesheet" />
+<script src="${ContextPath}/js/bootstrap-select.min.js"></script>
+
+<script>
+	function showMessage(msg) {
+	
+		var alert = "新订单{ 订单编号:" + msg.id + ", 下单时间:" + msg.createDate + " }到达, 请及时处理!!!";
+		messageTips.show(alert);
+	}
+
+	function onModalOK(){
+
+		var stationID = $('#dispatch_stationID').val();
+		var orderID = $('#dispatch_orderID').val();
+		var obj = $.ajax({
+			url    : "dispatch.do",
+			async  : false,
+			data   : {orderID : orderID, stationID : stationID},
+			success: function(data){
+				if('SUCCESS' == data){
+					//alert($('tr[orderid='+ orderID + ']').html());
+					$('tr[orderid='+ orderID + ']').remove();
+				} else {
+				}
+			}
+		});
+		$('#myModal').width("100px");
+	}
+
+	$(function () {
+
+		messageTips.init({"selector":".bb-alert"});
+		
+		//$(".js-example-basic-single").select2();
+		$(".selectpicker").selectpicker();
+		
+		$("[data-toggle='popover']").popover({
+			html:true,
+			title:'订单详情',
+			trigger:'hover'
+		});
+		
+		$(".dispatch").click(function(){
+			
+			var city = $(this).attr('city');
+			var cityID = $('option[city="' + city + '"]').val();
+			$('.selectpicker').val(cityID);
+			$('.selectpicker').selectpicker('render');
+			$('#myModal').width("600px");
+			var orderID = $(this).parents("tr").attr("orderID");
+			$('#myModal #dispatch_orderID').val(orderID);
+			$('#myModal').modal();
+		});
+
+		$("[data-toggle='confirm']").click(function(){
+			var row = $(this).parents("tr").parent();
+			var orderID = $(this).parents("tr").attr("orderID");
+			bootbox.confirm("取消订单, 是否继续?", function(result) {
+				console.log("cancel order{id : " + orderID + ", userResponse : " + result + "}");
+				if(true == result){
+					$.post('cancel.do', {id : orderID}, function(data){
+						if("SUCCESS" == data){
+							row.remove();
+						}
+					});  
+				}
+			}); 
+		});
+	});
+</script>
+
+
+<!-- 派送模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true" style="width:100px;">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">订单配送</h4>
+         </div>
+         <div class="modal-body" style="height:150px;"> 
+<input type="hidden" id="dispatch_orderID"/>
+选择配送小站
+<select class="selectpicker" data-size="5" id="dispatch_stationID" data-live-search="true">
+#foreach($station in ${stations})
+<option value="${station.id}" data-subtext="${station.name}" city="${station.name}">${station.name}</option>
+#end
+</select>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="onModalOK();">确定</button>
+         </div>
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- 新订单提示 -->
+<div class="bb-alert alert alert-danger" style="display:none;">
+	<button type="button" class="close" aria-hidden="true" onclick="messageTips.hide();">&times;</button>
+	<span></span><a href="pendingFirst.do">刷新</a>
+</div>
+
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+	<thead>
+		<tr>
+			<th>订单编号</th>
+			<th>下单日期</th>
+			<th>操作</th>
+			<th>产品</th>
+			<th>数量</th>
+		</tr>
+	</thead>
+#foreach( $order in ${page.dataList})
+	<tbody>
+	#foreach( $orderItem in ${order.details} )
+		<tr orderID="${order.id}">
+			#if( $velocityCount == 1 )
+			<td rowspan="$!{order.details.size()}" data-container="body" data-toggle="popover" data-content="$orderHelper.format($order)">
+				${order.id}
+			</td>
+			<td rowspan="$!{order.details.size()}">${order.createDate}</td>
+			<td rowspan="$!{order.details.size()}">
+				<button type="button" class="btn btn-small btn-danger" data-toggle="confirm">取消</button>
+				<button type="button" class="btn btn-small btn-info dispatch" city="${order.delivery.city}">配送</button>
+			</td>
+			#end
+			<td>${orderItem.product.displayName}</td>
+			<td>${orderItem.quantity}</td>
+		</tr>
+	#end
+	</tbody>
+#end
+</table>
+</div>
+
+<div class="pagination pagination-right">
+	<ul>
+		<li><a href="pendingFirst.do">|<<</a></li>
+		<li><a href="pendingPages.do?pageNumber=${page.previousPage}"><</a></li>
+		<li><a href="pendingPages.do?pageNumber=${page.nextPage}">></a></li>
+		<li><a href="pendingPages.do?pageNumber=${page.totalPage}">>>|</a></li>
+		<li><a href="#">第 ${page.currentPage}页 / 共 ${page.totalPage}页</a></li>
+	</ul>
+</div>

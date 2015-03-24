@@ -14,6 +14,13 @@ public class StationService implements IStationService {
 	public void setStationDao(StationDAO stationDao) {
 		this.stationDao = stationDao;
 	}
+	
+	@Override
+	public Station queryByCity(String city) {
+		String hql = "from Station where city=:city";
+		Station station = this.stationDao.findByHQL(hql, new String[]{"city"}, new Object[]{city});
+		return station;
+	}
 
 	@Override
 	public Station queryByCredential(String username, String password) {

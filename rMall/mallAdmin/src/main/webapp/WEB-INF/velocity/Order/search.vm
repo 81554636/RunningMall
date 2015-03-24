@@ -1,0 +1,188 @@
+#set( $ContextPath = ${request.contextPath} )
+
+<link href="${ContextPath}/css/bootstrap-select.min.css" rel="stylesheet" />
+
+<script src="${ContextPath}/js/bootbox.js"></script>
+<script src="${ContextPath}/js/jqBootstrapValidation.js"></script>
+<script src="${ContextPath}/js/messageTips.js"></script>
+<script src="${ContextPath}/js/bootstrap-select.min.js"></script>
+
+<script>
+	function onModalOK(){
+	
+		var stationID = $('#dispatch_stationID').val();
+		var orderID = $('#dispatch_orderID').val();
+		var obj = $.ajax({
+			url    : "dispatch.do",
+			async  : false,
+			data   : {orderID : orderID, stationID : stationID},
+			success: function(data){
+				if('SUCCESS' == data){
+					//订单状态改为processing, 按钮改为disable
+					$('#btnCancel').attr("class","btn btn-small btn-danger disabled");
+					$('#btnDispatch').attr("class","btn btn-small btn-info disabled");
+					$('#btnStatus').html('processing');
+				}
+			}
+		});
+	}
+	
+	function showMessage(msg) {
+	
+		var alert = "新订单{ 订单编号:" + msg.id + ", 下单时间:" + msg.createDate + " }到达, 请及时处理!!!";
+		messageTips.show(alert);
+	}
+	
+	$(function(){
+	
+		messageTips.init({ "selector":".bb-alert" });
+		$(".selectpicker").selectpicker();
+		
+		$("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
+		
+		$("[data-toggle='popover_order']").popover({
+			html:true,
+			title:'订单详情',
+			trigger:'hover'
+		});
+		
+		$("[data-toggle='popover_ship']").popover({
+			html:true,
+			title:'配送信息',
+			trigger:'hover'
+		});
+		
+		$(".dispatch").click(function(){
+			
+			var orderID = $(this).parents("tr").attr("orderID");
+			$('#myModal #dispatch_orderID').val(orderID);
+			$('#myModal').modal();
+		});
+		
+		$("[data-toggle='confirm']").click(function(){
+			//var row = $(this).parents("tr").parent();
+			//var orderID = $(this).parents("tr").attr("orderID");
+			var orderID = $("#orderID").val();
+			bootbox.confirm("取消订单, 是否继续?", function(result) {
+				console.log("cancel order{id : " + orderID + ", userResponse : " + result + "}");
+				if(true == result){
+					$.post('cancel.do', {id : orderID}, function(data){
+						if("SUCCESS" == data){
+							$('#btnCancel').attr("class","btn btn-small btn-danger disabled");
+							$('#btnDispatch').attr("class","btn btn-small btn-info disabled");
+							$('#btnStatus').html('CANCEL');
+							$('#btnStatus').attr("class","btn btn-small btn-danger disabled");
+						}
+					});  
+				}
+			}); 
+		});
+	});
+</script>
+
+
+<div class="row">
+	#parse("/layout/sidebar.vm")
+	<div class="span9">
+		
+		<h2>订单查询</h2>
+		<!-- 新订单提示 -->
+		<div class="bb-alert alert alert-danger" style="display:none;">
+			<button type="button" class="close" aria-hidden="true" onclick="messageTips.hide();">&times;</button>
+			<span></span><a href="pendingFirst.do">刷新</a>
+		</div>
+
+		<form class="form-search form-inline" action="search.do" method="POST">
+			<input class="input-medium search-query" type="text" name="orderID"
+				placeholder="订单编号" required 
+			 	data-validation-required-message="You must agree to the terms and conditions"/>
+			<input type="hidden" id="orderID" value="${order.id}"/>
+			<button type="submit" class="btn">查询</button>
+		</form>
+		<div class="row">
+			<div class="span3">
+				<table class="table table-bordered table-striped">
+					<tr>
+						<th colspan="2">订单详情</th>
+					</tr>
+					<tbody>
+						<tr orderID="${order.id}"><td>订单编号</td><td>$!{order.id}</td></tr>
+						<tr><td>下单日期</td><td>$!{order.createDate}</td></tr>
+						<tr><td>取货编码</td><td>$!{order.accessCode}</td></tr>
+						<tr><td>订单状态</td>
+							<td>
+							#if($!{order.status} == 'PENDING')
+								<button class="btn btn-small btn-info disabled" id="btnStatus">$!{order.status}</button>
+							#elseif($!{order.status} == 'PROCESSING')
+								<button class="btn btn-small btn-info disabled" id="btnStatus" 
+									data-container="body" data-toggle="popover_ship" data-content="$!{orderHelper.format($!{order.shipment})}">
+								$!{order.status}
+								</button>
+							#elseif($!{order.status} == 'CANCEL')
+								<button class="btn btn-small btn-danger disabled" id="btnStatus">$!{order.status}</button>
+							#elseif($!{order.status} == 'FINISH')
+								<button class="btn btn-small btn-success disabled" id="btnStatus">$!{order.status}</button>
+							#end
+							</td>
+						</tr>
+						<tr>
+							<td>操作</td>
+							<td>
+								#if($!{order.status} == 'PENDING')
+									<button class="btn btn-small btn-danger" type="button" data-toggle="confirm" id="btnCancel">取消</button>
+									<button class="btn btn-small btn-info dispatch" type="button" id="btnDispatch">配送</button>
+								#else
+									<button class="btn btn-small btn-danger disabled" type="button" id="btnCancel">取消</button>
+									<button class="btn btn-small btn-info disabled" type="button" id="btnDispatch">配送</button>
+								#end
+							</td>
+						</tr>
+					</tbody>
+					<tr><th colspan="2"></th></tr>
+					<tr><th colspan="2">派单详情</th></tr>
+					<tbody>
+						<tr><td>收货人</td><td>$!{order.delivery.name}</td></tr>
+						<tr><td>联系电话</td><td>$!{order.delivery.phone}</td></tr>
+						<tr><td>送货地址</td><td>$!{order.delivery.address}</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="span6">
+				<ul class="thumbnails">
+					#foreach(${orderItem} in ${order.details})
+					<li class="span3">
+						<div class="thumbnail">
+							<img alt="" src="${orderItem.product.url}"/>
+							<div class="caption">${orderItem.product.displayName} * ${orderItem.quantity}</div>
+					</li>
+					#end
+				</ul>
+			</div>
+		</div>
+		
+<!-- 派送模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">订单配送</h4>
+         </div>
+         <div class="modal-body" style="height:150px;">
+<input type="hidden" id="dispatch_orderID"/>
+选择配送小站
+<select class="js-example-basic-single selectpicker" id="dispatch_stationID" data-live-search="true">
+#foreach($station in ${stations})
+<option value="${station.id}" data-subtext="${station.name}" city="${station.name}">${station.name}</option>
+#end
+</select>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="onModalOK();">确定</button>
+         </div>
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+	</div>
+</div>

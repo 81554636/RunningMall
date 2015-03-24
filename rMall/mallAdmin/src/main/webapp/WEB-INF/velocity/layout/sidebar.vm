@@ -1,0 +1,27 @@
+#set( $ContextPath = ${request.contextPath} )
+<div class="span3">
+	<div class="well" style="padding: 8px 0;">
+		<ul class="nav nav-list">
+			<li class="nav-header">订单管理</li>
+			<li #if(${CURRENT}=="PENDING")class='active'#end>
+				<a href="${ContextPath}/Order/pendingFirst.do"><i class="icon-time"></i> 待分配订单</a>
+			</li>
+			<li #if(${CURRENT}=="PROCESSING")class='active'#end>
+				<a href="${ContextPath}/Order/processingFirst.do"><i class="icon-check"></i> 已分配订单</a>
+			</li>
+			<li #if(${CURRENT}=="SEARCH")class='active'#end>
+				<a href="${ContextPath}/Order/search.do"><i class="icon-search"></i> 订单查询</a>
+			</li>
+			
+			<li class="nav-header">派单管理</li>
+			<li>
+				<a href="${ContextPath}/Shipment/first.do"><i class="icon-search"></i> 派单查询</a>
+			</li>
+			<li class="divider">
+			</li>
+			<li>
+				<a href="#"><i class="icon-info-sign"></i> Logout</a>
+			</li>
+		</ul>
+	</div>
+</div>

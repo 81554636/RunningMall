@@ -1,0 +1,86 @@
+#set( $ContextPath = ${request.contextPath} )
+<script src="${ContextPath}/js/messageTips.js"></script>
+
+<script>
+	function showMessage(msg) {
+	
+		var alert = "新订单{ 订单编号:" + msg.id + ", 下单时间:" + msg.createDate + " }到达, 请及时处理!!!";
+		messageTips.show(alert);
+	}
+
+	$(function () {
+
+		messageTips.init({"selector":".bb-alert"});
+		
+		$("[data-toggle='popover_ship']").popover({
+			html:true,
+			title:'配送信息',
+			trigger:'hover'
+		});
+	});
+</script>
+
+<div class="row">
+	#parse("/layout/sidebar.vm")
+	<div class="span9">
+		<!--
+		<h1>Dashboard</h1>
+		<div class="well summary">
+			<ul>
+				<li><a href="#"><span class="count">3</span> Pending</a></li>
+				<li><a href="#"><span class="count">27</span> Processing</a></li>
+				<li class="last"><a href="#"><span class="count">5</span> Files</a></li>
+			</ul>
+		</div>
+		-->
+		
+		<h2>派单查询</h2>
+		<!-- 新订单提示 -->
+		<div class="bb-alert alert alert-danger" style="display:none;">
+			<button type="button" class="close" aria-hidden="true" onclick="messageTips.hide();">&times;</button>
+			<span></span><a href="pendingFirst.do">刷新</a>
+		</div>
+		
+		<table class="table table-bordered table-striped table-condensed table-hover">
+			<thead>
+				<tr>
+					<th>配送单编号</th>
+					<th>跑跑小站</th>
+					<th>状态</th>
+					<th>下单日期</th>
+					<th>产品</th>
+					<th>数量</th>
+				</tr>
+			</thead>
+		#foreach( $shipment in ${page.dataList})
+			<tbody>
+			#foreach( $orderItem in ${shipment.details} )
+				<tr shipID="${shipment.id}">
+					#if( $velocityCount == 1 )
+					<td rowspan="$!{shipment.details.size()}"
+						data-container="body" data-toggle="popover_ship" data-content="$orderHelper.format($!{shipment})">
+						${shipment.id}
+					</td>
+					<td rowspan="$!{shipment.details.size()}">${shipment.station.name}</td>
+					<td rowspan="$!{shipment.details.size()}">${shipment.status}</td>
+					<td rowspan="$!{shipment.details.size()}">${shipment.createDate}</td>
+					#end
+					<td>${orderItem.product.displayName}</td>
+					<td>${orderItem.quantity}</td>
+				</tr>
+			#end
+			</tbody>
+		#end
+		</table>
+		
+		<div class="pagination pagination-right">
+			<ul>
+				<li><a href="first.do">|<<</a></li>
+				<li><a href="page.do?pageNumber=${page.previousPage}"><</a></li>
+				<li><a href="page.do?pageNumber=${page.nextPage}">></a></li>
+				<li><a href="page.do?pageNumber=${page.totalPage}">>>|</a></li>
+				<li><a href="#">第 ${page.currentPage}页 / 共 ${page.totalPage}页</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
