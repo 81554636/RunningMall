@@ -1,5 +1,6 @@
 package ecommerce.rmall.admin.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,17 +49,18 @@ public class OrderController {
 	private IShipmentService shipmentEndpoint;
 	
 	@RequestMapping(method=RequestMethod.GET, value="/pendingFirst")
-	public String pendingFirst(Model model){
-		return this.pendingPage(model, 1);
+	public String pendingFirst(Model model, Principal principal){
+		return this.pendingPage(model, 1, principal);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/pendingPages")
-	public String pendingPage(Model model, int pageNumber){
+	public String pendingPage(Model model, int pageNumber, Principal principal){
 		
 		Page<Order> page = this.service.queryPendingWithPage(pageNumber);
 		List<Station> stations = this.stationService.listAll();
 		List<Product> products = this.productService.listAll();
 		
+		model.addAttribute("DISPLAYNAME", principal!=null?principal.getName() : "UNKNOWN");
 		model.addAttribute("CURRENT", "PENDING");
 		model.addAttribute("page", page);
 		model.addAttribute("stations", stations);
@@ -67,16 +69,17 @@ public class OrderController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/processingFirst")
-	public String processingFirst(Model model){
-		return this.processingPage(model, 1);
+	public String processingFirst(Model model, Principal principal){
+		return this.processingPage(model, 1, principal);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/processingPages")
-	public String processingPage(Model model, int pageNumber){
-		
+	public String processingPage(Model model, int pageNumber, Principal principal){
+
 		Page<Order> page = this.service.queryProcessingWithPage(pageNumber);
 		List<Station> stations = this.stationService.listAll();
 		
+		model.addAttribute("DISPLAYNAME", principal!=null?principal.getName() : "UNKNOWN");
 		model.addAttribute("CURRENT", "PROCESSING");
 		model.addAttribute("page", page);
 		model.addAttribute("stations", stations);
@@ -84,8 +87,9 @@ public class OrderController {
 	}
 
 	@RequestMapping(method={RequestMethod.POST, RequestMethod.GET}, value="/search")
-	public String search(Model model, @RequestParam(value="orderID", required=false)String orderID){
+	public String search(Model model, @RequestParam(value="orderID", required=false)String orderID, Principal principal){
 		
+		model.addAttribute("DISPLAYNAME", principal!=null?principal.getName() : "UNKNOWN");
 		model.addAttribute("CURRENT", "SEARCH");
 		if(null != orderID){
 			Order order = this.service.query(Integer.parseInt(orderID));
@@ -97,14 +101,16 @@ public class OrderController {
 	}
 	
 	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET}, value="/stastic")
-	public String stastic(){
+	public String stastic(Model model, Principal principal){
+		
+		model.addAttribute("DISPLAYNAME", principal.getName());
 		return "Order/stastic";
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/cancel")
 	@ResponseBody
     public String cancelOrder(Integer id) {
-		this.service.cancel(id);		
+		this.service.cancel(id);
         return "SUCCESS";
     }
 	

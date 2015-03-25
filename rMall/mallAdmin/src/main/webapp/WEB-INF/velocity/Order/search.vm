@@ -12,7 +12,7 @@
 	
 		var stationID = $('#dispatch_stationID').val();
 		var orderID = $('#dispatch_orderID').val();
-		var obj = $.ajax({
+		var obj = jQuery.ajax({
 			url    : "dispatch.do",
 			async  : false,
 			data   : {orderID : orderID, stationID : stationID},
@@ -66,7 +66,7 @@
 			bootbox.confirm("取消订单, 是否继续?", function(result) {
 				console.log("cancel order{id : " + orderID + ", userResponse : " + result + "}");
 				if(true == result){
-					$.post('cancel.do', {id : orderID}, function(data){
+					jQuery.post('cancel.do', {id : orderID}, function(data){
 						if("SUCCESS" == data){
 							$('#btnCancel').attr("class","btn btn-small btn-danger disabled");
 							$('#btnDispatch').attr("class","btn btn-small btn-info disabled");

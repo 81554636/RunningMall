@@ -1,6 +1,8 @@
 package ecommerce.rmall.admin.controller;
 
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -18,16 +20,16 @@ public class ShipmentController {
 	private ecommerce.rmall.service.IShipmentService service;
 	
 	@RequestMapping(method=RequestMethod.GET, value="/first")
-	public String first(Model model){
+	public String first(Model model, Principal principal){
 
-		return this.page(model, 1, null);
+		return this.page(model, 1, null, principal);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/page")
-	public String page(Model model, 
-			int pageNumber, 
-			@RequestParam(value="station", required=false)String station){
+	public String page(Model model, int pageNumber,
+			@RequestParam(value="station", required=false)String station, Principal principal){
 		
+		model.addAttribute("DISPLAYNAME", principal.getName());
 		model.addAttribute("CURRENT", "SHIPMENT");
 		if(null != station)
 			model.addAttribute("page", this.service.queryByNameWithPage(station, pageNumber));

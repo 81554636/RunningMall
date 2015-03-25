@@ -53,7 +53,7 @@
 			order.details.push(orderItem);
 		});
 		
-		var obj = $.ajax({
+		var obj = jQuery.ajax({
 			type : "POST",
 			url    : "create.do",
 			contentType:"application/json",
@@ -90,7 +90,7 @@
 				<label class="control-label" for="ucity">城市</label>
 				<div class="controls">
 					<select id="ucity" class="selectpicker" data-size="5" id="dispatch_stationID" data-live-search="true">
-					#foreach($station in ${stations})
+					#foreach(${station} in ${stations})
 					<option value="${station.id}" data-subtext="${station.name}" city="${station.name}">${station.name}</option>
 					#end
 					</select>

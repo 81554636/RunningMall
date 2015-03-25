@@ -26,7 +26,7 @@
 		$("[data-toggle='renotify']").click(function(){
 		
 			var shipID = $(this).attr("shipmentID");
-			var obj = $.ajax({
+			var obj = jQuery.ajax({
 				url    : "notify.do",
 				async  : false,
 				data   : {shipmentID : shipID},

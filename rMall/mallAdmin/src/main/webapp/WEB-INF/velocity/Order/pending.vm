@@ -16,7 +16,7 @@
 		var stationID = $('#dispatch_stationID').val();
 		var orderID = $('#dispatch_orderID').val();
 		console.log("dispatch order{id : " + orderID + ", stationID : " + stationID + "}");
-		var obj = $.ajax({
+		var obj = jQuery.ajax({
 			url    : "dispatch.do",
 			async  : false,
 			data   : {orderID : orderID, stationID : stationID},
@@ -41,9 +41,6 @@
 			trigger:'hover'
 		});
 		
-		$("[data-toggle='modify']").click(function(){
-		});
-		
 		$("[data-toggle='distribution']").click(function(){
 			
 			var city = $(this).attr('city');
@@ -63,7 +60,7 @@
 			bootbox.confirm("取消订单, 是否继续?", function(result) {
 				console.log("cancel order{id : " + orderID + ", userResponse : " + result + "}");
 				if(true == result){
-					$.post('cancel.do', {id : orderID}, function(data){
+					jQuery.post('cancel.do', {id : orderID}, function(data){
 						if("SUCCESS" == data){
 							row.remove();
 						}
