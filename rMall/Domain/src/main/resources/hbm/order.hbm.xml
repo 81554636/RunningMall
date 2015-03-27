@@ -20,7 +20,7 @@
         <property name="accessCode" type="java.lang.String" column="accessCode" length="12"/>
         
         <many-to-one name="customer" column="customerID" 
-        	cascade="save-update" not-null="true"
+        	cascade="none" not-null="true"
         	class="ecommerce.rmall.domain.Customer" lazy="false"/>
         	
         <many-to-one name="delivery" column="deliverID" 

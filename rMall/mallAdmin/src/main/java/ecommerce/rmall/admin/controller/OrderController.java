@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,12 +49,12 @@ public class OrderController {
 	@Qualifier("shipmentEndpoint")
 	private IShipmentService shipmentEndpoint;
 	
-	@RequestMapping(method=RequestMethod.GET, value="/pendingFirst")
+	@RequestMapping(method=RequestMethod.GET, value="/pending/First")
 	public String pendingFirst(Model model, Principal principal){
 		return this.pendingPage(model, 1, principal);
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/pendingPages")
+	@RequestMapping(method=RequestMethod.GET, value="/pending/Pages")
 	public String pendingPage(Model model, int pageNumber, Principal principal){
 		
 		Page<Order> page = this.service.queryPendingWithPage(pageNumber);
@@ -68,12 +69,12 @@ public class OrderController {
 		return "Order/pending";
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/processingFirst")
+	@RequestMapping(method=RequestMethod.GET, value="/processing/First")
 	public String processingFirst(Model model, Principal principal){
 		return this.processingPage(model, 1, principal);
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/processingPages")
+	@RequestMapping(method=RequestMethod.GET, value="/processing/Pages")
 	public String processingPage(Model model, int pageNumber, Principal principal){
 
 		Page<Order> page = this.service.queryProcessingWithPage(pageNumber);
@@ -94,8 +95,11 @@ public class OrderController {
 		if(null != orderID){
 			Order order = this.service.query(Integer.parseInt(orderID));
 			List<Station> stations = this.stationService.listAll();
+			List<Product> products = this.productService.listAll();
+			
 			model.addAttribute("order", order);
 			model.addAttribute("stations", stations);
+			model.addAttribute("products", products);
 		}
 		return "Order/search";
 	}
@@ -103,20 +107,13 @@ public class OrderController {
 	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET}, value="/stastic")
 	public String stastic(Model model, Principal principal){
 		
-		model.addAttribute("DISPLAYNAME", principal.getName());
+		model.addAttribute("DISPLAYNAME", principal != null ? principal.getName() : "UNKNOWN");
 		return "Order/stastic";
 	}
 	
-	@RequestMapping(method=RequestMethod.POST, value="/cancel")
+	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET}, value="/{orderID}/dispatch")
 	@ResponseBody
-    public String cancelOrder(Integer id) {
-		this.service.cancel(id);
-        return "SUCCESS";
-    }
-	
-	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET}, value="/dispatch")
-	@ResponseBody
-	public String dispatchOrder(int orderID, int stationID){
+	public String dispatchOrder(@PathVariable("orderID")int orderID, @RequestParam(value="stationID", required=true)int stationID){
 
 		Shipment shipment = this.shipmentEndpoint.dispatch(orderID, stationID);
 		logger.debug("generate new shipment {id:{}, station:{}, delivery:{}}", 
@@ -126,11 +123,11 @@ public class OrderController {
 		return "SUCCESS";
 	}
 	
-	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET}, value="/notify")
-	@ResponseBody
-	public String notify(@RequestParam(value="shipmentID", required=true)int shipmentID){
-		return this.shipmentEndpoint.notify(shipmentID);
-	}
+	//@RequestMapping(method={RequestMethod.POST,RequestMethod.GET}, value="/notify")
+	//@ResponseBody
+	//public String notify(@RequestParam(value="shipmentID", required=true)int shipmentID){
+	//	return this.shipmentEndpoint.notify(shipmentID);
+	//}
 	
 	@RequestMapping(method={RequestMethod.POST}, value="/create")
 	@ResponseBody
@@ -138,6 +135,30 @@ public class OrderController {
 		
 		this.service.placeAndDistribute(order.getDelivery(), order.getDetails());
    		return "SUCCESS";
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, value="/{orderID}/cancel")
+	@ResponseBody
+    public String cancelOrder(@PathVariable("orderID")Integer id) {
+		
+		this.service.cancel(id);
+        return "SUCCESS";
+    }
+
+	@RequestMapping(method={RequestMethod.POST, RequestMethod.GET}, value="/{orderID}/modify")
+	@ResponseBody
+	public String modifyOrder(@PathVariable("orderID")int orderID, @RequestBody Order order){
+
+		this.service.update(order);
+   		return "SUCCESS";
+	}
+	
+	@RequestMapping(method={RequestMethod.POST}, value="/{orderID}/query")
+	@ResponseBody
+	public Order queryOrder(@PathVariable("orderID")int orderID){
+		
+		Order order = this.service.query(orderID);
+		return order;
 	}
 	
 	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET}, value="/countByDate")

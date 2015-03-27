@@ -4,8 +4,6 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 /***
  * 收货信息
  * @author martin
@@ -14,7 +12,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @XmlRootElement (name = "Delivery")
 public class Delivery {
 
-	@JsonIgnore
 	private int id;
 	private String name;
 	private String address;

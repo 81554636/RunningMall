@@ -27,13 +27,11 @@
 		
 			var shipID = $(this).attr("shipmentID");
 			var obj = jQuery.ajax({
-				url    : "notify.do",
+				url    : "${ContextPath}/Shipment/" + shipID + "/notify.do",
 				async  : false,
-				data   : {shipmentID : shipID},
 				success: function(data){
 					alert(data);
 					if('SUCCESS' == data){
-						//$('tr[orderid='+ orderID + ']').remove();
 					} else {
 					}
 				}
@@ -60,7 +58,7 @@
 		<!-- 新订单提示 -->
 		<div class="bb-alert alert alert-danger" style="display:none;">
 			<button type="button" class="close" aria-hidden="true" onclick="messageTips.hide();">&times;</button>
-			<span></span><a href="pendingFirst.do">刷新</a>
+			<span></span><a href="First.do">刷新</a>
 		</div>
 		
 		<table class="table table-bordered table-striped  table-condensed table-hover">
@@ -86,7 +84,7 @@
 						<button type="button" class="btn btn-small btn-info disabled">$!{order.status}</button>
 					</td>
 					<td>
-						<a href="#" class="btn btn-info" data-toggle="renotify" shipmentID="$!{order.shipment.id}"><i class="icon-envelope icon-white"></i>通知</a>
+						<button class="btn btn-small btn-primary" data-toggle="renotify" shipmentID="$!{order.shipment.id}"><i class="icon-envelope icon-white"></i>通知</button>
 					</td>
 					<td>
 						#foreach($orderItem in ${order.details})<div>${orderItem.product.displayName}</div>#end
@@ -98,10 +96,10 @@
 		
 		<div class="pagination pagination-right">
 			<ul>
-				<li><a href="processingFirst.do">|<<</a></li>
-				<li><a href="processingPages.do?pageNumber=${page.previousPage}"><</a></li>
-				<li><a href="processingPages.do?pageNumber=${page.nextPage}">></a></li>
-				<li><a href="processingPages.do?pageNumber=${page.totalPage}">>>|</a></li>
+				<li><a href="First.do">|<<</a></li>
+				<li><a href="Pages.do?pageNumber=${page.previousPage}"><</a></li>
+				<li><a href="Pages.do?pageNumber=${page.nextPage}">></a></li>
+				<li><a href="Pages.do?pageNumber=${page.totalPage}">>>|</a></li>
 				<li><a href="#">第 ${page.currentPage}页 / 共 ${page.totalPage}页</a></li>
 			</ul>
 		</div>
@@ -128,7 +126,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h4 class="modal-title" id="myModalLabel">订单配送</h4>
          </div>
-         <div class="modal-body" style="height:150px;"> 
+         <div class="modal-body" style="height:150px;">
 <input type="hidden" id="dispatch_orderID"/>
 选择配送小站
 <select class="selectpicker" data-size="5" id="dispatch_stationID" data-live-search="true">

@@ -42,7 +42,7 @@
 			details:[]
 		};
 		
-		$(".thumbnails").find("input").each(function(){
+		$("#new-order .thumbnails").find("input").each(function(){
 		
 			var product = $(this);
 			var orderItem = {
@@ -50,12 +50,13 @@
 				price : product.attr("price"),
 				quantity : product.val()
 			};
-			order.details.push(orderItem);
+			if(orderItem.quantity > 0)
+				order.details.push(orderItem);
 		});
 		
 		var obj = jQuery.ajax({
-			type : "POST",
-			url    : "create.do",
+			type   : "POST",
+			url    : "../create.do",
 			contentType:"application/json",
 			dataType:"json",
 			async  : false,
@@ -76,15 +77,17 @@
 		<div class="span5">
 			<div class="control-group">
 				<label class="control-label" for="uname">联系人</label>
-				<div class="controls"><input id="uname" class"input-xlarge" type="text"></div>
+				<div class="controls"><input id="uname" class"input-xlarge" type="text"/></div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="uphone">联系电话</label>
-				<div class="controls"><input id="uphone" class"input-xlarge" type="text"></div>
+				<div class="controls">
+					<input id="uphone" class"input-xlarge" type="text"/>
+				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="uaddress">联系地址</label>
-				<div class="controls"><input id="uaddress" class"input-xlarge" type="text"></div>
+				<div class="controls"><input id="uaddress" class"input-xlarge" type="text"/></div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="ucity">城市</label>

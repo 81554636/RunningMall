@@ -234,4 +234,9 @@ public class OrderService implements IOrderService {
 	public List<CountByDate> countByDate() {
 		return this.orderDao.count();
 	}
+	@Override
+	public void update(Order order) {
+		order.setLastUpdate(new Date());
+		this.orderDao.update(order);
+	}
 }

@@ -14,18 +14,12 @@
 (function($){
 
 	$(function() {
-	
 		/* toggle links */
 		$('.toggle-link').click(function(e) {
-		
 			var target = $($(this).attr('href')).toggleClass('hidden');
-			
 			$.scrollTo(target);
-			
 			e.preventDefault();
-		
 		});
-	
 	});
 
 })(this.jQuery);

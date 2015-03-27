@@ -4,22 +4,27 @@
 <script src="${ContextPath}/js/bootbox.js"></script>
 <script src="${ContextPath}/js/messageTips.js"></script>
 <script src="${ContextPath}/js/bootstrap-select.min.js"></script>
+<script src="${ContextPath}/js/jqBootstrapValidation.js"></script>
 
 <script>
-	function showMessage(msg) {
-		var alert = "新订单{ 订单编号:" + msg.id + ", 下单时间:" + msg.createDate + " }到达, 请及时处理!!!";
-		messageTips.show(alert);
+	function nextTab(){
+		$('#modifyTab a[href="#items"]').tab('show');
 	}
 	
-	function onModalOK(){
+	function showMessage(msg) {
+		var message = "新订单{ 订单编号:" + msg.id + ", 下单时间:" + msg.createDate + " }到达, 请及时处理!!!";
+		messageTips.show(message);
+	}
+	
+	function onDistributeOrder(){
 
 		var stationID = $('#dispatch_stationID').val();
 		var orderID = $('#dispatch_orderID').val();
 		console.log("dispatch order{id : " + orderID + ", stationID : " + stationID + "}");
 		var obj = jQuery.ajax({
-			url    : "dispatch.do",
+			url    : "../" + orderID + "/dispatch.do",
 			async  : false,
-			data   : {orderID : orderID, stationID : stationID},
+			data   : {stationID : stationID},
 			success: function(data){
 				if('SUCCESS' == data){
 					$('tr[orderid='+ orderID + ']').remove();
@@ -29,9 +34,56 @@
 		});
 	}
 	
+	function onModifyOrder(){
+	
+		var cityID = $('#m_ucity').val();
+		var city = $('#m_ucity>option[value=' + cityID + ']').attr('city');
+		var order = {
+			id         : $('#m_id').val(),
+			status     : $('#m_status').val(),
+			createDate : $('#m_createDate').val(),
+			customer   :{ id : $('#m_customer_id').val() },
+			delivery   :{
+				id     : $('#m_delivery_id').val(),
+				name   : $('#m_uname').val(),
+				phone  : $('#m_uphone').val(),
+				address: $('#m_uaddress').val(),
+				city   : city
+			},
+			details:[]
+		};
+		
+		$("#items").find("input").each(function(){
+		
+			var product = $(this);
+			var orderItem = {
+				product : {id:product.attr("id")},
+				price   : product.attr("price"),
+				quantity: product.val()
+			};
+			if(orderItem.quantity > 0)
+				order.details.push(orderItem);
+		});
+		
+		console.log("modifyOrder : " + JSON.stringify(order));
+		var url = "../" + order.id + "/modify.do";
+		var obj = jQuery.ajax({
+			type   : "POST",
+			url    : url,
+			dataType:"json",
+			async  : false,
+			data   : JSON.stringify(order),
+			contentType:"application/json",
+			success: function(data){
+				alert(data);
+			}
+		});
+	}
+	
 	$(function(){
 		
 		messageTips.init({"selector":".bb-alert"});
+		$("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
 		$(".selectpicker").selectpicker();
 		
 		$("[data-toggle='popover']").popover({
@@ -41,26 +93,68 @@
 			trigger:'hover'
 		});
 		
+		$("[data-toggle='modify']").click(function(){
+		
+			var orderID = $(this).parents("tr").attr("orderID");
+			var url = "../" + orderID + "/query.do";
+			var obj = jQuery.ajax({
+				type   : "POST",
+				url    : url,
+				async  : false,
+				success: function(data){
+					
+					$('#m_customer_id').val(data.customer.id);
+					$('#m_delivery_id').val(data.delivery.id);
+					$('#modifyTab a[href="#profile"]').tab('show');
+					$('#items input').each(function(){
+						$(this).val(0);
+					});
+					
+					$('#modify_orderID').val(data.id);
+					$('#m_uname').val(data.delivery.name);
+					$('#m_uphone').val(data.delivery.phone);
+					$('#m_uaddress').val(data.delivery.address);
+					
+					$('#m_id').val(data.id),
+					$('#m_status').val(data.status);
+					$('#m_createDate').val(data.createDate);
+					
+					var cityID = $('option[city="' + data.delivery.city + '"]').val();
+					$('#m_ucity').val(cityID);
+					$('#m_ucity').selectpicker('render');
+					
+					for(i=0; i<data.details.length; i++){
+						var item = data.details[i];
+						console.log("order{id : m_" + item.product.id + ", quantity : " + item.quantity + "}");
+						$('#modifyModal input[id="'+item.product.id + '"]').val(item.quantity);
+					}
+					
+					$('#modifyModal').modal();
+				}
+			});
+			
+		});
+		
 		$("[data-toggle='distribution']").click(function(){
 			
 			var city = $(this).attr('city');
 			var cityID = $('option[city="' + city + '"]').val();
 			$('.selectpicker').val(cityID);
 			$('.selectpicker').selectpicker('render');
-			$('#myModal').width("600px");
 			var orderID = $(this).parents("tr").attr("orderID");
 			$('#myModal #dispatch_orderID').val(orderID);
 			$('#myModal').modal();
 		});
 		
 		//取消订单,弹出框确认提示
-		$("[data-toggle='confirm']").click(function(){
-			var row = $(this).parents("tr").parent();
+		$("[data-toggle='cancelOrder']").click(function(){
+		
+			var row = $(this).parents("tr");
 			var orderID = $(this).parents("tr").attr("orderID");
 			bootbox.confirm("取消订单, 是否继续?", function(result) {
 				console.log("cancel order{id : " + orderID + ", userResponse : " + result + "}");
 				if(true == result){
-					jQuery.post('cancel.do', {id : orderID}, function(data){
+					jQuery.post('../' + orderID + '/cancel.do', null, function(data){
 						if("SUCCESS" == data){
 							row.remove();
 						}
@@ -89,7 +183,7 @@
 		<!-- 新订单提示 -->
 		<div class="bb-alert alert alert-danger" style="display:none;">
 			<button type="button" class="close" aria-hidden="true" onclick="messageTips.hide();">&times;</button>
-			<span></span><a href="pendingFirst.do">刷新</a>
+			<span></span><a href="First.do">刷新</a>
 		</div>
 		
 		<table class="table table-bordered table-striped  table-condensed table-hover">
@@ -111,9 +205,9 @@
 					<td>${order.createDate}</td>
 					<td>${order.delivery.city}</td>
 					<td>
-						<a href="#" class="btn btn-primary" data-toggle="distribution" city="${order.delivery.city}"><i class="icon-refresh icon-white"></i>配送</a>
-						<a href="#" class="btn btn-info" data-toggle="modify"><i class="icon-pencil icon-white"></i>修改</a>
-						<a href="#" class="btn btn-danger" data-toggle="confirm"><i class="icon-minus icon-white"></i>取消</a>
+						<button class="btn btn-small btn-primary" data-toggle="distribution" city="${order.delivery.city}"><i class="icon-refresh icon-white"></i>配送</button>
+						<button class="btn btn-small btn-info" data-toggle="modify"><i class="icon-pencil icon-white"></i>修改</button>
+						<button class="btn btn-small btn-danger" data-toggle="cancelOrder"><i class="icon-minus icon-white"></i>取消</button>
 					</td>
 					<td>
 						#foreach($orderItem in ${order.details})<div>${orderItem.product.displayName}</div>#end
@@ -130,10 +224,10 @@
 			<div class="span6">
 				<div class="pagination pagination-right">
 					<ul>
-						<li><a href="pendingFirst.do">|<<</a></li>
-						<li><a href="pendingPages.do?pageNumber=${page.previousPage}"><</a></li>
-						<li><a href="pendingPages.do?pageNumber=${page.nextPage}">></a></li>
-						<li><a href="pendingPages.do?pageNumber=${page.totalPage}">>>|</a></li>
+						<li><a href="First.do">|<<</a></li>
+						<li><a href="Pages.do?pageNumber=${page.previousPage}"><</a></li>
+						<li><a href="Pages.do?pageNumber=${page.nextPage}">></a></li>
+						<li><a href="Pages.do?pageNumber=${page.totalPage}">>>|</a></li>
 						<li><a href="#">第 ${page.currentPage}页 / 共 ${page.totalPage}页</a></li>
 					</ul>
 				</div>
@@ -166,17 +260,95 @@
             <h4 class="modal-title" id="myModalLabel">订单配送</h4>
          </div>
          <div class="modal-body" style="height:150px;"> 
-<input type="hidden" id="dispatch_orderID"/>
-选择配送小站
-<select class="selectpicker" data-size="5" id="dispatch_stationID" data-live-search="true">
-#foreach($station in ${stations})
-<option value="${station.id}" data-subtext="${station.name}" city="${station.name}">${station.name}</option>
-#end
-</select>
+			<input type="hidden" id="dispatch_orderID"/>
+			选择配送小站
+			<select class="selectpicker" data-size="5" id="dispatch_stationID" data-live-search="true">
+				#foreach($station in ${stations})
+				<option value="${station.id}" data-subtext="${station.name}" city="${station.name}">${station.name}</option>
+				#end
+			</select>
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="onModalOK();">确定</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="onDistributeOrder();">确定</button>
+         </div>
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- 修改模态框（Modal） -->
+<div class="modal fade" id="modifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">订单更新</h4>
+         </div>
+         <div class="modal-body">
+         <input type="hidden" id="m_id"/>
+         <input type="hidden" id="m_status"/>
+         <input type="hidden" id="m_createDate"/>
+<ul class="nav nav-tabs" id="modifyTab">
+	<li class="active"><a href="#profile" data-toggle="tab">送货信息</a></li>
+	<li><a href="#items" data-toggle="tab">商品信息</a></li>
+</ul>
+<div class="tab-content">
+	<div class="tab-pane active" id="profile">
+		<div class="form-horizontal">
+		<input type="hidden" id="modify_orderID"/>
+		<input type="hidden" id="m_customer_id"/>
+		<input type="hidden" id="m_delivery_id"/>
+		<div class="control-group">
+				<label class="control-label" for="m_uname">联系人</label>
+				<div class="controls"><input id="m_uname" class"input-xlarge" type="text"></div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="m_uphone">联系电话</label>
+				<div class="controls"><input id="m_uphone" class"input-xlarge" type="text"></div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="m_uaddress">联系地址</label>
+				<div class="controls"><input id="m_uaddress" class"input-xlarge" type="text"></div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="m_ucity">城市</label>
+				<div class="controls">
+					<select id="m_ucity" class="selectpicker" data-size="4" id="dispatch_stationID" data-live-search="true">
+					#foreach(${station} in ${stations})
+					<option value="${station.id}" data-subtext="${station.name}" city="${station.name}">${station.name}</option>
+					#end
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+				<button class="btn btn-primary" onclick="return nextTab();">下一步</button>
+				</div>
+			</div>
+		</div>
+	</div><!-- END OF DIV of TAB_PROFILE -->
+	<div class="tab-pane" id="items">
+		<ul class="thumbnails">
+		#foreach(${product} in ${products})
+			<li class="span2">
+				<div class="thumbnail">
+					<img src="${product.url}">
+					<div class="caption" align="center">
+						${product.displayName}<br>
+						<i class="icon-plus" style="cursor:pointer" onclick="return onPlus(this);"></i>
+						<input type="text" id="${product.id}" price="${product.price}" size="2" style="width:20px;" value="0"/>
+						<i class="icon-minus" style="cursor:pointer" onclick="return onMinus(this);"></i>
+					</div>
+				</div>
+			</li>
+		#end
+		</ul>
+	</div><!-- END OF DIV of TAB_ITEMS -->
+</div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="onModifyOrder();">保存</button>
          </div>
       </div><!-- /.modal-content -->
    </div><!-- /.modal-dialog -->

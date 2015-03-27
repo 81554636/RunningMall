@@ -10,12 +10,10 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @XmlRootElement (name = "Customer")
 public class Customer {
 
-	@JsonIgnore
 	private int id;
 	private String name;
 	private String phone;
 	private String address;
-	@JsonIgnore
 	private Date createDate;
 	@JsonIgnore
 	private Date lastUpdate;

@@ -80,6 +80,10 @@ public interface IOrderService {
 	 * @param orderId 
 	 */
 	void finish(int orderId);
-	
+	/***
+	 * 更新订单
+	 * @param order
+	 */
+	void update(Order order);
 	List<CountByDate> countByDate();
 }
