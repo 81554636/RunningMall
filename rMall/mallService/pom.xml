@@ -151,12 +151,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-all</artifactId>
 		</dependency>
@@ -185,27 +179,17 @@
 	        <groupId>org.codehaus.jackson</groupId>  
 	        <artifactId>jackson-mapper-asl</artifactId>
 	    </dependency>
-	    
-		<!-- proxool -->
+		
 		<dependency>
-			<groupId>com.cloudhopper.proxool</groupId>
-			<artifactId>proxool</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.cloudhopper.proxool</groupId>
-			<artifactId>proxool-cglib</artifactId>
-		</dependency>
-
-		<!-- H2 -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>druid</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>eCommerce</groupId>
 			<artifactId>Domain</artifactId>
