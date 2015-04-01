@@ -48,7 +48,7 @@
 		<property name="maxActive" value="${datasource.maxConnection}" />
 		<!--initialSize: 初始化连接 -->
 		<property name="initialSize" value="${datasource.initConnection}" />
-	</bean> 
+	</bean>
 
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">

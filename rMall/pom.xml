@@ -7,15 +7,32 @@
 	<artifactId>rMall</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-
 	<name>rMall</name>
 	<url>http://maven.apache.org</url>
+	
+	
+	<repositories>
+		<repository>
+			<id>nexus</id>
+			<url>http://127.0.0.1:8081/nexus/content/groups/public/</url>
+			<releases><enabled>true</enabled></releases>
+			<snapshots><enabled>true</enabled></snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>nexus</id>
+			<url>http://127.0.0.1:8081/nexus/content/groups/public/</url>
+			<releases><enabled>true</enabled></releases>
+			<snapshots><enabled>true</enabled></snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk-version>1.6</jdk-version>
 		<junit-version>4.11</junit-version>
-		<spring.version>3.2.10.RELEASE</spring.version>
+		<spring.version>3.2.13.RELEASE</spring.version>
 		<spring.sec.version>3.2.7.RELEASE</spring.sec.version>
 		<cxf.version>2.7.15</cxf.version>
 		<jackson.version>1.9.13</jackson.version>

@@ -115,7 +115,8 @@
 			<version>${dwr.version}</version>
 		</dependency>
 		
-		<!-- proxool -->  
+		<!-- proxool -->
+		<!--   
         <dependency>  
             <groupId>com.cloudhopper.proxool</groupId>  
             <artifactId>proxool</artifactId>
@@ -130,7 +131,13 @@
             <groupId>com.cloudhopper.proxool</groupId>  
             <artifactId>proxool-cglib</artifactId>  
         </dependency>
-        
+        -->
+
+        <dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>druid</artifactId>
+		</dependency>
+		
         <dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-ehcache</artifactId>

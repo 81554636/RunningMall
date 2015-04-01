@@ -28,6 +28,12 @@
         </encoder>
     </appender>
 
+	<logger name="org.springframework">
+        <level value="INFO" />
+    </logger>
+    <logger name="org.apache.activemq">
+    	<level value="INFO" />
+    </logger>
     <root level="DEBUG">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="file" />
