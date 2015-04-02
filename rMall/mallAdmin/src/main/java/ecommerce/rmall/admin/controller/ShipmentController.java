@@ -37,7 +37,7 @@ public class ShipmentController {
 	public String page(Model model, int pageNumber,
 			@RequestParam(value="station", required=false)String station, Principal principal){
 		
-		model.addAttribute("DISPLAYNAME", principal.getName());
+		model.addAttribute("DISPLAYNAME", principal == null ? "UNKNOWN" : principal.getName());
 		model.addAttribute("CURRENT", "SHIPMENT");
 		if(null != station)
 			model.addAttribute("page", this.service.queryByNameWithPage(station, pageNumber));

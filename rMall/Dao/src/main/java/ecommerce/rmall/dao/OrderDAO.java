@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.Query;
 
 import ecommerce.rmall.domain.CountByDate;
+import ecommerce.rmall.domain.CountByStatus;
 import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.Page;
 
@@ -57,7 +58,7 @@ public class OrderDAO extends DaoSupport implements IPagination<Order>{
 	
 	public List<CountByDate> count(){
 		
-		List<CountByDate> rtn = new ArrayList<CountByDate>();
+		List <CountByDate> rtn = new ArrayList<CountByDate>();
 		Query query = super.getSession().getNamedQuery("countGroupByDate");
 		List<Object[]> result = query.list();
 		for(int i=0; i<result.size(); i++){
@@ -65,6 +66,21 @@ public class OrderDAO extends DaoSupport implements IPagination<Order>{
 			int count = ((java.math.BigInteger)objs[0]).intValue();
 			String date = ((java.util.Date)objs[1]).toString();
 			rtn.add(new CountByDate(count, date));
+		}
+		return rtn;
+	}
+	
+	public List<CountByStatus> stastic(){
+		
+		List<CountByStatus> rtn = new ArrayList<CountByStatus>();
+		Query query = super.getSession().createQuery("select count(id),status from Order group by status");
+		query.setCacheable(true);
+		List<Object[]> result = query.list();
+		for(int i=0; i<result.size(); i++){
+			Object[] objs = (Object[])result.get(i);
+			int count = ((Long)objs[0]).intValue();
+			String status = objs[1].toString();
+			rtn.add(new CountByStatus(count, status));
 		}
 		return rtn;
 	}

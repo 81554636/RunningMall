@@ -1,6 +1,7 @@
 package ecommerce.rmall.service;
 
 import java.util.List;
+import java.util.Map;
 
 import ecommerce.rmall.domain.CountByDate;
 import ecommerce.rmall.domain.Page;
@@ -85,5 +86,7 @@ public interface IOrderService {
 	 * @param order
 	 */
 	void update(Order order);
+	
 	List<CountByDate> countByDate();
+	Map<String, Integer> countByStatus();
 }

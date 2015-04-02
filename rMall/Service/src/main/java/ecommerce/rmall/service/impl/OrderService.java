@@ -1,7 +1,9 @@
 package ecommerce.rmall.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import ecommerce.rmall.dao.ProductDAO;
 import ecommerce.rmall.dao.ShipmentDAO;
 import ecommerce.rmall.dao.StationDAO;
 import ecommerce.rmall.domain.CountByDate;
+import ecommerce.rmall.domain.CountByStatus;
 import ecommerce.rmall.domain.Customer;
 import ecommerce.rmall.domain.Delivery;
 import ecommerce.rmall.domain.Order;
@@ -234,6 +237,18 @@ public class OrderService implements IOrderService {
 	public List<CountByDate> countByDate() {
 		return this.orderDao.count();
 	}
+	
+	@Override
+	public Map<String, Integer> countByStatus(){
+		
+		Map<String, Integer> rtn = new HashMap<String, Integer>();
+		List<CountByStatus> result = this.orderDao.stastic();
+		for(CountByStatus item : result)
+			rtn.put(item.getStatus(), item.getCount());
+		
+		return rtn;
+	}
+	
 	@Override
 	public void update(Order order) {
 		order.setLastUpdate(new Date());

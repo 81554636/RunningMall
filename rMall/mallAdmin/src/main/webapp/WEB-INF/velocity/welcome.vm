@@ -1,0 +1,23 @@
+#set( $ContextPath = ${request.contextPath} )
+
+<div class="row">
+	#parse("/layout/sidebar.vm")
+	<div class="span9">
+		<div class="hero-unit">
+			<h1> Welcome! </h1>
+			<p>       这里是公告栏！！！！！ </p>
+			
+			<p>
+				<a class="btn btn-primary btn-large" href="#">Start Tour</a>
+				<a class="btn btn-large">No Thanks</a>
+			</p>
+		</div>
+		
+		<div class="well summary">
+			<li><a href="${ContextPath}/Order/pending/First.do"><span class="count">${Orders.get("PENDING")}</span>待分配</a></li>
+			<li><a href="${ContextPath}/Order/processing/First.do"><span class="count">${Orders.get("PROCESSING")}</span>已分配</a></li>
+			<li><a href="#"><span class="count">...</span>Messages</a></li>
+			<li><a href="#"><span class="count">...</span>Files</a></li>
+		</div>
+	</div>
+</div>
