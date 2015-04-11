@@ -27,7 +27,7 @@
         	cascade="save-update" not-null="true"
         	class="ecommerce.rmall.domain.Delivery" lazy="false"/>
 
-        <list name="details" table="rmall_orderDetails" cascade="save-update" lazy="false">
+        <list name="details" table="rmall_orderDetails" cascade="all" lazy="false">
         	<key column="orderID"/>
         	<index column="[index]" type="string"/>  
         	<many-to-many class="ecommerce.rmall.domain.OrderItem" column="orderItemID"/>

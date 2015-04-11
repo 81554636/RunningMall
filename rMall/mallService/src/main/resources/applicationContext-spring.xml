@@ -28,9 +28,35 @@
 	
 	<bean id="productService" class="ecommerce.rmall.service.impl.ProductService">
 		<property name="productDao" ref="productDao"/>
+		<property name="customerDao" ref="customerDao"/>
+		
+		<property name="productHelper" ref="productHelper"/>
 	</bean>
 	
 	<bean id="stationService" class="ecommerce.rmall.service.impl.StationService">
 		<property name="stationDao" ref="stationDao"/>
+	</bean>
+	
+	<bean id="customerService" class="ecommerce.rmall.service.impl.CustomerService">
+		<property name="customerDao" ref="customerDao"/>
+		<property name="couponDao" ref="couponDao"/>
+	</bean>
+	
+	<bean id="customerOrderService" class="ecommerce.rmall.service.impl.CustomerOrderService">
+		<property name="orderDao" ref="orderDao"/>
+		<property name="customerDao" ref="customerDao"/>
+		<property name="productDao" ref="productDao"/>
+		<property name="shipmentDao" ref="shipmentDao"/>
+		
+		<property name="messageSender" ref="messageSender.place"/>
+	</bean>
+	
+	<bean id="activityService" class="ecommerce.rmall.service.impl.ActivityService">
+		<property name="activityDao" ref="activityDao"/>
+	</bean>
+	
+	<bean id="productHelper" class="ecommerce.rmall.utils.ProductHelper">
+		<property name="customerDao" ref="customerDao"/>
+		<property name="productDao" ref="productDao"/>
 	</bean>
 </beans>

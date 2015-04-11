@@ -1,13 +1,18 @@
 <script>
 	function onPlus(e){
 		var input = $(e).parent().find("input");
-		input.val(Number(input.val())+1);
+		var max = $(e).parent().attr("max")
+		if(Number(input.val()) < Number(max))
+			input.val(Number(input.val())+1);
 	}
+	
 	function onMinus(e){
 		var input = $(e).parent().find("input");
-		if(input.val()>0)
+		var min = $(e).parent().attr("min")
+		if(Number(input.val())>Number(min))
 			input.val(Number(input.val())-1);
 	}
+	
 	function clean(){
 		$('#uname').val('');
 		$('#uphone').val('');
@@ -19,12 +24,15 @@
 			product.val(0);
 		});
 	}
+	
 	function onCancel(){
 		clean();
 		var target = $("#new-order").toggleClass('hidden');
 	}
+	
 	function onCreateOrder(){
 
+		var customerID = $('#customerID').val();
 		var cityID = $('#ucity').val();
 		var city = $('select>option[value=' + cityID + ']').attr('city');
 		var order = {
@@ -56,7 +64,8 @@
 		
 		var obj = jQuery.ajax({
 			type   : "POST",
-			url    : "../create.do",
+			//url    : "../create.do",
+			url    : "./" + customerID + "/order.do",
 			contentType:"application/json",
 			dataType:"json",
 			async  : false,
@@ -71,6 +80,7 @@
 </script>
 
 <div id="new-order" class="form-horizontal hidden">
+	<input type="hidden" id="customerID"/>
 	<fieldset>
 		<legend>创建订单</legend>
 		<div class="row">
@@ -112,11 +122,15 @@
 				<li class="span2">
 					<div class="thumbnail">
 						<img src="${product.url}">
-						<div class="caption" align="center">
+						<div class="caption" align="center" min="${product.min}" max="${product.max}">
 							${product.displayName}<br>
+							#if(${product.valid})
 							<i class="icon-plus" style="cursor:pointer" onclick="return onPlus(this);"></i>
 							<input type="text" id="${product.id}" price="${product.price}" size="2" style="width:20px;" value="0"/>
 							<i class="icon-minus" style="cursor:pointer" onclick="return onMinus(this);"></i>
+							#else
+							<input type="text" id="${product.id}" price="${product.price}" size="2" style="width:20px;" value="0" disabled/>
+							#end
 						</div>
 					</div>
 				</li>
@@ -126,4 +140,3 @@
 		</div><!-- <div class="row"> -->
 	</fieldset>
 </div>
-	

@@ -1,6 +1,7 @@
 package ecommerce.rmall.ws;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -20,7 +21,8 @@ public interface IShipmentService {
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes({MediaType.APPLICATION_JSON})
-	Shipment dispatch(@QueryParam("order")int orderID, @QueryParam("station")int stationid);
+	Shipment dispatch(@QueryParam("order")int orderID, 
+			@QueryParam("station")int stationid);
 	
 	@GET
 	@Path("/{shipmentID}")
@@ -38,11 +40,13 @@ public interface IShipmentService {
 	@Path("/{shipmentID}/finish")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	String finish(@PathParam("shipmentID")int shipmentID, @QueryParam("accessCode")String accessCode);
+	String finish(@PathParam("shipmentID")int shipmentID, 
+			@QueryParam("accessCode")String accessCode);
 	
 	@GET
 	@Path("/search")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	Page<Shipment> queryByStation(@QueryParam("sessionKey")String sessionKey, @QueryParam("pageNumber")int pageNumber);
+	Page<Shipment> queryByStation(@QueryParam("sessionKey")String sessionKey, 
+			@DefaultValue("1")@QueryParam("pageNumber")int pageNumber);
 }

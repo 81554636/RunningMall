@@ -4,8 +4,6 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 /***
  * 认证信息
  * @author martin
@@ -13,10 +11,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  */
 @XmlRootElement (name = "Credential")
 public class Credential{
-	
-	@JsonIgnore
+
 	private String username;
-	@JsonIgnore
 	private String password;
 	private String sessionKey;
 	private Date expireTime;

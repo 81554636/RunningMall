@@ -44,9 +44,15 @@
         	<bean class="ecommerce.rmall.ws.restful.StationService">
         		<property name="stationService" ref="stationService"/>
         	</bean>
+        	<bean class="ecommerce.rmall.ws.restful.CustomerService">
+        		<property name="customerService" ref="customerService"/>
+        		<property name="orderService" ref="customerOrderService"/>
+        	</bean>
+        	<bean class="ecommerce.rmall.ws.restful.ActivityService">
+        		<property name="activityService" ref="activityService"/>
+        	</bean>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
-		<!-- <bean class="org.apache.cxf.jaxrs.provider.JAXBElementProvider"/> -->
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
         </jaxrs:providers>
     </jaxrs:server>

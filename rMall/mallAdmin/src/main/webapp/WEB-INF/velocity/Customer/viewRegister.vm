@@ -1,0 +1,120 @@
+#set( $ContextPath = ${request.contextPath} )
+<script src="${ContextPath}/js/jqBootstrapValidation.js"></script>
+
+<script>
+	$(function(){
+		$("input,textarea,select").jqBootstrapValidation({
+            preventSubmit: true,
+            submitError: function($form, event, errors) {
+                // Here I do nothing, but you could do something like display 
+                // the error messages to the user, log, etc.
+                console.log("submitError");
+            },
+            submitSuccess: function($form, event) {
+                alert("OK");
+                event.preventDefault();
+            },
+            filter: function() {
+                return $(this).is(":visible");
+            }
+        });
+
+		$('#uphone').focusout(function(){
+			
+			var username = $('#uphone').val();
+			var obj = jQuery.ajax({
+				url    : "credential/username/" + username + ".do",
+				async  : false,
+				type   : "GET",
+				contentType:"application/json",
+				success: function(data){
+					$('#uphone-help').html("");
+					if(data.id == null){
+						$('#uphone-help').html("<font color='green'>可以注册</font>");
+					} else {
+						$('#uphone-help').html("<font color='red'>用户已存在</font>");
+					}
+				}
+			});
+		});
+	});
+	
+	function onRegister(){
+	
+		alert("onsubmit");
+		return false;
+		var userName = $('#uname').val();
+		var userPhone = $('#uphone').val();
+		var userAddress = $('#uaddress').val();
+		
+		var request = {
+			name   : userName,
+			phone  : userPhone,
+			address:userAddress,
+			credential:{
+				username:userPhone
+			}
+		}
+		var obj = jQuery.ajax({
+			url    : "register.do",
+			async  : false,
+			type   : "POST",
+			contentType:"application/json",
+			data   : JSON.stringify(request),
+			success: function(data){
+				var userID = data.id;
+				alert(userID);
+			}
+		});
+	}
+	
+	function onCancel(){
+		
+		$('#newCustomer #uname').val("");
+		$('#newCustomer #uphone').val("");
+		$('#newCustomer #uaddress').val("");
+	}
+</script>
+
+<div class="row">
+	#parse("/layout/sidebar.vm")
+	<div class="span9">
+		<form id="newCustomer" class="form-horizontal error">
+			<fieldset>
+				<legend>新用户注册</legend>
+				<div class="row">
+				<div class="span5">
+					<div class="control-group">
+						<label class="control-label" for="uname">联系人</label>
+						<div class="controls">
+							<input id="uname" name="uname" class="input-xlarge" type="text" aria-invalid="false" required/>
+							<p class="help-block"></p>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="uphone">联系电话</label>
+						<div class="controls">
+							<input id="uphone" class="input-xlarge" type="text" required/>
+							<p class="help-block" id="uphone-help"></p>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="uaddress">联系地址</label>
+						<div class="controls">
+							<input id="uaddress" class="input-xlarge" type="text" required/>
+							<p class="help-block"></p>
+						</div>
+					</div>
+					<div class="form-actions">
+						<button class="btn btn-primary" type="submit">确定</button>
+						<button class="btn" onclick="onCancel();">取消</button>
+					</div>
+				</div><!-- <div class="span5"> -->
+				<div class="span4">
+
+				</div><!-- <div class="span4"> -->
+				</div><!-- <div class="row"> -->
+			</fieldset>
+		</form>
+	</div>
+</div>

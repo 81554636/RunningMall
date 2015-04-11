@@ -34,6 +34,18 @@
         <constructor-arg value="${message.Queue.Destination.Ship}" />
     </bean>
     
+    <!-- +++++++++ PLACE ORDER +++++++++ -->
+    <!-- PTP jms模板 -->  
+    <bean id="jmsTemplate.place" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="queueConnectionFactory"/>
+        <property name="defaultDestination" ref="destination.place"/>        
+        <property name="pubSubDomain" value="false" />
+    </bean>
+    <!-- 消息发送方 -->
+    <bean id="messageSender.place" class="ecommerce.rmall.message.MessageSender">
+    	<property name="jmsTemplate" ref="jmsTemplate.place"/>
+    </bean>
+    
     <!-- +++++++++ DISTRIBUTION SENDER +++++++++ -->
     <!-- PTP jms模板 -->  
     <bean id="jmsTemplate.dispatch" class="org.springframework.jms.core.JmsTemplate">  

@@ -22,7 +22,6 @@ import ecommerce.rmall.domain.OrderItem;
 import ecommerce.rmall.domain.OrderStatus;
 import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.domain.Product;
-import ecommerce.rmall.domain.Shipment;
 import ecommerce.rmall.domain.ShipmentStatus;
 import ecommerce.rmall.domain.Station;
 import ecommerce.rmall.message.MessageSender;
@@ -114,10 +113,10 @@ public class OrderService implements IOrderService {
 		int index = 0;
 		for(OrderItem item:items)
 			ids[index++] = item.getProduct().getId();
-		List<Product> products = this.productDao.findByIDs(ids);
-		index = 0;
+		Map<Integer, Product> products = this.productDao.findByIDs(ids);
+
 		for(OrderItem item : items){
-			item.setProduct(products.get(index++));
+			item.setProduct(products.get(item.getProduct().getId()));
 			order.getDetails().add(item);
 		}
 		
@@ -126,9 +125,9 @@ public class OrderService implements IOrderService {
 		
 		String hql = "from Station where city=:city";
 		Station station = this.stationDao.findByHQL(hql, new String[]{"city"}, new Object[]{delivery.getCity()});
-		if(null != station){//找到相应小站
-			Shipment ship = this.shipmentService.dispatch(order, station.getId());
-		} else {//没找到小站
+		if(null != station)//找到相应小站
+			this.shipmentService.dispatch(order, station.getId());
+		else {//没找到小站
 			logger.info("send ORDER to MessageQueue as PlainText");
 			this.msgSender.sendMessage(new com.google.gson.Gson().toJson(order));
 		}
@@ -154,10 +153,9 @@ public class OrderService implements IOrderService {
 			int index = 0;
 			for(OrderItem item:items)
 				ids[index++] = item.getProduct().getId();
-			List<Product> products = this.productDao.findByIDs(ids);
-			index = 0;
+			Map<Integer, Product> products = this.productDao.findByIDs(ids);
 			for(OrderItem item : items){
-				item.setProduct(products.get(index++));
+				item.setProduct(products.get(item.getProduct().getId()));
 				order.getDetails().add(item);
 			}
 			
@@ -189,6 +187,18 @@ public class OrderService implements IOrderService {
 				new Object[]{phone}, 
 				pageNumber);
 	}
+	
+	@Override
+	public Page<Order> queryBySessionKeyWithPage(String sessionKey, int pageNumber) {
+		
+		String hql = "from Order where customer.credential.sessionKey=:sessionKey order by id desc";
+		return this.orderDao.findByHQLWithPage(
+				hql, 
+				new String[]{"sessionKey"}, 
+				new Object[]{sessionKey}, 
+				pageNumber);
+	}
+	
 	@Override
 	public Page<Order> queryPendingWithPage(int pageNumber) {
 		String hql = "from Order where status=:status order by id desc";
@@ -233,8 +243,10 @@ public class OrderService implements IOrderService {
 			this.orderDao.update(order);
 		}
 	}
+	
 	@Override
 	public List<CountByDate> countByDate() {
+		
 		return this.orderDao.count();
 	}
 	
@@ -251,6 +263,7 @@ public class OrderService implements IOrderService {
 	
 	@Override
 	public void update(Order order) {
+		
 		order.setLastUpdate(new Date());
 		this.orderDao.update(order);
 	}

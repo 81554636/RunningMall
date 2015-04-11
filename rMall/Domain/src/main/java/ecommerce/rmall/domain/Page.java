@@ -2,7 +2,6 @@ package ecommerce.rmall.domain;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 @XmlRootElement (name = "Page")
 public class Page<T> {

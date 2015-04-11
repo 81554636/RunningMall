@@ -57,6 +57,7 @@
 		
 			var product = $(this);
 			var orderItem = {
+				id : product.attr("orderItemID"),
 				product : {id:product.attr("id")},
 				price   : product.attr("price"),
 				quantity: product.val()
@@ -127,6 +128,7 @@
 						var item = data.details[i];
 						console.log("order{id : m_" + item.product.id + ", quantity : " + item.quantity + "}");
 						$('#modifyModal input[id="'+item.product.id + '"]').val(item.quantity);
+						$('#modifyModal input[id="'+item.product.id + '"]').attr("orderItemID", item.id);
 					}
 					
 					$('#modifyModal').modal();
@@ -205,8 +207,8 @@
 					<td>${order.createDate}</td>
 					<td>${order.delivery.city}</td>
 					<td>
-						<button class="btn btn-small btn-primary" data-toggle="distribution" city="${order.delivery.city}"><i class="icon-refresh icon-white"></i>配送</button>
-						<button class="btn btn-small btn-info" data-toggle="modify"><i class="icon-pencil icon-white"></i>修改</button>
+						<button class="btn btn-small btn-primary" data-toggle="distribution" city="${order.delivery.city}"><i class="icon-share icon-white"></i>配送</button>
+						<button class="btn btn-small btn-info" data-toggle="modify"><i class="icon-edit icon-white"></i>修改</button>
 						<button class="btn btn-small btn-danger" data-toggle="cancelOrder"><i class="icon-minus icon-white"></i>取消</button>
 					</td>
 					<td>
@@ -219,7 +221,7 @@
 		
 		<div class="row">
 			<div class="span3">
-				<a class="toggle-link" href="#new-order"><i class="icon-plus"></i>new Order</a>
+				<!--<a class="toggle-link" href="#new-order"><i class="icon-plus"></i>new Order</a>-->
 			</div>
 			<div class="span6">
 				<div class="pagination pagination-right">
@@ -245,7 +247,7 @@
 			</li>
 		</ul>-->
 		
-		#parse("/layout/newOrder.vm")
+		###parse("/layout/newOrder.vm")
 	</div>
 </div>
 
@@ -333,12 +335,19 @@
 			<li class="span2">
 				<div class="thumbnail">
 					<img src="${product.url}">
-					<div class="caption" align="center">
+				#if(${product.valid})
+					<div class="caption" align="center" min="${product.min}" max="${product.max}">
 						${product.displayName}<br>
 						<i class="icon-plus" style="cursor:pointer" onclick="return onPlus(this);"></i>
 						<input type="text" id="${product.id}" price="${product.price}" size="2" style="width:20px;" value="0"/>
 						<i class="icon-minus" style="cursor:pointer" onclick="return onMinus(this);"></i>
 					</div>
+				#else
+					<div class="caption" align="center">
+						${product.displayName}<br>
+						<input type="text" id="${product.id}" price="${product.price}" size="2" style="width:20px;" value="0" disabled/>
+					</div>
+				#end
 				</div>
 			</li>
 		#end

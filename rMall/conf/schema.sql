@@ -11,6 +11,13 @@ insert into rmall_station(displayName,city,createdate,username,password) values(
 insert into rmall_station(displayName,city,createdate,username,password) values('奉化','奉化',CURRENT_TIMESTAMP,'STID009','Pass2010');
 insert into rmall_station(displayName,city,createdate,username,password) values('宁海','宁海',CURRENT_TIMESTAMP,'STID010','Pass2010');
 insert into rmall_station(displayName,city,createdate,username,password) values('象山','象山',CURRENT_TIMESTAMP,'STID011','Pass2010');
-	
-insert into rmall_product(id,displayName,price,createDate,lastUpdate,url) values(1,'wine红酒',230.00,current_timestamp,current_timestamp,'http://121.40.58.21/imgs/wine.png');
-insert into rmall_product(id,displayName,price,createDate,lastUpdate,url) values(2,'kiwi奇异果',120.00,current_timestamp,current_timestamp,'http://121.40.58.21/imgs/kiwi.png');
+
+insert into rmall_product(id,displayName,price,createDate,lastUpdate,url,min,max,isValid) values(1,'wine红酒-注册送好礼',0.00,current_timestamp,current_timestamp,'http://121.40.58.21/imgs/wine.png',1,1,false);
+insert into rmall_product(id,displayName,price,createDate,lastUpdate,url,min,max,isValid) values(2,'kiwi奇异果-注册送好礼',0.00,current_timestamp,current_timestamp,'http://121.40.58.21/imgs/kiwi.png',1,1,false);
+
+insert into rmall_product(id,displayName,price,createDate,lastUpdate,url,min,max,isValid) values(1001,'wine红酒',230.00,current_timestamp,current_timestamp,'http://121.40.58.21/imgs/wine.png',0,255,true);
+insert into rmall_product(id,displayName,price,createDate,lastUpdate,url,min,max,isValid) values(1002,'kiwi奇异果',120.00,current_timestamp,current_timestamp,'http://121.40.58.21/imgs/kiwi.png',0,255,true);
+
+insert rmall_activity(id,description,isValid) values(1,'跑跑上线, 注册送好礼',true);
+insert into rmall_activityDetails(activityID,productID,`index`) values(1,1,0);
+insert into rmall_activityDetails(activityID,productID,`index`) values(1,2,1);

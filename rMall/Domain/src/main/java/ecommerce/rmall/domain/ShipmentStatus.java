@@ -5,6 +5,5 @@ public enum ShipmentStatus {
 	PROCESSING("PROCESSING"),
 	FINISH("FINISH");
 	
-	private String status;
-	ShipmentStatus(String status){this.status = status;}
+	ShipmentStatus(String status){}
 }

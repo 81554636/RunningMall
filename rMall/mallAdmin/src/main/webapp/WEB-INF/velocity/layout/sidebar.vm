@@ -13,6 +13,14 @@
 				<a href="${ContextPath}/Order/search.do"><i class="icon-search"></i> 订单查询</a>
 			</li>
 			
+			<li class="nav-header">客户管理</li>
+			<li #if(${CURRENT}=="REGISTER")class='active'#end>
+				<a href="${ContextPath}/Customer/initRegister.do"><i class="icon-user"></i> 新客户注册</a>
+			</li>
+			<li #if(${CURRENT}=="CUSTOMER")class='active'#end>
+				<a href="${ContextPath}/Customer/search.do"><i class="icon-search"></i> 客户搜索</a>
+			</li>
+			
 			<li class="nav-header">派单管理</li>
 			<li>
 				<a href="${ContextPath}/Shipment/first.do"><i class="icon-search"></i> 派单查询</a>

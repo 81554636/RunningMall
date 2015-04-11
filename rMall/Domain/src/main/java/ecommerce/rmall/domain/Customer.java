@@ -15,64 +15,43 @@ public class Customer {
 	private String phone;
 	private String address;
 	private Date createDate;
-	@JsonIgnore
-	private Date lastUpdate;
-	@JsonIgnore
-	private String lastUpdateBy;
+	@JsonIgnore private Date lastUpdate;
+	@JsonIgnore private String lastUpdateBy;
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	public Date getLastUpdate() {
-		return lastUpdate;
-	}
-
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
-
-	public String getLastUpdateBy() {
-		return lastUpdateBy;
-	}
-
-	public void setLastUpdateBy(String lastUpdateBy) {
-		this.lastUpdateBy = lastUpdateBy;
-	}
+	private Credential credential;
+	public Credential getCredential() { return credential; }
+	public void setCredential(Credential credential) { this.credential = credential; }
 	
-	public String getPhone() {
-		return phone;
-	}
+	private boolean isJoinActivity;
+	public boolean isJoinActivity() { return isJoinActivity; }
+	public void setJoinActivity(boolean isJoinActivity) { this.isJoinActivity = isJoinActivity; }
+	
+	private boolean isActive;
+	public boolean isActive() { return isActive; }
+	public void setActive(boolean isActive) { this.isActive = isActive; }
+	
+	@JsonIgnore private String activateCode;
+	public String getActivateCode() { return activateCode; }
+	public void setActivateCode(String activateCode) { this.activateCode = activateCode; }
+	
+	public int getId() { return id; }
+	public void setId(int id) { this.id = id; }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+	public String getName() { return name; }
+	public void setName(String name) { this.name = name; }
+
+	public String getAddress() { return address; }
+	public void setAddress(String address) { this.address = address; }
+
+	public Date getCreateDate() { return createDate; }
+	public void setCreateDate(Date createDate) { this.createDate = createDate; }
+
+	public Date getLastUpdate() { return lastUpdate; }
+	public void setLastUpdate(Date lastUpdate) { this.lastUpdate = lastUpdate; }
+
+	public String getLastUpdateBy() { return lastUpdateBy; }
+	public void setLastUpdateBy(String lastUpdateBy) { this.lastUpdateBy = lastUpdateBy; }
+	
+	public String getPhone() { return phone; }
+	public void setPhone(String phone) { this.phone = phone; }
 }

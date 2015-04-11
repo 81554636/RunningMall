@@ -12,7 +12,10 @@
         </id>
         <property name="displayName" type="java.lang.String" column="displayName" length="64"/>
         <property name="url" type="java.lang.String" column="url" length="256"/>
-        <property name="price" type="float" column="price"/>        
+        <property name="price" type="float" column="price"/>
+        <property name="min" type="integer" column="min"/>
+        <property name="max" type="integer" column="max"/>
+        <property name="valid" type="boolean" column="isValid"/>
         <property name="createDate" type="java.sql.Timestamp" column="createDate"/>
         <property name="lastUpdate" type="java.sql.Timestamp" column="lastUpdate"/>
     </class>

@@ -33,7 +33,8 @@ public class DaoSupport {
     }
     
     protected void update(Object obj) {
-        getSession().update(obj);
+        //getSession().update(obj);
+        getSession().merge(obj);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

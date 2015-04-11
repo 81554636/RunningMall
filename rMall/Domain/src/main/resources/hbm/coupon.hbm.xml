@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Hibernate-mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="ecommerce.rmall.domain.Coupon" table="rmall_coupon">
+        <id name="id" type="java.lang.Integer">
+            <column name="id"/>
+            <generator class="identity"/>
+        </id>
+        <many-to-one name="owner" column="customerID" 
+        	cascade="none" not-null="true"
+        	class="ecommerce.rmall.domain.Customer" lazy="false"/>
+        <property name="startTime" type="java.sql.Timestamp" column="startTime"/>
+        <property name="expireTime" type="java.sql.Timestamp" column="expireTime"/>
+        <property name="cutPrice" type="float" column="cutPrice"/>
+    </class>
+</hibernate-mapping>

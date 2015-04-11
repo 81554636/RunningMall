@@ -6,8 +6,6 @@ public enum OrderStatus {
 	CANCEL("CANCEL"),
 	FINISH("FINISH");
 	
-	private String status;
 	OrderStatus(String status){
-		this.status = status;
 	}
 }

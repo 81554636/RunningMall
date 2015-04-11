@@ -72,6 +72,14 @@ public interface IOrderService {
 	Page<Order> queryByPhoneWithPage(String phone, int pageNumber);
 	
 	/***
+	 * 查询订单(分页),根据客户登录会话查询
+	 * @param sessionKey 登录会话
+	 * @param pageNumber 1,2,3......
+	 * @return
+	 */
+	Page<Order> queryBySessionKeyWithPage(String sessionKey, int pageNumber);
+	
+	/***
 	 * 取消订单
 	 * @param orderId 
 	 */

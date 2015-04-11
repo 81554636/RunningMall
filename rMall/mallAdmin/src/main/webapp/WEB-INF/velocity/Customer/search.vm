@@ -1,0 +1,92 @@
+#set( $ContextPath = ${request.contextPath} )
+
+<link href="${ContextPath}/css/bootstrap-select.min.css" rel="stylesheet" />
+
+<script src="${ContextPath}/js/bootbox.js"></script>
+<script src="${ContextPath}/js/jqBootstrapValidation.js"></script>
+<script src="${ContextPath}/js/messageTips.js"></script>
+<script src="${ContextPath}/js/bootstrap-select.min.js"></script>
+
+<script>
+	function nextTab(){
+		$('#modifyTab a[href="#items"]').tab('show');
+	}
+	
+	function showMessage(msg) {
+	
+		var alert = "新订单{ 订单编号:" + msg.id + ", 下单时间:" + msg.createDate + " }到达, 请及时处理!!!";
+		messageTips.show(alert);
+	}
+	
+	$(function(){
+	
+		messageTips.init({ "selector":".bb-alert" });
+		$(".selectpicker").selectpicker();
+		
+		$("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
+
+		//修改
+		$("[data-toggle='createOrder']").click(function(){
+			
+			var customer = $(this).parent().parent();
+			$('#customerID').val(customer.attr("customerid"));
+			$('#uname').val($(customer).find("[type=name]").html());
+			$('#uphone').val($(customer).find("[type=phone]").html());
+			$('#uaddress').val($(customer).find("[type=address]").html());
+		});
+		
+	});
+</script>
+
+<div class="row">
+	#parse("/layout/sidebar.vm")
+	<div class="span9">
+		
+		<h2>客户查询</h2>
+		<!-- 新订单提示 -->
+		<div class="bb-alert alert alert-danger" style="display:none;">
+			<button type="button" class="close" aria-hidden="true" onclick="messageTips.hide();">&times;</button>
+			<span></span><a href="${ContextPath}/Order/pending/First.do">刷新</a>
+		</div>
+
+		<form class="form-search form-inline" action="search.do" method="POST">
+			<input class="input-medium search-query" type="text" name="customerID"
+				placeholder="客户姓名 或 手机号码" required/>
+			<input type="hidden" id="customerID" value=""/>
+			<button type="submit" class="btn">查询</button>
+		</form>
+		<div class="row">
+			<div class="span9">
+				<table class="table table-bordered table-striped  table-condensed table-hover">
+					<thead>
+						<tr>
+							<th>姓名</th>
+							<th>手机</th>
+							<th>地址</th>
+							<th>注册日期</th>
+							<th>手机登录ID</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						#foreach( $customer in ${page.dataList})
+						<tr customerID="$!{customer.id}">
+							<td type="name" style="width:75px;">$!{customer.name}</td>
+							<td type="phone" style="width:100px;">$!{customer.phone}</td>
+							<td type="address">$!{customer.address}</td>
+							<td>$!{customer.createDate}</td>
+							<td>$!{customer.credential.username}</td>
+							<!--<td><button class="btn btn-small btn-primary" data-toggle="createOrder"><i class="icon-refresh icon-white"></i>下单</button></td>-->
+							<td style="width:70px;"><a class="toggle-link" href="#new-order" data-toggle="createOrder"><i class="icon-shopping-cart"></i>下订单</a></td>
+						</tr>
+						#end
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div>
+			#parse("/layout/newOrder.vm")
+		</div>
+	</div>
+</div>
+		

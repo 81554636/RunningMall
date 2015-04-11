@@ -18,4 +18,9 @@ public class ProductService implements ecommerce.rmall.ws.IProductService {
 	public Page<Product> queryWithPage(int pageNumber) {
 		return this.productService.queryWithPage(pageNumber);
 	}
+
+	@Override
+	public Page<Product> queryPagination(String sessionKey, int pageNumber) {
+		return this.productService.queryWithPage(sessionKey, pageNumber);
+	}
 }

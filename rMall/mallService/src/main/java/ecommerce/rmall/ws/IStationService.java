@@ -1,5 +1,7 @@
 package ecommerce.rmall.ws;
 
+import java.util.List;
+
 import javax.jws.WebService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,9 +16,16 @@ import javax.ws.rs.core.MediaType;
 import ecommerce.rmall.domain.Channel;
 import ecommerce.rmall.domain.Station;
 
-@WebService
 @Path("/Station")
+@WebService(endpointInterface="ecommerce.rmall.webservice", serviceName="StationService")
 public interface IStationService {
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	List<Station> listAll();
+	
 	
 	@GET
 	@Path("/")

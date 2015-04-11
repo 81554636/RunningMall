@@ -7,7 +7,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @XmlRootElement (name = "OrderItem")
 public class OrderItem {
 
-	@JsonIgnore
 	private int id;
 	private Product product;
 	private int quantity;

@@ -7,6 +7,7 @@ import ecommerce.rmall.domain.Page;
 
 public interface IProductService {
 	
+	Page<Product> queryWithPage(String sessionKey, int pageNumber);
 	Page<Product> queryWithPage(int pageNumber);
 	List<Product> listAll();
 }
