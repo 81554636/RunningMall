@@ -12,5 +12,9 @@
 			<module name="org.slf4j" />
 			<module name="org.slf4j.impl" />
 		</exclusions>
+		
+		<exclude-subsystems>
+			<subsystem name="webservices" />
+	    </exclude-subsystems>
 	</deployment>
 </jboss-deployment-structure>

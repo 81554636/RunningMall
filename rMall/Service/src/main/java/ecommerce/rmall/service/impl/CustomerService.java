@@ -40,7 +40,7 @@ public class CustomerService implements ICustomerService {
 		logger.info("save customer[{}] to DATABASE", customer.getCredential().getUsername());
 		Customer rtn = this.dao.save(customer);
 		
-		logger.info("send ACTIVATE-CODE[{}] to customer {}", customer.getActivateCode(), customer.getPhone());
+		logger.info("ignore sending ACTIVATE-CODE[{}] to customer {}", customer.getActivateCode(), customer.getPhone());
 		this.notify.sendMessage(customer.getPhone(), customer.getActivateCode());
 		return rtn;
 	}
