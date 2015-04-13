@@ -56,6 +56,7 @@ public class OrderDAO extends DaoSupport implements IPagination<Order>{
 			return null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<CountByDate> count(){
 		
 		List <CountByDate> rtn = new ArrayList<CountByDate>();
@@ -70,6 +71,7 @@ public class OrderDAO extends DaoSupport implements IPagination<Order>{
 		return rtn;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<CountByStatus> stastic(){
 		
 		List<CountByStatus> rtn = new ArrayList<CountByStatus>();

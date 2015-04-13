@@ -3,21 +3,29 @@ package ecommerce.rmall.service.impl;
 import java.util.Date;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ecommerce.rmall.dao.CouponDAO;
 import ecommerce.rmall.dao.CustomerDAO;
 import ecommerce.rmall.domain.Coupon;
 import ecommerce.rmall.domain.Customer;
 import ecommerce.rmall.domain.Page;
+import ecommerce.rmall.notify.INotify;
 import ecommerce.rmall.service.ICustomerService;
-import ecommerce.rmall.utils.CredentialHelper;
 import ecommerce.rmall.utils.RandomCode;
 
 public class CustomerService implements ICustomerService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
 	
 	private CustomerDAO dao;
 	private CouponDAO couponDao;
 	public void setCustomerDao(CustomerDAO dao){ this.dao = dao; }
 	public void setCouponDao(CouponDAO dao){ this.couponDao = dao; }
+	
+	private INotify notify;
+	public void setNotify(INotify notify){ this.notify = notify; }
 
 	@Override
 	public Customer create(Customer customer) {
@@ -28,7 +36,13 @@ public class CustomerService implements ICustomerService {
 		customer.setActivateCode(RandomCode.obtainRandomCode());
 		if(null != customer.getCredential())
 			customer.getCredential().setSessionKey(sessionKey);
-		return this.dao.save(customer);
+		
+		logger.info("save customer[{}] to DATABASE", customer.getCredential().getUsername());
+		Customer rtn = this.dao.save(customer);
+		
+		logger.info("send ACTIVATE-CODE[{}] to customer {}", customer.getActivateCode(), customer.getPhone());
+		this.notify.sendMessage(customer.getPhone(), customer.getActivateCode());
+		return rtn;
 	}
 	
 	@Override
@@ -39,6 +53,7 @@ public class CustomerService implements ICustomerService {
 		if(null != customer && activateCode.equals(customer.getActivateCode())){
 			customer.setActive(true);
 			this.dao.update(customer);
+			logger.info("activate customer {}", customer.getCredential().getUsername());
 		}
 		return customer;
 	}

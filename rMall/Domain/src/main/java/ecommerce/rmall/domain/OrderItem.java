@@ -2,8 +2,6 @@ package ecommerce.rmall.domain;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 @XmlRootElement (name = "OrderItem")
 public class OrderItem {
 

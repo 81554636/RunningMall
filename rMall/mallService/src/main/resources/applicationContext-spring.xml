@@ -40,6 +40,7 @@
 	<bean id="customerService" class="ecommerce.rmall.service.impl.CustomerService">
 		<property name="customerDao" ref="customerDao"/>
 		<property name="couponDao" ref="couponDao"/>
+		<property name="notify" ref="smsNotify"/>
 	</bean>
 	
 	<bean id="customerOrderService" class="ecommerce.rmall.service.impl.CustomerOrderService">
@@ -58,5 +59,11 @@
 	<bean id="productHelper" class="ecommerce.rmall.utils.ProductHelper">
 		<property name="customerDao" ref="customerDao"/>
 		<property name="productDao" ref="productDao"/>
+	</bean>
+	
+	<bean id="smsNotify" class="ecommerce.rmall.notify.moming.SmsNotifyImpl">
+		<property name="smsEndpoint" ref="smsEndpoint"/>
+		<property name="account" value="${sms.account}"/>
+		<property name="password" value="${sms.password}"/>
 	</bean>
 </beans>

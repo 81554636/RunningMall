@@ -58,4 +58,6 @@
     </jaxrs:server>
     
     <!-- RESTFUL/SOAP CXF CLIENT -->
+    <jaxrs:client id="smsEndpoint" 
+    	serviceClass="ecommerce.rmall.notify.moming.ISmsEndpoint" address="${sms.endpoint}"/>
 </beans>
