@@ -57,6 +57,17 @@ public class CustomerService implements ICustomerService {
 		}
 		return customer;
 	}
+	
+	@Override
+	public Customer validate(String username, String captcha) {
+
+		String hql = "from Customer where credential.username=:username";
+		Customer customer = this.dao.findByHQL(hql, new String[]{"username"}, new Object[]{username});
+		if(null != customer && customer.getActivateCode().equals(captcha)){
+			return customer;
+		}
+		return null;
+	}
 
 	@Override
 	public Customer signIn(String username, String password) {
@@ -98,6 +109,20 @@ public class CustomerService implements ICustomerService {
 	@Override
 	public void update(String sessionKey, Customer customer) {
 		
+		this.dao.update(customer);
+	}
+	
+	@Override
+	public void update(Customer updateCustomer) {
+		
+		Customer customer = this.dao.findByID(updateCustomer.getId());
+		if( null != customer ){
+			
+			customer.setAddress(updateCustomer.getAddress());
+			customer.setName(updateCustomer.getName());
+			customer.getCredential().setPassword(
+					updateCustomer.getCredential()==null?"":updateCustomer.getCredential().getPassword());
+		}
 		this.dao.update(customer);
 	}
 

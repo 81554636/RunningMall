@@ -22,11 +22,23 @@ public class CustomerService implements ICustomerService {
 	public Customer register(Customer customer) {
 		return this.customerService.create(customer);
 	}
+	
+	@Override
+	public Customer update(int customerID, Customer customer) {
+		customer.setId(customerID);
+		this.customerService.update(customer);
+		return customer;
+	}
 
 	@Override
 	public String activate(String userName, String activateCode) {
 		this.customerService.activate(userName, activateCode);
 		return "SUCCESS";
+	}
+	
+	@Override
+	public Customer validate(String userName, String captcha) {
+		return this.customerService.validate(userName, captcha);
 	}
 	
 	@Override

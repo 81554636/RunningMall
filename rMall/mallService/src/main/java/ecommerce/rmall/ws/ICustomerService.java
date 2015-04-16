@@ -29,6 +29,12 @@ public interface ICustomerService {
 	Customer register(Customer customer);
 	
 	@PUT
+	@Path("/{customerID}")
+	@Produces({MediaType.APPLICATION_JSON})
+	@Consumes({MediaType.APPLICATION_JSON})
+	Customer update(@PathParam("customerID")int customerID, Customer customer);
+	
+	@PUT
 	@Path("/{userName}/activation")
 	@Produces({MediaType.APPLICATION_JSON})
 	@Consumes({MediaType.APPLICATION_JSON})
@@ -39,6 +45,12 @@ public interface ICustomerService {
 	@Produces({MediaType.APPLICATION_JSON})
 	@Consumes({MediaType.APPLICATION_JSON})
 	Customer signIn(@PathParam("userName")String userName, @QueryParam("passDigest")String passDigest);
+	
+	@GET
+	@Path("/{userName}/validation")
+	@Produces({MediaType.APPLICATION_JSON})
+	@Consumes({MediaType.APPLICATION_JSON})
+	Customer validate(@PathParam("userName")String userName, @QueryParam("captcha")String captcha);
 
 	@PUT
 	@Path("/{sessionKey}/signOut")
