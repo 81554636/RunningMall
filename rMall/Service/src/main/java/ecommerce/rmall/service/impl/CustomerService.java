@@ -115,7 +115,10 @@ public class CustomerService implements ICustomerService {
 	@Override
 	public void update(Customer updateCustomer) {
 		
-		Customer customer = this.dao.findByID(updateCustomer.getId());
+		String hql = "from Customer where credential.username=:username";
+		Customer customer = this.dao.findByHQL(
+				hql, new String[]{"username"}, new Object[]{updateCustomer.getCredential().getUsername()});
+
 		if( null != customer ){
 			
 			customer.setAddress(updateCustomer.getAddress());

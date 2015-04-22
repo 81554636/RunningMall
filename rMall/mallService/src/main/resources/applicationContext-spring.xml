@@ -61,10 +61,10 @@
 		<property name="productDao" ref="productDao"/>
 	</bean>
 	
-	<!-- <bean id="smsNotify" class="ecommerce.rmall.notify.NotifyNothing"/> -->
-	<bean id="smsNotify" class="ecommerce.rmall.notify.moming.SmsNotifyImpl">
+	<bean id="smsNotify" class="ecommerce.rmall.notify.NotifyNothing"/>
+	<!-- <bean id="smsNotify" class="ecommerce.rmall.notify.moming.SmsNotifyImpl">
 		<property name="smsEndpoint" ref="smsEndpoint"/>
 		<property name="account" value="${sms.account}"/>
 		<property name="password" value="${sms.password}"/>
-	</bean>
+	</bean> -->
 </beans>

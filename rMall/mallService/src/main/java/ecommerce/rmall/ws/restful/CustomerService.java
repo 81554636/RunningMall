@@ -1,6 +1,7 @@
 package ecommerce.rmall.ws.restful;
 
 import ecommerce.rmall.domain.Coupon;
+import ecommerce.rmall.domain.Credential;
 import ecommerce.rmall.domain.Customer;
 import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.Page;
@@ -24,8 +25,11 @@ public class CustomerService implements ICustomerService {
 	}
 	
 	@Override
-	public Customer update(int customerID, Customer customer) {
-		customer.setId(customerID);
+	public Customer update(String userName, Customer customer) {
+
+		if(null == customer.getCredential())
+			customer.setCredential( new Credential() );
+		customer.getCredential().setUsername(userName);
 		this.customerService.update(customer);
 		return customer;
 	}

@@ -29,10 +29,10 @@ public interface ICustomerService {
 	Customer register(Customer customer);
 	
 	@PUT
-	@Path("/{customerID}")
+	@Path("/{userName}")
 	@Produces({MediaType.APPLICATION_JSON})
 	@Consumes({MediaType.APPLICATION_JSON})
-	Customer update(@PathParam("customerID")int customerID, Customer customer);
+	Customer update(@PathParam("userName")String userName, Customer customer);
 	
 	@PUT
 	@Path("/{userName}/activation")
