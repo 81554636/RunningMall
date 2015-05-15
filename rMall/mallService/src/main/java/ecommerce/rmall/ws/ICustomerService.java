@@ -40,6 +40,18 @@ public interface ICustomerService {
 	@Consumes({MediaType.APPLICATION_JSON})
 	String activate(@PathParam("userName")String userName, @QueryParam("activateCode")String activateCode);
 	
+	@PUT
+	@Path("/{userName}/password/init")
+	@Produces({MediaType.APPLICATION_JSON})
+	@Consumes({MediaType.APPLICATION_JSON})
+	String requestPassword(@PathParam("userName")String userName);
+	
+	@PUT
+	@Path("/{userName}/password/reset")
+	@Produces({MediaType.APPLICATION_JSON})
+	@Consumes({MediaType.APPLICATION_JSON})
+	Customer resetPassword(@PathParam("userName")String userName, @QueryParam("captcha")String activateCode, @QueryParam("passDigest")String passDigest);
+	
 	@GET
 	@Path("/{userName}/signIn")
 	@Produces({MediaType.APPLICATION_JSON})

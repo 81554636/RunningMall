@@ -8,8 +8,8 @@
         <id name="id" type="java.lang.Integer">
             <column name="id"/>
             <generator class="identity"/>
-        </id>        
-        <!-- <property name="status" type="java.lang.String" column="status" length="16"/> -->
+        </id>
+
         <property name="status" column="status" length="16">
 	        <type name="org.hibernate.type.EnumType">
 	            <param name="enumClass">ecommerce.rmall.domain.OrderStatus</param>
@@ -18,6 +18,7 @@
 	        </type>
         </property>
         <property name="accessCode" type="java.lang.String" column="accessCode" length="12"/>
+        <property name="description" type="java.lang.String" column="memo" length="512"/>
         
         <many-to-one name="customer" column="customerID" 
         	cascade="none" not-null="true"

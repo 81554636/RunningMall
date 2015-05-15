@@ -30,14 +30,26 @@ public class CustomerService implements ICustomerService {
 		if(null == customer.getCredential())
 			customer.setCredential( new Credential() );
 		customer.getCredential().setUsername(userName);
-		this.customerService.update(customer);
-		return customer;
+		return this.customerService.update(customer);
 	}
 
 	@Override
 	public String activate(String userName, String activateCode) {
 		this.customerService.activate(userName, activateCode);
 		return "SUCCESS";
+	}
+	
+	@Override
+	public String requestPassword(String userName) {
+		
+		this.customerService.initResetPassword(userName);
+		return "SUCCESS";
+	}
+	
+	@Override
+	public Customer resetPassword(String userName, String activateCode, String passDigest) {
+		
+		return this.customerService.resetPassword(userName, activateCode, passDigest);
 	}
 	
 	@Override
@@ -58,6 +70,7 @@ public class CustomerService implements ICustomerService {
 
 	@Override
 	public Page<Coupon> fetchCoupons(String sessionKey, int pageNumber) {
+		
 		return this.customerService.coupons(sessionKey, pageNumber);
 	}
 
@@ -70,7 +83,10 @@ public class CustomerService implements ICustomerService {
 	@Override
 	public Order Place(String sessionKey, Order order) {
 		
-		return this.orderService.Place(sessionKey, order.getDelivery(), order.getDetails());
+		return this.orderService.Place(sessionKey, 
+				order.getDelivery(), 
+				order.getDetails(), 
+				order.getDescription());
 	}
 	
 	@Override

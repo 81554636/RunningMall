@@ -29,20 +29,36 @@ public class CustomerService implements ICustomerService {
 
 	@Override
 	public Customer create(Customer customer) {
-		
-		String sessionKey = UUID.randomUUID().toString();
-		customer.setCreateDate(new Date());
-		customer.setJoinActivity(true);
-		customer.setActivateCode(RandomCode.obtainRandomCode());
-		if(null != customer.getCredential())
-			customer.getCredential().setSessionKey(sessionKey);
-		
-		logger.info("save customer[{}] to DATABASE", customer.getCredential().getUsername());
-		Customer rtn = this.dao.save(customer);
-		
-		logger.info("ignore sending ACTIVATE-CODE[{}] to customer {}", customer.getActivateCode(), customer.getPhone());
-		this.notify.sendMessage(customer.getPhone(), customer.getActivateCode());
-		return rtn;
+
+		String hql = "from Customer where credential.username=:username";
+		Customer existCustomer = this.dao.findByHQL(hql, new String[]{"username"}, new Object[]{customer.getCredential().getUsername()});
+		if( null != existCustomer ){
+			
+			if(existCustomer.isActive() == false){
+				
+				logger.info("CUSTOMER[{}] already exists, update ACTIVATE-CODE to DATABASE", customer.getCredential().getUsername());
+				existCustomer.setActivateCode(RandomCode.obtainRandomCode());
+				this.dao.update(existCustomer);
+			
+				logger.info("sending ACTIVATE-CODE[{}] to CUSTOMER[{}]", customer.getActivateCode(), customer.getPhone());
+				this.notify.sendMessage(customer.getPhone(), customer.getActivateCode());
+			}
+			
+			return existCustomer;
+		} else {
+
+			customer.setCreateDate(new Date());
+			customer.setJoinActivity(true);
+			customer.setActivateCode(RandomCode.obtainRandomCode());
+			customer.setPhone(customer.getCredential().getUsername());
+			
+			logger.info("save CUSTOMER[{}] to DATABASE", customer.getCredential().getUsername());
+			Customer rtn = this.dao.save(customer);
+			
+			logger.info("sending ACTIVATE-CODE[{}] to CUSTOMER[{}]", customer.getActivateCode(), customer.getPhone());
+			this.notify.sendMessage(customer.getPhone(), customer.getActivateCode());
+			return rtn;
+		}
 	}
 	
 	@Override
@@ -51,9 +67,10 @@ public class CustomerService implements ICustomerService {
 		String hql = "from Customer where credential.username=:username";
 		Customer customer = this.dao.findByHQL(hql, new String[]{"username"}, new Object[]{username});
 		if(null != customer && activateCode.equals(customer.getActivateCode())){
+			
 			customer.setActive(true);
+			logger.info("activate CUSTOMER[{}]", customer.getCredential().getUsername());
 			this.dao.update(customer);
-			logger.info("activate customer {}", customer.getCredential().getUsername());
 		}
 		return customer;
 	}
@@ -62,6 +79,7 @@ public class CustomerService implements ICustomerService {
 	public Customer validate(String username, String captcha) {
 
 		String hql = "from Customer where credential.username=:username";
+		logger.info("validate CUSTOMER[{}] by ACTIVATE-CODE[{}]", username, captcha);
 		Customer customer = this.dao.findByHQL(hql, new String[]{"username"}, new Object[]{username});
 		if(null != customer && customer.getActivateCode().equals(captcha)){
 			return customer;
@@ -76,7 +94,8 @@ public class CustomerService implements ICustomerService {
 		Customer customer = this.dao.findByHQL(hql, new String[]{"username"}, new Object[]{username});
 		if(null != customer){
 
-			if(customer.getCredential().getPassword().equals(password)){
+			if(null != customer.getCredential().getPassword() &&
+					customer.getCredential().getPassword().equals(password)){
 				String sessionKey = UUID.randomUUID().toString();
 				customer.getCredential().setSessionKey(sessionKey);
 				this.dao.update(customer);
@@ -109,11 +128,12 @@ public class CustomerService implements ICustomerService {
 	@Override
 	public void update(String sessionKey, Customer customer) {
 		
+		logger.info("update CUSTOMER[{}] by SESSION-KEY[{}]", customer.getCredential().getUsername(), sessionKey);
 		this.dao.update(customer);
 	}
 	
 	@Override
-	public void update(Customer updateCustomer) {
+	public Customer update(Customer updateCustomer) {
 		
 		String hql = "from Customer where credential.username=:username";
 		Customer customer = this.dao.findByHQL(
@@ -123,10 +143,14 @@ public class CustomerService implements ICustomerService {
 			
 			customer.setAddress(updateCustomer.getAddress());
 			customer.setName(updateCustomer.getName());
+			customer.setEmail(updateCustomer.getEmail());
+			customer.setImgUrl(updateCustomer.getImgUrl());
 			customer.getCredential().setPassword(
 					updateCustomer.getCredential()==null?"":updateCustomer.getCredential().getPassword());
+			customer.setLastUpdate(new Date());
+			this.dao.update(customer);
 		}
-		this.dao.update(customer);
+		return customer;
 	}
 
 	@Override
@@ -145,5 +169,35 @@ public class CustomerService implements ICustomerService {
 		String hql = "from Customer where name like :Param OR phone like :Param";
 		String param = "%" + query + "%";
 		return this.dao.findByHQLWithPage(hql, new String[]{"Param"}, new Object[]{param}, 1);
+	}
+	
+	@Override
+	public void initResetPassword(String username) {
+		String hql = "from Customer where credential.username=:username";
+		Customer customer = this.dao.findByHQL(hql, new String[]{"username"}, new Object[]{username});
+		if(null != customer){
+			
+			customer.setActivateCode(RandomCode.obtainRandomCode());
+			
+			logger.info("update CUSTOMER[{}] set ACTIVATE-CODE[{}]", username, customer.getActivateCode());
+			this.dao.update(customer);
+			
+			logger.info("sending ACTIVATE-CODE[{}] to CUSTOMER[{}]", customer.getActivateCode(), customer.getPhone());
+			this.notify.sendMessage(customer.getPhone(), customer.getActivateCode());
+		}
+	}
+	
+	@Override
+	public Customer resetPassword(String username, String activateCode, String password) {
+		
+		String hql = "from Customer where credential.username=:username";
+		Customer customer = this.dao.findByHQL(hql, new String[]{"username"}, new Object[]{username});
+		if(null != customer && customer.getActivateCode().equals(activateCode)){
+			
+			customer.getCredential().setPassword(password);
+			this.dao.update(customer);
+			return customer;
+		}
+		return null;
 	}
 }

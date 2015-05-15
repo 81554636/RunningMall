@@ -11,7 +11,9 @@
         </id>
         <property name="name" type="java.lang.String" column="name" length="64"/>
         <property name="phone" type="java.lang.String" column="phone" length="20"/>
-        <property name="address" type="java.lang.String" column="address" length="256"/>
+        <property name="email" type="java.lang.String" column="email" length="64"/>
+        <property name="address" type="java.lang.String" column="address" length="128"/>
+        <property name="imgUrl" type="java.lang.String" column="imgUrl" length="256"/>
         <property name="joinActivity" type="boolean" column="isJoinActivity"/>
         <property name="active" type="boolean" column="isActive"/>
         <property name="activateCode" type="java.lang.String" column="activateCode"/>

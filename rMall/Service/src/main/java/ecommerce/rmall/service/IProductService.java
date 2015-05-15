@@ -10,4 +10,5 @@ public interface IProductService {
 	Page<Product> queryWithPage(String sessionKey, int pageNumber);
 	Page<Product> queryWithPage(int pageNumber);
 	List<Product> listAll();
+	List<Product> listByIDs(int[] ids);
 }

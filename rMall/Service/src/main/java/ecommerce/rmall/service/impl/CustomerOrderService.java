@@ -139,7 +139,7 @@ public class CustomerOrderService implements ICustomerOrderService {
 	}
 	
 	@Override
-	public Order Place(String sessionKey, Delivery delivery, List<OrderItem> items) {
+	public Order Place(String sessionKey, Delivery delivery, List<OrderItem> items, String description) {
 		
 		String hql = "from Customer where credential.sessionKey=:sessionKey";
 		Customer customer = this.customerDao.findByHQL(
@@ -157,6 +157,7 @@ public class CustomerOrderService implements ICustomerOrderService {
 			newOrder.setCustomer(customer);
 			newOrder.setDelivery(delivery);
 			newOrder.setDetails(new java.util.ArrayList<OrderItem>());
+			newOrder.setDescription(description);
 			
 			int[] ids = new int[items.size()];
 			int index = 0;

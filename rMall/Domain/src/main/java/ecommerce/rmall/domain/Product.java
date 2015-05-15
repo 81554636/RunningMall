@@ -1,6 +1,7 @@
 package ecommerce.rmall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -11,10 +12,13 @@ public class Product {
 	
 	private int id;
 	private String displayName;
+	private String description;
 	private float price;
 	private int max;
 	private int min;
 	private String url;
+	private List<String> imgUrls;
+
 	@JsonIgnore private boolean isValid;
 	@JsonIgnore private Date createDate;
 	@JsonIgnore private Date lastUpdate;
@@ -24,9 +28,15 @@ public class Product {
 
 	public String getDisplayName() { return displayName; }
 	public void setDisplayName(String displayName) { this.displayName = displayName; }
+	
+	public String getDescription() { return description; }
+	public void setDescription(String description) { this.description = description; }
 
 	public String getUrl() { return url; }
 	public void setUrl(String url) { this.url = url; }
+	
+	public List<String> getImgUrls() { return imgUrls; }
+	public void setImgUrls(List<String> imgUrls) { this.imgUrls = imgUrls; }
 
 	public float getPrice() { return price; }
 	public void setPrice(float price) { this.price = price; }

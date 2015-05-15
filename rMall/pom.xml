@@ -330,28 +330,11 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			
-			<plugin>
-				<groupId>org.wildfly.plugins</groupId>
-				<artifactId>wildfly-maven-plugin</artifactId>
-				<version>1.1.0.Alpha1</version>
-				<configuration>
-					<hostname>127.0.0.1</hostname>
-					<port>9999</port>
-					<username>jboss</username>
-					<password>123456</password>
-					<domain>
-						<server-groups>
-							<server-group>main-server-group</server-group>
-						</server-groups>
-					</domain>
-				</configuration>
-          	</plugin>
           	
           	<plugin>
 				<groupId>org.wildfly.plugins</groupId>
 				<artifactId>wildfly-maven-plugin</artifactId>
-				<version>1.1.0.Alpha1</version>
+				<version>1.0.2.Final</version>
 				<configuration>
 					<hostname>127.0.0.1</hostname>
 					<port>9999</port>

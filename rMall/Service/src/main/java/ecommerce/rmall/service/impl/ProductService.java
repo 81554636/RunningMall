@@ -1,6 +1,8 @@
 package ecommerce.rmall.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import ecommerce.rmall.dao.CustomerDAO;
 import ecommerce.rmall.dao.ProductDAO;
@@ -45,5 +47,15 @@ public class ProductService implements IProductService {
 	@Override
 	public List<Product> listAll() {
 		return dao.listAll();
+	}
+
+	@Override
+	public List<Product> listByIDs(int[] ids) {
+		
+		List<Product> rtn = new ArrayList<Product>();
+		Map<Integer, Product> mapProducts = dao.findByIDs(ids);
+		for(Map.Entry<Integer, Product> entry : mapProducts.entrySet())
+			rtn.add(entry.getValue());
+		return rtn;
 	}
 }

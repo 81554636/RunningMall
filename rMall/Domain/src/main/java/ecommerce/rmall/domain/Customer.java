@@ -14,6 +14,9 @@ public class Customer {
 	private String name;
 	private String phone;
 	private String address;
+	private String email;
+	private String imgUrl;
+
 	private Date createDate;
 	@JsonIgnore private Date lastUpdate;
 	@JsonIgnore private String lastUpdateBy;
@@ -54,4 +57,10 @@ public class Customer {
 	
 	public String getPhone() { return phone; }
 	public void setPhone(String phone) { this.phone = phone; }
+	
+	public String getEmail() { return email; }
+	public void setEmail(String email) { this.email = email; }
+	
+	public String getImgUrl() { return imgUrl; }
+	public void setImgUrl(String imgUrl) { this.imgUrl = imgUrl; }
 }

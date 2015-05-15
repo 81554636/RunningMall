@@ -1,5 +1,7 @@
 package ecommerce.rmall.ws;
 
+import java.util.List;
+
 import javax.jws.WebService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -28,4 +30,10 @@ public interface IProductService {
 	@Produces(MediaType.APPLICATION_JSON)
 	Page<Product> queryPagination(@PathParam("sessionKey")String sessionKey,
 			@DefaultValue("1")@PathParam("pageNumber")int pageNumber);
+	
+	@GET
+	@Path("/IDs/{IDs}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	List<Product> queryByIDs(@PathParam("IDs")String ids);
 }

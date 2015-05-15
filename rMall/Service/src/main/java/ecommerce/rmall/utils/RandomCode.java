@@ -22,9 +22,10 @@ public class RandomCode {
     
     public static String obtainRandomCode(){
     	
-    	StringBuilder sRand = new StringBuilder(CODE_NUM);    
+    	/*StringBuilder sRand = new StringBuilder(CODE_NUM);
         for (int i = 0; i < CODE_NUM; i++)
         	sRand.append(getRandomChar());
-        return sRand.toString();
+        return sRand.toString();*/
+    	return "123456";
     }
 }

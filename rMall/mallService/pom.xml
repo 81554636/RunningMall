@@ -48,8 +48,38 @@
 					</execution>
 				</executions>
 			</plugin>
-			
-			
+			<plugin>
+			    <groupId>org.wildfly.plugins</groupId>
+			    <artifactId>wildfly-maven-plugin</artifactId>
+			    <version>1.0.2.Final</version>
+			    <configuration>
+			    	<hostname>127.0.0.1</hostname>
+			    	<port>9990</port>
+			    	<username>jboss</username>
+			    	<password>123456</password>
+			    	<filename>../../mallService/target/mallService.war</filename>
+			    	<domain>
+			    		<server-groups>
+			    			<server-group>main-server-group</server-group>
+			    		</server-groups>
+			    	</domain>
+			    </configuration>
+			    <executions>
+					<execution>
+						<id>deploy</id>
+						<phase>install</phase>
+						<goals><goal>deploy</goal></goals>
+					</execution>
+					<!-- <execution>
+						<id>undeploy</id>
+						<phase>clean</phase>
+						<goals><goal>undeploy</goal></goals>
+						<configuration>
+							<ignoreMissingDeployment>true</ignoreMissingDeployment>
+						</configuration>
+					</execution> -->
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 

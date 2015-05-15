@@ -14,9 +14,10 @@ public interface ICustomerOrderService {
 	 * @param sessionKey	客户会话
 	 * @param delivery	送货信息
 	 * @param items	订单内容
+	 * @param description 客户备注
 	 * @return
 	 */
-	Order Place(String sessionKey, Delivery delivery, List<OrderItem> items);
+	Order Place(String sessionKey, Delivery delivery, List<OrderItem> items, String description);
 	
 	/***
 	 * 客户下订单

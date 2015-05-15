@@ -12,6 +12,11 @@
         </id>
         <property name="displayName" type="java.lang.String" column="displayName" length="64"/>
         <property name="url" type="java.lang.String" column="url" length="256"/>
+        <list name="imgUrls" cascade="save-update" table="rmall_product_imgs" lazy="false">
+        	<key column="product_id"/>
+        	<index column="index_"/>
+        	<element column="imgUrl" type="java.lang.String" length="128"/>
+        </list>
         <property name="price" type="float" column="price"/>
         <property name="min" type="integer" column="min"/>
         <property name="max" type="integer" column="max"/>
