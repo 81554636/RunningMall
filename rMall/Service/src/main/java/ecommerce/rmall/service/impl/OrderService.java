@@ -111,12 +111,13 @@ public class OrderService implements IOrderService {
 		
 		int[] ids = new int[items.size()];
 		int index = 0;
-		for(OrderItem item:items)
-			ids[index++] = item.getProduct().getId();
-		Map<Integer, Product> products = this.productDao.findByIDs(ids);
+		/*for(OrderItem item:items)
+			ids[index++] = item.getSpec().getProduct().getId();
+		Map<Integer, Product> products = this.productDao.findByIDs(ids);*/
 
+		//TODO:need to fix
 		for(OrderItem item : items){
-			item.setProduct(products.get(item.getProduct().getId()));
+			//item.setProduct(products.get(item.getSpec().getProduct().getId()));
 			order.getDetails().add(item);
 		}
 		
@@ -151,11 +152,12 @@ public class OrderService implements IOrderService {
 			
 			int[] ids = new int[items.size()];
 			int index = 0;
-			for(OrderItem item:items)
-				ids[index++] = item.getProduct().getId();
+			//TODO:need to FIX
+			//for(OrderItem item:items)
+			//	ids[index++] = item.getProduct().getId();
 			Map<Integer, Product> products = this.productDao.findByIDs(ids);
 			for(OrderItem item : items){
-				item.setProduct(products.get(item.getProduct().getId()));
+				//item.setProduct(products.get(item.getProduct().getId()));
 				order.getDetails().add(item);
 			}
 			

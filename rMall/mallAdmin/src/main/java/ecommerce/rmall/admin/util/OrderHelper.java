@@ -15,7 +15,7 @@ public class OrderHelper {
 				sb.append(String.format("    名称 : %s<br/>", ship.getStation().getName()));
 				sb.append(String.format("    城市 : %s<br/><br/>", ship.getStation().getCity()));
 			
-				sb.append("送货信息 : <br/>");
+				sb.append("收件人信息 : <br/>");
 				sb.append(String.format("    姓名 : %s<br/>", ship.getDelivery().getName()));
 				sb.append(String.format("    电话 : %s<br/>", ship.getDelivery().getPhone()));
 				sb.append(String.format("    城市 : %s<br/>", ship.getDelivery().getCity()));
@@ -26,6 +26,7 @@ public class OrderHelper {
 		} else
 			return "";
 	}
+	
 	public String format(Order order){
 		if( null != order ){
 			StringBuilder sb = new StringBuilder();
@@ -37,9 +38,9 @@ public class OrderHelper {
 				
 				sb.append("<br/>商品项 : <br/>");
 				for(OrderItem item : order.getDetails())
-					sb.append(String.format("    %s * %d<br/>", item.getProduct().getDisplayName(), item.getQuantity()));
+					sb.append(String.format("    %s(%s) * <font color='RED'>%d</font><br/>", item.getProduct().getDisplayName(), item.getSpec().getName(), item.getQuantity()));					
 				
-				sb.append("<br/>送货信息 : <br/>");
+				sb.append("<br/>收件人信息 : <br/>");
 				sb.append(String.format("    姓名 : %s<br/>", order.getDelivery().getName()));
 				sb.append(String.format("    电话 : %s<br/>", order.getDelivery().getPhone()));
 				sb.append(String.format("    地址 : %s<br/>", order.getDelivery().getAddress()));
@@ -47,6 +48,7 @@ public class OrderHelper {
 					sb.append(String.format("  验证码 : <B>%s</B><br/>", order.getAccessCode()));
 			sb.append("</pre></address>");
 			return sb.toString();
+			
 		} else
 			return "";
 	}

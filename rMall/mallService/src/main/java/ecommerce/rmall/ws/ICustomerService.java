@@ -29,16 +29,16 @@ public interface ICustomerService {
 	Customer register(Customer customer);
 	
 	@PUT
-	@Path("/{userName}")
+	@Path("/{sessionKey}")
 	@Produces({MediaType.APPLICATION_JSON})
 	@Consumes({MediaType.APPLICATION_JSON})
-	Customer update(@PathParam("userName")String userName, Customer customer);
+	Customer update(@PathParam("sessionKey")String sessionKey, Customer customer);
 	
 	@PUT
-	@Path("/{userName}/activation")
+	@Path("/{sessionKey}/activation")
 	@Produces({MediaType.APPLICATION_JSON})
 	@Consumes({MediaType.APPLICATION_JSON})
-	String activate(@PathParam("userName")String userName, @QueryParam("activateCode")String activateCode);
+	String activate(@PathParam("sessionKey")String sessionKey);
 	
 	@PUT
 	@Path("/{userName}/password/init")
@@ -47,10 +47,10 @@ public interface ICustomerService {
 	String requestPassword(@PathParam("userName")String userName);
 	
 	@PUT
-	@Path("/{userName}/password/reset")
+	@Path("/{sessionKey}/password/reset")
 	@Produces({MediaType.APPLICATION_JSON})
 	@Consumes({MediaType.APPLICATION_JSON})
-	Customer resetPassword(@PathParam("userName")String userName, @QueryParam("captcha")String activateCode, @QueryParam("passDigest")String passDigest);
+	Customer resetPassword(@PathParam("sessionKey")String userName, @QueryParam("passDigest")String passDigest);
 	
 	@GET
 	@Path("/{userName}/signIn")
@@ -104,6 +104,13 @@ public interface ICustomerService {
 	@Path("/{sessionKey}/orders/pagination/{pageNumber}")
 	@Produces({MediaType.APPLICATION_JSON})
 	Page<Order> orderPagination(@PathParam("sessionKey")String sessionKey, 
+			@DefaultValue("1")@PathParam("pageNumber")int pageNumber);
+	
+	@GET
+	@Path("/{sessionKey}/orders/pagination/{pageNumber}/status/{status}")
+	@Produces({MediaType.APPLICATION_JSON})
+	Page<Order> orderPaginationByStatus(@PathParam("sessionKey")String sessionKey, 
+			@PathParam("status")Status status,
 			@DefaultValue("1")@PathParam("pageNumber")int pageNumber);
 	
 	@PUT

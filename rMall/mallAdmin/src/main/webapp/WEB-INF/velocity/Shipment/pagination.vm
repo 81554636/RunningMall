@@ -65,7 +65,7 @@
 					<td rowspan="$!{shipment.details.size()}">${shipment.status}</td>
 					<td rowspan="$!{shipment.details.size()}">${shipment.createDate}</td>
 					#end
-					<td>${orderItem.product.displayName}</td>
+					<td>${orderItem.product.displayName}(${orderItem.spec.name})</td>
 					<td>${orderItem.quantity}</td>
 				</tr>
 			#end

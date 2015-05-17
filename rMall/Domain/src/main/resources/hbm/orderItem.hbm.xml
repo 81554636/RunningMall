@@ -13,5 +13,7 @@
         <property name="quantity" type="java.lang.Integer" column="quantity"/>
         <many-to-one name="product" column="productID" lazy="false" 
         	not-null="true" class="ecommerce.rmall.domain.Product"/>
+        <many-to-one name="spec" column="specID" lazy="false" 
+        	not-null="true" class="ecommerce.rmall.domain.Specification"/>
     </class>
 </hibernate-mapping>

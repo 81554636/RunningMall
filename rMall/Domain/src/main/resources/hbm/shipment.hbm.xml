@@ -28,5 +28,6 @@
         <property name="createDate" type="java.sql.Timestamp" column="createDate"/>
         <property name="lastUpdate" type="java.sql.Timestamp" column="lastUpdate"/>
         <property name="lastUpdateBy" type="java.lang.String" column="updateBy"/>
+        <property name="description" type="java.lang.String" column="description"/>
     </class>
 </hibernate-mapping>

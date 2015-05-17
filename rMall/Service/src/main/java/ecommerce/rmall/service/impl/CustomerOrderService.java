@@ -11,14 +11,15 @@ import ecommerce.rmall.dao.CustomerDAO;
 import ecommerce.rmall.dao.OrderDAO;
 import ecommerce.rmall.dao.ProductDAO;
 import ecommerce.rmall.dao.ShipmentDAO;
+import ecommerce.rmall.dao.SpecificationDAO;
 import ecommerce.rmall.domain.Customer;
 import ecommerce.rmall.domain.Delivery;
 import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.OrderItem;
 import ecommerce.rmall.domain.OrderStatus;
 import ecommerce.rmall.domain.Page;
-import ecommerce.rmall.domain.Product;
 import ecommerce.rmall.domain.ShipmentStatus;
+import ecommerce.rmall.domain.Specification;
 import ecommerce.rmall.message.MessageSender;
 import ecommerce.rmall.service.ICustomerOrderService;
 import ecommerce.rmall.utils.CredentialHelper;
@@ -32,18 +33,13 @@ public class CustomerOrderService implements ICustomerOrderService {
 	private CustomerDAO customerDao;
 	private ProductDAO productDao;
 	private ShipmentDAO shipmentDao;
-	public void setOrderDao(OrderDAO dao) {
-		this.orderDao = dao;
-	}
-	public void setCustomerDao(CustomerDAO dao) {
-		this.customerDao = dao;
-	}
-	public void setProductDao(ProductDAO dao){
-		this.productDao = dao;
-	}
-	public void setShipmentDao(ShipmentDAO dao){
-		this.shipmentDao = dao;
-	}
+	private SpecificationDAO specDao;
+	
+	public void setSpecDao(SpecificationDAO specDao) { this.specDao = specDao; }
+	public void setOrderDao(OrderDAO dao) { this.orderDao = dao; }
+	public void setCustomerDao(CustomerDAO dao) { this.customerDao = dao; }
+	public void setProductDao(ProductDAO dao){ this.productDao = dao; }
+	public void setShipmentDao(ShipmentDAO dao){ this.shipmentDao = dao; }
 	
 	// +++++ MessageSender +++++
 	private MessageSender msgSender;
@@ -73,12 +69,13 @@ public class CustomerOrderService implements ICustomerOrderService {
 			
 			int[] ids = new int[items.size()];
 			int index = 0;
-			for(OrderItem item:items)
-				ids[index++] = item.getProduct().getId();
-			Map<Integer, Product> products = this.productDao.findByIDs(ids);
+			/*for(OrderItem item:items)
+				ids[index++] = item.getSpec().getProduct().getId();
+			Map<Integer, Product> products = this.productDao.findByIDs(ids);*/
 			
+			//TODO:need to FIX
 			for(OrderItem item : items){
-				item.setProduct(products.get(item.getProduct().getId()));
+				//item.setProduct(products.get(item.getProduct().getId()));
 				newOrder.getDetails().add(item);
 			}
 			
@@ -114,7 +111,7 @@ public class CustomerOrderService implements ICustomerOrderService {
 			newOrder.setDelivery(delivery);
 			newOrder.setDetails(new java.util.ArrayList<OrderItem>());
 			
-			int[] ids = new int[items.size()];
+			/*int[] ids = new int[items.size()];
 			int index = 0;
 			for(OrderItem item:items)
 				ids[index++] = item.getProduct().getId();
@@ -125,7 +122,7 @@ public class CustomerOrderService implements ICustomerOrderService {
 				Product product = products.get(item.getProduct().getId());
 				item.setProduct(product);
 				newOrder.getDetails().add(item);				
-			}
+			}*/
 			
 			logger.info("persistence ORDER to DataBase");
 			this.orderDao.save(newOrder);
@@ -137,7 +134,7 @@ public class CustomerOrderService implements ICustomerOrderService {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Order Place(String sessionKey, Delivery delivery, List<OrderItem> items, String description) {
 		
@@ -162,21 +159,23 @@ public class CustomerOrderService implements ICustomerOrderService {
 			int[] ids = new int[items.size()];
 			int index = 0;
 			for(OrderItem item:items)
-				ids[index++] = item.getProduct().getId();
-			Map<Integer, Product> products = this.productDao.findByIDs(ids);
+				ids[index++] = item.getSpec().getId();
+			Map<Integer, Specification> specs = this.specDao.findByIDs(ids);
 			
 			index = 0;
 			for(OrderItem item : items){
-				Product product = products.get(item.getProduct().getId());
-				item.setProduct(product);
+				Specification spec = specs.get(item.getSpec().getId());
+				item.setSpec(spec);
+				item.setProduct(spec.getProduct());
 				newOrder.getDetails().add(item);				
 			}
 			
+			String persistence = new com.google.gson.Gson().toJson(newOrder);
 			logger.info("persistence ORDER to DataBase");
 			this.orderDao.save(newOrder);
 			
 			logger.info("send ORDER to MessageQueue as PlainText");
-			this.msgSender.sendMessage(new com.google.gson.Gson().toJson(newOrder));
+			this.msgSender.sendMessage(persistence);
 			
 			return newOrder;
 		}
@@ -198,6 +197,33 @@ public class CustomerOrderService implements ICustomerOrderService {
 		return null;
 	}
 
+	@Override
+	public Page<Order> ordersPaginationByStatus(String sessionKey,
+			OrderStatus status, int pageNumber) {
+		
+		String hql = "from Customer where credential.sessionKey=:sessionKey";
+		Customer customer = this.customerDao.findByHQL(
+				hql, 
+				new String[]{"sessionKey"}, 
+				new Object[]{sessionKey});
+		if(null != customer && CredentialHelper.validateSession(customer.getCredential())){
+			
+			String hqlBySessionKey = "from Order where customer.credential.sessionKey=:sessionKey and status=:status order by id desc";
+			String[] params = new String[]{"sessionKey", "status"};
+			Object[] values = new Object[]{sessionKey, status};
+			if(status == OrderStatus.PENDING || status == OrderStatus.PROCESSING){
+				hqlBySessionKey = "from Order where customer.credential.sessionKey=:sessionKey and status=:status1 or status=:status2 order by id desc";
+				params = new String[]{"sessionKey", "status1", "status2"};
+				values = new Object[]{sessionKey, OrderStatus.PENDING, OrderStatus.PROCESSING};
+			}
+			return this.orderDao.findByHQLWithPage(
+					hqlBySessionKey, 
+					params, values, 
+					pageNumber);
+		}
+		return null;
+	}
+	
 	@Override
 	public Page<Order> ordersPagination(String sessionKey, int pageNumber) {
 
@@ -260,5 +286,4 @@ public class CustomerOrderService implements ICustomerOrderService {
 			this.orderDao.update(order);
 		}
 	}
-	
 }

@@ -54,8 +54,8 @@ public class ShipmentService implements IShipmentService {
 			shipment.setLastUpdate(new Date());
 			shipment.setDelivery(order.getDelivery());
 			shipment.setStation(station);
-			//shipment.setStatus("INIT");
 			shipment.setStatus(ShipmentStatus.INIT);
+			shipment.setDescription(order.getDescription());
 			shipment.setDetails(new HashSet<OrderItem>());
 			for(OrderItem item : order.getDetails()){
 				OrderItem newItem = new OrderItem();
@@ -65,8 +65,7 @@ public class ShipmentService implements IShipmentService {
 			
 			logger.info("persistence ORDER & SHIPMENT to Database");
 			this.shipDao.save(shipment);
-			
-			//order.setStatus("processing");
+
 			order.setStatus(OrderStatus.PROCESSING);
 			order.setShipment(shipment);
 			order.setAccessCode(RandomCode.obtainRandomCode());

@@ -1,12 +1,13 @@
 package ecommerce.rmall.ws.restful;
 
 import ecommerce.rmall.domain.Coupon;
-import ecommerce.rmall.domain.Credential;
 import ecommerce.rmall.domain.Customer;
 import ecommerce.rmall.domain.Order;
+import ecommerce.rmall.domain.OrderStatus;
 import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.service.ICustomerOrderService;
 import ecommerce.rmall.ws.ICustomerService;
+import ecommerce.rmall.ws.Status;
 
 public class CustomerService implements ICustomerService {
 
@@ -25,17 +26,15 @@ public class CustomerService implements ICustomerService {
 	}
 	
 	@Override
-	public Customer update(String userName, Customer customer) {
+	public Customer update(String sessionKey, Customer customer) {
 
-		if(null == customer.getCredential())
-			customer.setCredential( new Credential() );
-		customer.getCredential().setUsername(userName);
-		return this.customerService.update(customer);
+		return this.customerService.update(sessionKey, customer);
 	}
 
 	@Override
-	public String activate(String userName, String activateCode) {
-		this.customerService.activate(userName, activateCode);
+	public String activate(String sessionKey) {
+		
+		this.customerService.activate(sessionKey);
 		return "SUCCESS";
 	}
 	
@@ -47,9 +46,9 @@ public class CustomerService implements ICustomerService {
 	}
 	
 	@Override
-	public Customer resetPassword(String userName, String activateCode, String passDigest) {
+	public Customer resetPassword(String sessionKey, String passDigest) {
 		
-		return this.customerService.resetPassword(userName, activateCode, passDigest);
+		return this.customerService.resetPassword(sessionKey, passDigest);
 	}
 	
 	@Override
@@ -113,5 +112,16 @@ public class CustomerService implements ICustomerService {
 		
 		this.orderService.Finish(sessionKey, orderID);
 		return "SUCCESS";
+	}
+	@Override
+	public Page<Order> orderPaginationByStatus(String sessionKey, Status status, int pageNumber) {
+		
+		ecommerce.rmall.domain.OrderStatus query = OrderStatus.PENDING;
+		if(Status.CANCEL.equals(status))
+			query = OrderStatus.CANCEL;
+		else if(Status.FINISH.equals(status))
+			query = OrderStatus.FINISH;
+		
+		return this.orderService.ordersPaginationByStatus(sessionKey, query, pageNumber);
 	}
 }

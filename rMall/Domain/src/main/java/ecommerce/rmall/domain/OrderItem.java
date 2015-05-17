@@ -6,39 +6,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class OrderItem {
 
 	private int id;
-	private Product product;
 	private int quantity;
 	private float price;
+	private Specification spec;
+	private Product product;
 	
-	public int getId() {
-		return id;
-	}
+	public Product getProduct() { return product; }
+	public void setProduct(Product product) { this.product = product; }
+	
+	public int getId() { return id; }
+	public void setId(int id) { this.id = id; }
+	
+	public Specification getSpec() { return spec; }
+	public void setSpec(Specification spec) { this.spec = spec; }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+	public int getQuantity() { return quantity; }
+	public void setQuantity(int quantity) { this.quantity = quantity; }
 
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	public float getPrice() {
-		return price;
-	}
-
-	public void setPrice(float price) {
-		this.price = price;
-	}
+	public float getPrice() { return price; }
+	public void setPrice(float price) { this.price = price; }
 }

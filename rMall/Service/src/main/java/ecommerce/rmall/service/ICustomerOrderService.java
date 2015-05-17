@@ -5,6 +5,7 @@ import java.util.List;
 import ecommerce.rmall.domain.Delivery;
 import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.OrderItem;
+import ecommerce.rmall.domain.OrderStatus;
 import ecommerce.rmall.domain.Page;
 
 public interface ICustomerOrderService {
@@ -52,6 +53,7 @@ public interface ICustomerOrderService {
 	 * @return
 	 */
 	Page<Order> ordersPagination(String sessionKey, int pageNumber);
+	Page<Order> ordersPaginationByStatus(String sessionKey, OrderStatus status, int pageNumber);
 	
 	/***
 	 * 取消订单

@@ -10,12 +10,16 @@
             <column name="id"/>
             <generator class="identity"/>
         </id>
-        <property name="description" column="description"/>
+        <property name="description" column="description" length="64"/>
+        <property name="imgUrl" column="img" length="64"/>
         <property name="valid" type="boolean" column="isValid"/>
-        <list name="details" table="rmall_activityDetails" cascade="save-update" lazy="false">
+        <!-- <list name="details" table="rmall_activityDetails" cascade="save-update" lazy="false">
         	<key column="activityID"/>
         	<index column="[index]" type="string"/>  
         	<many-to-many class="ecommerce.rmall.domain.Product" column="productID"/>
-        </list>
+        </list> -->
+        <many-to-one name="product" column="productID" 
+        	cascade="none" not-null="true"
+        	class="ecommerce.rmall.domain.Product" lazy="false"/>
     </class>
 </hibernate-mapping>

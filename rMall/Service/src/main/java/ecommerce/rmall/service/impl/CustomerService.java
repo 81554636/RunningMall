@@ -62,11 +62,11 @@ public class CustomerService implements ICustomerService {
 	}
 	
 	@Override
-	public Customer activate(String username, String activateCode) {
+	public Customer activate(String sessionKey) {
 
-		String hql = "from Customer where credential.username=:username";
-		Customer customer = this.dao.findByHQL(hql, new String[]{"username"}, new Object[]{username});
-		if(null != customer && activateCode.equals(customer.getActivateCode())){
+		String hql = "from Customer where credential.sessionKey=:sessionKey";
+		Customer customer = this.dao.findByHQL(hql, new String[]{"sessionKey"}, new Object[]{sessionKey});
+		if(null != customer){
 			
 			customer.setActive(true);
 			logger.info("activate CUSTOMER[{}]", customer.getCredential().getUsername());
@@ -82,6 +82,10 @@ public class CustomerService implements ICustomerService {
 		logger.info("validate CUSTOMER[{}] by ACTIVATE-CODE[{}]", username, captcha);
 		Customer customer = this.dao.findByHQL(hql, new String[]{"username"}, new Object[]{username});
 		if(null != customer && customer.getActivateCode().equals(captcha)){
+			
+			String sessionKey = UUID.randomUUID().toString();
+			customer.getCredential().setSessionKey(sessionKey);
+			this.dao.update(customer);
 			return customer;
 		}
 		return null;
@@ -126,10 +130,24 @@ public class CustomerService implements ICustomerService {
 	}
 
 	@Override
-	public void update(String sessionKey, Customer customer) {
+	public Customer update(String sessionKey, Customer customer) {
 		
 		logger.info("update CUSTOMER[{}] by SESSION-KEY[{}]", customer.getCredential().getUsername(), sessionKey);
-		this.dao.update(customer);
+		String hql = "from Customer where credential.sessionKey=:sessionKey";
+		Customer pCustomer = this.dao.findByHQL(
+				hql, new String[]{"sessionKey"}, new Object[]{sessionKey});
+		if( null != customer ){
+			
+			pCustomer.setAddress(customer.getAddress());
+			pCustomer.setName(customer.getName());
+			pCustomer.setEmail(customer.getEmail());
+			pCustomer.setImgUrl(customer.getImgUrl());
+			pCustomer.getCredential().setPassword(
+					customer.getCredential()==null?"":customer.getCredential().getPassword());
+			pCustomer.setLastUpdate(new Date());
+			this.dao.update(pCustomer);
+		}
+		return pCustomer;
 	}
 	
 	@Override
@@ -188,12 +206,12 @@ public class CustomerService implements ICustomerService {
 	}
 	
 	@Override
-	public Customer resetPassword(String username, String activateCode, String password) {
+	public Customer resetPassword(String sessionKey, String password) {
 		
-		String hql = "from Customer where credential.username=:username";
-		Customer customer = this.dao.findByHQL(hql, new String[]{"username"}, new Object[]{username});
-		if(null != customer && customer.getActivateCode().equals(activateCode)){
-			
+		String hql = "from Customer where credential.sessionKey=:sessionKey";
+		Customer customer = this.dao.findByHQL(hql, new String[]{"sessionKey"}, new Object[]{sessionKey});
+		if(null != customer){
+
 			customer.getCredential().setPassword(password);
 			this.dao.update(customer);
 			return customer;

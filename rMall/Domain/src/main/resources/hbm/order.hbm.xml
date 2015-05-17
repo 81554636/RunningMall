@@ -30,7 +30,7 @@
 
         <list name="details" table="rmall_orderDetails" cascade="all" lazy="false">
         	<key column="orderID"/>
-        	<index column="[index]" type="string"/>  
+        	<index column="[index]" type="string"/>
         	<many-to-many class="ecommerce.rmall.domain.OrderItem" column="orderItemID"/>
         </list>
         

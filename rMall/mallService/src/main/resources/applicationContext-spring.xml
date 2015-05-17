@@ -48,6 +48,7 @@
 		<property name="customerDao" ref="customerDao"/>
 		<property name="productDao" ref="productDao"/>
 		<property name="shipmentDao" ref="shipmentDao"/>
+		<property name="specDao" ref="specDao"/>
 		
 		<property name="messageSender" ref="messageSender.place"/>
 	</bean>
