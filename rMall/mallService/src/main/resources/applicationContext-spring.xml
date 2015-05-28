@@ -63,6 +63,15 @@
 	</bean>
 	
 	<bean id="smsNotify" class="ecommerce.rmall.notify.NotifyNothing"/>
+	<!-- 云通讯 -->
+	<!-- <bean id="smsNotify" class="ecommerce.rmall.notify.yuntongxun.SmsNotifyImpl">
+		<property name="serverUrl" value="sandboxapp.cloopen.com"/>
+		<property name="serverPort" value="8883"/>
+		<property name="accountSID" value="aaf98f894d328b13014d6fa72cbe2c07"/>
+		<property name="accountToken" value="c633a2b3edd642fcb60b9a24df220ca0"/>
+		<property name="appID" value="8a48b5514d32a2a8014d6fa9203c2b96"/>
+	</bean> -->
+	<!-- 莫名 -->
 	<!-- <bean id="smsNotify" class="ecommerce.rmall.notify.moming.SmsNotifyImpl">
 		<property name="smsEndpoint" ref="smsEndpoint"/>
 		<property name="account" value="${sms.account}"/>

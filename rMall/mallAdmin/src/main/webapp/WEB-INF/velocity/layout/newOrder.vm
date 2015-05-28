@@ -54,8 +54,9 @@
 		
 			var product = $(this);
 			var orderItem = {
-				product : {id:product.attr("id")},
-				price : product.attr("price"),
+				product : {id:product.attr("product_id")},
+				spec	: {id:product.attr("id")},
+				price	: product.attr("price"),
 				quantity : product.val()
 			};
 			if(orderItem.quantity > 0)
@@ -64,14 +65,13 @@
 		
 		var obj = jQuery.ajax({
 			type   : "POST",
-			//url    : "../create.do",
 			url    : "./" + customerID + "/order.do",
 			contentType:"application/json",
 			dataType:"json",
 			async  : false,
 			data   : JSON.stringify(order),
-			success: function(data){
-				alert(data);
+			success: function(order){
+				console.log("new Order = {id : " + order.id + "}");
 			}
 		});
 		
@@ -118,18 +118,20 @@
 		</div><!-- <div class="span5"> -->
 		<div class="span4">
 			<ul class="thumbnails">
-			#foreach(${product} in ${products})
+			#foreach(${spec} in ${specs})
 				<li class="span2">
-					<div class="thumbnail">
-						<img src="${product.url}">
-						<div class="caption" align="center" min="${product.min}" max="${product.max}">
-							${product.displayName}<br>
-							#if(${product.valid})
-							<i class="icon-plus" style="cursor:pointer" onclick="return onPlus(this);"></i>
-							<input type="text" id="${product.id}" price="${product.price}" size="2" style="width:20px;" value="0"/>
-							<i class="icon-minus" style="cursor:pointer" onclick="return onMinus(this);"></i>
+					<div class="thumbnail" align="center">
+						<span style="font-weight:bold;">${spec.product.displayName}<br></span>
+						<img src="${spec.product.url}">
+						<div class="caption" min="${spec.min}" max="${spec.max}">
+							<span style="background-color:#FF8000;color=#FFF;">${spec.name}<br></span>
+							#if(${spec.product.valid})
+								<i class="icon-plus" style="cursor:pointer" onclick="return onPlus(this);"></i>
+								<!--<input type="text" id="${product.id}" price="${product.price}" size="2" style="width:20px;" value="0"/>-->
+								<input type="text" id="${spec.id}" product_id="${spec.product.id}" price="${spec.price}" size="2" style="width:20px;" value="0"/>
+								<i class="icon-minus" style="cursor:pointer" onclick="return onMinus(this);"></i>
 							#else
-							<input type="text" id="${product.id}" price="${product.price}" size="2" style="width:20px;" value="0" disabled/>
+								<input type="text" id="${product.id}" product_id="${spec.product.id}" price="${product.price}" size="2" style="width:20px;" value="0" disabled/>
 							#end
 						</div>
 					</div>

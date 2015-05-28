@@ -130,4 +130,7 @@
 	<bean id="couponDao" class="ecommerce.rmall.dao.CouponDAO">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
+	<bean id="specDao" class="ecommerce.rmall.dao.SpecificationDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
 </beans>

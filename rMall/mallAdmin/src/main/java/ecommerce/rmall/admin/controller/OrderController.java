@@ -22,8 +22,10 @@ import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.domain.Product;
 import ecommerce.rmall.domain.Shipment;
+import ecommerce.rmall.domain.Specification;
 import ecommerce.rmall.domain.Station;
 import ecommerce.rmall.service.IProductService;
+import ecommerce.rmall.service.ISpecificationService;
 import ecommerce.rmall.service.IStationService;
 import ecommerce.rmall.ws.IShipmentService;
 
@@ -45,6 +47,10 @@ public class OrderController {
 	@Qualifier("productService")
 	private IProductService productService;
 	
+	@Autowired()
+	@Qualifier("specificationService")
+	private ISpecificationService specificationService;
+	
 	@Autowired
 	@Qualifier("shipmentEndpoint")
 	private IShipmentService shipmentEndpoint;
@@ -59,13 +65,13 @@ public class OrderController {
 		
 		Page<Order> page = this.service.queryPendingWithPage(pageNumber);
 		List<Station> stations = this.stationService.listAll();
-		List<Product> products = this.productService.listAll();
+		List<Specification> specs = this.specificationService.listAll();
 		
 		model.addAttribute("DISPLAYNAME", principal!=null?principal.getName() : "UNKNOWN");
 		model.addAttribute("CURRENT", "PENDING");
 		model.addAttribute("page", page);
 		model.addAttribute("stations", stations);
-		model.addAttribute("products", products);
+		model.addAttribute("specs", specs);
 		return "Order/pending";
 	}
 	
@@ -95,11 +101,11 @@ public class OrderController {
 		if(null != orderID){
 			Order order = this.service.query(Integer.parseInt(orderID));
 			List<Station> stations = this.stationService.listAll();
-			List<Product> products = this.productService.listAll();
+			List<Specification> specs = this.specificationService.listAll();
 			
 			model.addAttribute("order", order);
 			model.addAttribute("stations", stations);
-			model.addAttribute("products", products);
+			model.addAttribute("specs", specs);
 		}
 		return "Order/search";
 	}

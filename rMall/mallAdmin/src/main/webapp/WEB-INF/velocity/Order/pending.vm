@@ -7,6 +7,16 @@
 <script src="${ContextPath}/js/jqBootstrapValidation.js"></script>
 
 <script>
+	function onPlus(e){
+		var input = $(e).parent().find("input");
+		input.val(Number(input.val())+1);
+	}
+	function onMinus(e){
+		var input = $(e).parent().find("input");
+		if(input.val()>0)
+			input.val(Number(input.val())-1);
+	}
+	
 	function nextTab(){
 		$('#modifyTab a[href="#items"]').tab('show');
 	}
@@ -58,7 +68,8 @@
 			var product = $(this);
 			var orderItem = {
 				id : product.attr("orderItemID"),
-				product : {id:product.attr("id")},
+				spec	: {id:product.attr("id")},
+				product	: {id:product.attr("product_id")},
 				price   : product.attr("price"),
 				quantity: product.val()
 			};
@@ -102,33 +113,33 @@
 				type   : "POST",
 				url    : url,
 				async  : false,
-				success: function(data){
+				success: function(order){
 					
-					$('#m_customer_id').val(data.customer.id);
-					$('#m_delivery_id').val(data.delivery.id);
+					$('#m_customer_id').val(order.customer.id);
+					$('#m_delivery_id').val(order.delivery.id);
 					$('#modifyTab a[href="#profile"]').tab('show');
 					$('#items input').each(function(){
 						$(this).val(0);
 					});
 					
-					$('#modify_orderID').val(data.id);
-					$('#m_uname').val(data.delivery.name);
-					$('#m_uphone').val(data.delivery.phone);
-					$('#m_uaddress').val(data.delivery.address);
+					$('#modify_orderID').val(order.id);
+					$('#m_uname').val(order.delivery.name);
+					$('#m_uphone').val(order.delivery.phone);
+					$('#m_uaddress').val(order.delivery.address);
 					
-					$('#m_id').val(data.id),
-					$('#m_status').val(data.status);
-					$('#m_createDate').val(data.createDate);
+					$('#m_id').val(order.id),
+					$('#m_status').val(order.status);
+					$('#m_createDate').val(order.createDate);
 					
-					var cityID = $('option[city="' + data.delivery.city + '"]').val();
+					var cityID = $('option[city="' + order.delivery.city + '"]').val();
 					$('#m_ucity').val(cityID);
 					$('#m_ucity').selectpicker('render');
 					
-					for(i=0; i<data.details.length; i++){
-						var item = data.details[i];
-						console.log("order{id : m_" + item.product.id + ", quantity : " + item.quantity + "}");
-						$('#modifyModal input[id="'+item.product.id + '"]').val(item.quantity);
-						$('#modifyModal input[id="'+item.product.id + '"]').attr("orderItemID", item.id);
+					for(i=0; i<order.details.length; i++){
+						var item = order.details[i];
+						console.log("order{prod_id : " + item.product.id + ", spec_id : " + item.spec.id + ", quantity : " + item.quantity + "}");
+						$('#modifyModal input[id="'+item.spec.id + '"]').val(item.quantity);
+						$('#modifyModal input[id="'+item.spec.id + '"]').attr("orderItemID", item.id);
 					}
 					
 					$('#modifyModal').modal();
@@ -212,7 +223,7 @@
 						<button class="btn btn-small btn-danger" data-toggle="cancelOrder"><i class="icon-minus icon-white"></i>取消</button>
 					</td>
 					<td>
-						#foreach($orderItem in ${order.details})<div>${orderItem.product.displayName}</div>#end
+						#foreach($orderItem in ${order.details})<div>${orderItem.product.displayName}(${orderItem.spec.name}) * ${orderItem.quantity}</div>#end
 					</td>
 				</tr>
 #end				
@@ -261,7 +272,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h4 class="modal-title" id="myModalLabel">订单配送</h4>
          </div>
-         <div class="modal-body" style="height:150px;"> 
+         <div class="modal-body" style="height:205px;"> 
 			<input type="hidden" id="dispatch_orderID"/>
 			选择配送小站
 			<select class="selectpicker" data-size="5" id="dispatch_stationID" data-live-search="true">
@@ -323,29 +334,28 @@
 				</div>
 			</div>
 			<div class="control-group">
-				<div class="controls">
-				<button class="btn btn-primary" onclick="return nextTab();">下一步</button>
-				</div>
+				<div class="controls"><button class="btn btn-primary" onclick="return nextTab();">下一步</button></div>
 			</div>
 		</div>
 	</div><!-- END OF DIV of TAB_PROFILE -->
 	<div class="tab-pane" id="items">
 		<ul class="thumbnails">
-		#foreach(${product} in ${products})
+		#foreach(${spec} in ${specs})
 			<li class="span2">
-				<div class="thumbnail">
-					<img src="${product.url}">
-				#if(${product.valid})
-					<div class="caption" align="center" min="${product.min}" max="${product.max}">
-						${product.displayName}<br>
+				<div class="thumbnail" align="center">
+					<span style="font-weight:bold;">${spec.product.displayName}<br></span>
+					<img src="${spec.product.url}">
+				#if(${spec.product.valid})
+					<div class="caption" min="${spec.min}" max="${spec.max}">
+						<span style="background-color:#FF8000;color=#FFF;">${spec.name}<br></span>
 						<i class="icon-plus" style="cursor:pointer" onclick="return onPlus(this);"></i>
-						<input type="text" id="${product.id}" price="${product.price}" size="2" style="width:20px;" value="0"/>
+						<input type="text" id="${spec.id}" product_id="${spec.product.id}" price="${spec.price}" size="2" style="width:20px;" value="0"/>
 						<i class="icon-minus" style="cursor:pointer" onclick="return onMinus(this);"></i>
 					</div>
 				#else
 					<div class="caption" align="center">
-						${product.displayName}<br>
-						<input type="text" id="${product.id}" price="${product.price}" size="2" style="width:20px;" value="0" disabled/>
+						<span style="background-color:#FF8000;color=#FFF;">${spec.name}<br></span>
+						<input type="text" id="${spec.id}" product_id="${spec.product.id}" price="${spec.price}" size="2" style="width:20px;" value="0" disabled/>
 					</div>
 				#end
 				</div>

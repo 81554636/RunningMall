@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ecommerce.rmall.domain.Customer;
 import ecommerce.rmall.domain.Order;
 import ecommerce.rmall.domain.Page;
-import ecommerce.rmall.domain.Product;
+import ecommerce.rmall.domain.Specification;
 import ecommerce.rmall.domain.Station;
 import ecommerce.rmall.service.ICustomerOrderService;
 import ecommerce.rmall.service.ICustomerService;
-import ecommerce.rmall.service.IProductService;
+import ecommerce.rmall.service.ISpecificationService;
 import ecommerce.rmall.service.IStationService;
 
 @Controller
@@ -41,9 +41,13 @@ public class CustomerController {
 	@Qualifier("stationService")
 	private IStationService stationService;
 	
-	@Autowired()
+	/*@Autowired()
 	@Qualifier("productService")
-	private IProductService productService;
+	private IProductService productService;*/
+	
+	@Autowired()
+	@Qualifier("specificationService")
+	private ISpecificationService specificationService;
 	
 	@RequestMapping(method=RequestMethod.GET, value="/initRegister")
 	public String preRegister(Model model, Principal principal){
@@ -66,11 +70,11 @@ public class CustomerController {
 		model.addAttribute("DISPLAYNAME", principal == null ? "UNKNOWN" : principal.getName());
 		if(customerID != null){
 			Page<Customer> page = this.service.findCustomer(customerID);
-			List<Product> products = this.productService.listAll();
+			List<Specification> specs = this.specificationService.listAll();
 			List<Station> stations = this.stationService.listAll();
 			
 			model.addAttribute("stations", stations);
-			model.addAttribute("products", products);
+			model.addAttribute("specs", specs);
 			model.addAttribute("page", page);
 		}
 		return "Customer/search";
