@@ -1,5 +1,6 @@
 package ecommerce.rmall.service.impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -36,18 +37,31 @@ public class CustomerService implements ICustomerService {
 			
 			if(existCustomer.isActive() == false){
 				
-				logger.info("CUSTOMER[{}] already exists, update ACTIVATE-CODE to DATABASE", customer.getCredential().getUsername());
-				existCustomer.setActivateCode(RandomCode.obtainRandomCode());
-				this.dao.update(existCustomer);
+				logger.info("CUSTOMER[{}] already exists", customer.getCredential().getUsername());
+				
+				Calendar lastModify = Calendar.getInstance();
+				lastModify.setTime(existCustomer.getLastUpdate());
+				lastModify.add(Calendar.MINUTE, 30);
+				Calendar current = Calendar.getInstance();
+				current.setTime(new Date());
+				
+				if(current.after(lastModify)){
+					
+					logger.info("updating new ACTIVATE-CODE to DATABASE");
+					existCustomer.setLastUpdate(new Date());
+					existCustomer.setActivateCode(RandomCode.obtainRandomCode());
+					this.dao.update(existCustomer);
+				}
 			
-				logger.info("sending ACTIVATE-CODE[{}] to CUSTOMER[{}]", customer.getActivateCode(), customer.getPhone());
-				this.notify.sendMessage(customer.getPhone(), customer.getActivateCode());
+				logger.info("sending ACTIVATE-CODE[{}] to CUSTOMER[{}]", existCustomer.getActivateCode(), existCustomer.getPhone());
+				this.notify.sendMessage(existCustomer.getPhone(), existCustomer.getActivateCode());
 			}
 			
 			return existCustomer;
 		} else {
 
 			customer.setCreateDate(new Date());
+			customer.setLastUpdate(new Date());
 			customer.setJoinActivity(true);
 			customer.setActivateCode(RandomCode.obtainRandomCode());
 			customer.setPhone(customer.getCredential().getUsername());
@@ -191,14 +205,24 @@ public class CustomerService implements ICustomerService {
 	
 	@Override
 	public void initResetPassword(String username) {
+		
 		String hql = "from Customer where credential.username=:username";
 		Customer customer = this.dao.findByHQL(hql, new String[]{"username"}, new Object[]{username});
 		if(null != customer){
 			
-			customer.setActivateCode(RandomCode.obtainRandomCode());
+			Calendar lastModify = Calendar.getInstance();
+			lastModify.setTime(customer.getLastUpdate());
+			lastModify.add(Calendar.MINUTE, 30);
+			Calendar current = Calendar.getInstance();
+			current.setTime(new Date());
 			
-			logger.info("update CUSTOMER[{}] set ACTIVATE-CODE[{}]", username, customer.getActivateCode());
-			this.dao.update(customer);
+			if(current.after(lastModify)){
+			
+				customer.setLastUpdate(new Date());
+				customer.setActivateCode(RandomCode.obtainRandomCode());
+				logger.info("update CUSTOMER[{}] set new ACTIVATE-CODE[{}]", username, customer.getActivateCode());
+				this.dao.update(customer);
+			}
 			
 			logger.info("sending ACTIVATE-CODE[{}] to CUSTOMER[{}]", customer.getActivateCode(), customer.getPhone());
 			this.notify.sendMessage(customer.getPhone(), customer.getActivateCode());

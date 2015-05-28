@@ -109,7 +109,8 @@ public class CustomerOrderService implements ICustomerOrderService {
 			newOrder.setStatus(OrderStatus.PENDING);
 			newOrder.setCustomer(customer);
 			newOrder.setDelivery(delivery);
-			newOrder.setDetails(new java.util.ArrayList<OrderItem>());
+			//newOrder.setDetails(new java.util.ArrayList<OrderItem>());
+			newOrder.setDetails(items);
 			
 			/*int[] ids = new int[items.size()];
 			int index = 0;
@@ -212,7 +213,7 @@ public class CustomerOrderService implements ICustomerOrderService {
 			String[] params = new String[]{"sessionKey", "status"};
 			Object[] values = new Object[]{sessionKey, status};
 			if(status == OrderStatus.PENDING || status == OrderStatus.PROCESSING){
-				hqlBySessionKey = "from Order where customer.credential.sessionKey=:sessionKey and status=:status1 or status=:status2 order by id desc";
+				hqlBySessionKey = "from Order where customer.credential.sessionKey=:sessionKey and (status=:status1 or status=:status2) order by id desc";
 				params = new String[]{"sessionKey", "status1", "status2"};
 				values = new Object[]{sessionKey, OrderStatus.PENDING, OrderStatus.PROCESSING};
 			}

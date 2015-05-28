@@ -1,19 +1,19 @@
 package ecommerce.rmall.notify;
 
 public class NotifyResult {
-	private int retCode;
+	private String retCode;
 	private String retValue;
 	
-	public NotifyResult(int retCode, String retValue){
+	public NotifyResult(String retCode, String retValue){
 		this.retCode = retCode;
 		this.retValue = retValue;
 	}
 
-	public int getRetCode() {
+	public String getRetCode() {
 		return retCode;
 	}
 
-	public void setRetCode(int retCode) {
+	public void setRetCode(String retCode) {
 		this.retCode = retCode;
 	}
 

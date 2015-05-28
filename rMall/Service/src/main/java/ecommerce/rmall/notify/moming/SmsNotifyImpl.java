@@ -19,16 +19,16 @@ public class SmsNotifyImpl implements INotify {
 
 		String result = this.sms.getBalance("getBalance", this.account, this.password);
 		String[] arr = result.split("\\|\\|");
-		return new NotifyResult(Integer.parseInt(arr[0]), arr[1]);
+		return new NotifyResult(arr[0], arr[1]);
 	}
 
 	@Override
 	public NotifyResult sendMessage(String phone, String content) {
 
-		String sent = String.format("尊敬的%s, 您的注册码为 %s, 请及时激活", phone, content);
+		String sent = String.format("尊敬的%s, 您的注册码为 %s, 请于30分钟内正确输入[跑跑巴士]", phone, content);
 		String result = this.sms.sendMessage("send", 
 				this.account, this.password, 
 				"utf8", phone, sent);
-		return new NotifyResult(Integer.parseInt(result), "");
-	}
+		return new NotifyResult(result, "");
+	}	
 }

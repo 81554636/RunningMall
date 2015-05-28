@@ -12,6 +12,7 @@
         </id>
         <property name="name" type="java.lang.String" column="name" length="64"/>
         <property name="price" type="float" column="price"/>
+        <property name="original" type="float" column="original"/>
         <property name="min" type="integer" column="min"/>
         <property name="max" type="integer" column="max"/>
         <many-to-one name="product" column="productID" lazy="false"

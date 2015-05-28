@@ -9,6 +9,7 @@ public class Specification {
 	
 	private int id;
 	private String name;
+	private float original;
 	private float price;
 	private int max;
 	private int min;
@@ -26,6 +27,9 @@ public class Specification {
 	
 	public float getPrice() { return price; }
 	public void setPrice(float price) { this.price = price; }
+	
+	public float getOriginal() { return original; }
+	public void setOriginal(float original) { this.original = original; }
 	
 	public int getMax() { return max; }
 	public void setMax(int max) { this.max = max; }

@@ -56,5 +56,10 @@
 			<artifactId>BaiduPush</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.cloopen</groupId>
+			<artifactId>sms</artifactId>
+		</dependency>
 	</dependencies>
 </project>

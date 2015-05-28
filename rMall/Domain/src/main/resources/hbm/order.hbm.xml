@@ -25,7 +25,7 @@
         	class="ecommerce.rmall.domain.Customer" lazy="false"/>
         	
         <many-to-one name="delivery" column="deliverID" 
-        	cascade="save-update" not-null="true"
+        	cascade="all" not-null="true"
         	class="ecommerce.rmall.domain.Delivery" lazy="false"/>
 
         <list name="details" table="rmall_orderDetails" cascade="all" lazy="false">
