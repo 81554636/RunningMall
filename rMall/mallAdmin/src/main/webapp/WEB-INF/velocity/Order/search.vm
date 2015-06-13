@@ -2,10 +2,16 @@
 
 <link href="${ContextPath}/css/bootstrap-select.min.css" rel="stylesheet" />
 
+<style type="text/css">
+	input.error { border: 1px solid red; }
+</style>
+
 <script src="${ContextPath}/js/bootbox.js"></script>
-<script src="${ContextPath}/js/jqBootstrapValidation.js"></script>
 <script src="${ContextPath}/js/messageTips.js"></script>
 <script src="${ContextPath}/js/bootstrap-select.min.js"></script>
+<!--<script src="${ContextPath}/js/jqBootstrapValidation.js"></script>-->
+<!--<script src="${ContextPath}/js/jqxvalidator.min.js"></script>-->
+<script src="${ContextPath}/js/jquery.validate.min.js"></script>
 
 <script>
 	function nextTab(){
@@ -16,6 +22,7 @@
 		var input = $(e).parent().find("input");
 		input.val(Number(input.val())+1);
 	}
+	
 	function onMinus(e){
 		var input = $(e).parent().find("input");
 		if(input.val()>0)
@@ -99,7 +106,26 @@
 		messageTips.init({ "selector":".bb-alert" });
 		$(".selectpicker").selectpicker();
 		
-		$("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
+		//$("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
+		$('#frmSearch').validate({
+			debug: true, //调试模式取消submit的默认提交功能   
+            //errorClass: "label.error", //默认为错误的样式类为：error   
+            focusInvalid: true, //当为false时，验证无效时，没有焦点响应  
+            onkeyup: false,   
+			rules:{
+				orderID:{required:true, number:true}
+			},
+			messages:{
+            	orderID:{ required:"必填", number:"请输入有效数字" }
+            },
+			submitHandler: function(form){
+				console.log("submit");
+                form.submit();
+            },
+            errorPlacement:function(error,element){
+                error.appendTo(element.siblings("label"));
+            }
+		});
 		
 		$("[data-toggle='popover_order']").popover({
 			html:true,
@@ -214,12 +240,12 @@
 			<span></span><a href="pending/First.do">刷新</a>
 		</div>
 
-		<form class="form-search form-inline" action="search.do" method="POST">
-			<input class="input-medium search-query" type="number" min="1"
-				name="orderID" placeholder="订单编号" required 
-			 	data-validation-required-message="Valid number is required"/>
+		<form class="form-search form-inline" action="search.do" method="POST" id="frmSearch">
+			<!--<input class="input-medium search-query" min="1" name="orderID" placeholder="订单编号" required type="number"/>-->
+			<input class="input-medium search-query" name="orderID" id="orderID" placeholder="订单编号"/>
 			<input type="hidden" id="orderID" value="${order.id}"/>
-			<button type="submit" class="btn">查询</button>
+			<button type="submit" class="btn">查询</button><br>
+			<label id="lterms" for="orderID"></label>
 		</form>
 		<div class="row">
 			<div class="span3">

@@ -1,10 +1,14 @@
 #set( $ContextPath = ${request.contextPath} )
 <link href="${ContextPath}/css/bootstrap-select.min.css" rel="stylesheet" />
 
+<style type="text/css">
+</style>
+
 <script src="${ContextPath}/js/bootbox.js"></script>
 <script src="${ContextPath}/js/messageTips.js"></script>
 <script src="${ContextPath}/js/bootstrap-select.min.js"></script>
 <script src="${ContextPath}/js/jqBootstrapValidation.js"></script>
+<script src="${ContextPath}/js/jquery.validate.min.js"></script>
 
 <script>
 	function onPlus(e){
@@ -18,7 +22,8 @@
 	}
 	
 	function nextTab(){
-		$('#modifyTab a[href="#items"]').tab('show');
+		if($('#frmInfo').valid())
+			$('#modifyTab a[href="#items"]').tab('show');
 	}
 	
 	function showMessage(msg) {
@@ -46,14 +51,18 @@
 	
 	function onModifyOrder(){
 	
+		var valid = $('#frmInfo').validate().form();
+		if(!valid)
+			return;
+			
 		var cityID = $('#m_ucity').val();
 		var city = $('#m_ucity>option[value=' + cityID + ']').attr('city');
 		var order = {
 			id         : $('#m_id').val(),
 			status     : $('#m_status').val(),
 			createDate : $('#m_createDate').val(),
-			customer   :{ id : $('#m_customer_id').val() },
-			delivery   :{
+			customer   : { id : $('#m_customer_id').val() },
+			delivery   : {
 				id     : $('#m_delivery_id').val(),
 				name   : $('#m_uname').val(),
 				phone  : $('#m_uphone').val(),
@@ -90,13 +99,35 @@
 				alert(data);
 			}
 		});
+		
+		$('#modifyModal').modal('toggle');
 	}
 	
 	$(function(){
 		
-		messageTips.init({"selector":".bb-alert"});
-		$("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
 		$(".selectpicker").selectpicker();
+		messageTips.init({"selector":".bb-alert"});
+		
+		formObj = $('#frmInfo').validate({
+			debug: true, //调试模式取消submit的默认提交功能
+            focusInvalid: true, //当为false时，验证无效时，没有焦点响应  
+            onkeyup: false,
+            onfocusout : false,
+			rules:{
+				m_uname:{required:true},
+				m_uaddress:{required:true}
+			},
+			messages:{
+            	m_uname:{ required:"请输入联系人" },
+            	m_uaddress:{required:"请正确输入联系地址"}
+            },
+			submitHandler: function(form){
+				console.log("submit");
+            },
+            errorPlacement:function(error,element){
+            	error.appendTo(element.siblings("p"));
+            }
+		});
 		
 		$("[data-toggle='popover']").popover({
 			html:true,
@@ -106,7 +137,7 @@
 		});
 		
 		$("[data-toggle='modify']").click(function(){
-		
+
 			var orderID = $(this).parents("tr").attr("orderID");
 			var url = "../" + orderID + "/query.do";
 			var obj = jQuery.ajax({
@@ -142,6 +173,7 @@
 						$('#modifyModal input[id="'+item.spec.id + '"]').attr("orderItemID", item.id);
 					}
 					
+					$('#frmInfo').validate().resetForm();
 					$('#modifyModal').modal();
 				}
 			});
@@ -303,25 +335,27 @@
          <input type="hidden" id="m_createDate"/>
 <ul class="nav nav-tabs" id="modifyTab">
 	<li class="active"><a href="#profile" data-toggle="tab">送货信息</a></li>
-	<li><a href="#items" data-toggle="tab">商品信息</a></li>
+	<li class="disabled"><a href="#items" >商品信息</a></li>
 </ul>
 <div class="tab-content">
 	<div class="tab-pane active" id="profile">
-		<div class="form-horizontal">
-		<input type="hidden" id="modify_orderID"/>
-		<input type="hidden" id="m_customer_id"/>
-		<input type="hidden" id="m_delivery_id"/>
-		<div class="control-group">
+		<form id="frmInfo" class="form-horizontal">
+			<input type="hidden" id="modify_orderID"/>
+			<input type="hidden" id="m_customer_id"/>
+			<input type="hidden" id="m_delivery_id"/>
+			<div class="control-group">
 				<label class="control-label" for="m_uname">联系人</label>
-				<div class="controls"><input id="m_uname" class"input-xlarge" type="text"></div>
+				<div class="controls">
+					<input id="m_uname" name="m_uname" class="input-large" type="text"><p></p>
+				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="m_uphone">联系电话</label>
-				<div class="controls"><input id="m_uphone" class"input-xlarge" type="text"></div>
+				<div class="controls"><input id="m_uphone" name="m_uphone" class="input-large" type="text"><p></p></div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="m_uaddress">联系地址</label>
-				<div class="controls"><input id="m_uaddress" class"input-xlarge" type="text"></div>
+				<div class="controls"><input id="m_uaddress" name="m_uaddress" class="input-large" type="text"><p></p></div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="m_ucity">城市</label>
@@ -336,7 +370,7 @@
 			<div class="control-group">
 				<div class="controls"><button class="btn btn-primary" onclick="return nextTab();">下一步</button></div>
 			</div>
-		</div>
+		</form>
 	</div><!-- END OF DIV of TAB_PROFILE -->
 	<div class="tab-pane" id="items">
 		<ul class="thumbnails">
@@ -367,7 +401,7 @@
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="onModifyOrder();">保存</button>
+            <button type="button" class="btn btn-primary" onclick="onModifyOrder();">保存</button>
          </div>
       </div><!-- /.modal-content -->
    </div><!-- /.modal-dialog -->

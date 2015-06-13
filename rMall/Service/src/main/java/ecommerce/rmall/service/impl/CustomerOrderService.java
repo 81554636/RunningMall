@@ -226,6 +226,15 @@ public class CustomerOrderService implements ICustomerOrderService {
 	}
 	
 	@Override
+	public Page<Order> ordersPaginationByCustomer(String customerID, int pageNumber){
+		
+		String hqlBySessionKey = "from Order where customer.credential.username=:username order by id desc";
+		return this.orderDao.findByHQLWithPage(hqlBySessionKey, 
+				new String[]{"username"},
+				new Object[]{customerID}, pageNumber);
+	}
+	
+	@Override
 	public Page<Order> ordersPagination(String sessionKey, int pageNumber) {
 
 		String hql = "from Customer where credential.sessionKey=:sessionKey";

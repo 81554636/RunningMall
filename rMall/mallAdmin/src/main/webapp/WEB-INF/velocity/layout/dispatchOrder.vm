@@ -1,0 +1,49 @@
+<script>
+	$(function(){
+		$(".selectpicker").selectpicker();
+	});
+	
+	function onDispatchOrder(){
+		
+		var container = $('#myModal');
+		var stationID = container.find('#dispatch_stationID').val();
+		var orderID = container.find('#dispatch_orderID').val();
+		console.log("dispatch order{id : " + orderID + ", stationID : " + stationID + "}");
+		var obj = jQuery.ajax({
+			url    : "${ContextPath}/Order/" + orderID + "/dispatch.do",
+			async  : false,
+			data   : {stationID : stationID},
+			success: function(data){
+				if('SUCCESS' == data){
+					$('tr[orderid='+ orderID + ']').remove();
+				} else {
+				}
+			}
+		});
+	}
+</script>
+
+<!-- 派送模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">订单配送</h4>
+         </div>
+         <div class="modal-body" style="height:205px;"> 
+			<input type="hidden" id="dispatch_orderID"/>
+			选择配送小站
+			<select class="selectpicker" data-size="5" id="dispatch_stationID" data-live-search="true">
+				#foreach($station in ${stations})
+				<option value="${station.id}" data-subtext="${station.name}" city="${station.name}">${station.name}</option>
+				#end
+			</select>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="onDispatchOrder();">确定</button>
+         </div>
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

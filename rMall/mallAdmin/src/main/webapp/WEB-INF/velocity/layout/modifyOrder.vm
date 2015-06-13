@@ -1,0 +1,146 @@
+<script>
+	function onPlus(e){
+		var input = $(e).parent().find("input");
+		input.val(Number(input.val())+1);
+	}
+	function onMinus(e){
+		var input = $(e).parent().find("input");
+		if(input.val()>0)
+			input.val(Number(input.val())-1);
+	}
+	function nextTab(){
+		$('#modifyModal #modifyTab a[href="#items"]').tab('show');
+	}
+	
+	function onModifyOrder(){
+	
+		var cityID = $('#modifyModal #m_ucity').val();
+		var city = $('#modifyModal #m_ucity>option[value=' + cityID + ']').attr('city');
+		var order = {
+			id         : $('#modifyModal #m_id').val(),
+			status     : $('#modifyModal #m_status').val(),
+			createDate : $('#modifyModal #m_createDate').val(),
+			customer   : { id : $('#modifyModal #m_customer_id').val() },
+			delivery   : {
+				id     : $('#modifyModal #m_delivery_id').val(),
+				name   : $('#modifyModal #m_uname').val(),
+				phone  : $('#modifyModal #m_uphone').val(),
+				address: $('#modifyModal #m_uaddress').val(),
+				city   : city
+			},
+			details:[]
+		};
+		
+		$("#modifyModal #items").find("input").each(function(){
+		
+			var product = $(this);
+			var orderItem = {
+				id 		: product.attr("orderItemID"),
+				spec	: {id:product.attr("id")},
+				product	: {id:product.attr("product_id")},
+				price   : product.attr("price"),
+				quantity: product.val()
+			};
+			if(orderItem.quantity > 0)
+				order.details.push(orderItem);
+		});
+		
+		console.log("modifyOrder : " + JSON.stringify(order));
+		var url = "${ContextPath}/Order/" + order.id + "/modify.do";
+		var obj = jQuery.ajax({
+			type   	: "POST",
+			url    	: url,
+			dataType:"json",
+			async  	: false,
+			data   	: JSON.stringify(order),
+			contentType:"application/json",
+			success	: function(data){
+				alert(data);
+			}
+		});
+	}
+</script>
+
+<!-- 修改模态框（Modal） -->
+<div class="modal fade" id="modifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">订单更新</h4>
+         </div>
+         <div class="modal-body">
+         <input type="hidden" id="m_id"/>
+         <input type="hidden" id="m_status"/>
+         <input type="hidden" id="m_createDate"/>
+<ul class="nav nav-tabs" id="modifyTab">
+	<li class="active"><a href="#profile" data-toggle="tab">送货信息</a></li>
+	<li><a href="#items" data-toggle="tab">商品信息</a></li>
+</ul>
+<div class="tab-content">
+	<div class="tab-pane active" id="profile">
+		<div class="form-horizontal">
+		<input type="hidden" id="modify_orderID"/>
+		<input type="hidden" id="m_customer_id"/>
+		<input type="hidden" id="m_delivery_id"/>
+		<div class="control-group">
+				<label class="control-label" for="m_uname">联系人</label>
+				<div class="controls"><input id="m_uname" class"input-xlarge" type="text"></div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="m_uphone">联系电话</label>
+				<div class="controls"><input id="m_uphone" class"input-xlarge" type="text"></div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="m_uaddress">联系地址</label>
+				<div class="controls"><input id="m_uaddress" class"input-xlarge" type="text"></div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="m_ucity">城市</label>
+				<div class="controls">
+					<select id="m_ucity" class="selectpicker" data-size="4" id="dispatch_stationID" data-live-search="true">
+					#foreach(${station} in ${stations})
+					<option value="${station.id}" data-subtext="${station.name}" city="${station.name}">${station.name}</option>
+					#end
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls"><button class="btn btn-primary" onclick="return nextTab();">下一步</button></div>
+			</div>
+		</div>
+	</div><!-- END OF DIV of TAB_PROFILE -->
+	<div class="tab-pane" id="items">
+		<ul class="thumbnails">
+		#foreach(${spec} in ${specs})
+			<li class="span2">
+				<div class="thumbnail" align="center">
+					<span style="font-weight:bold;">${spec.product.displayName}<br></span>
+					<img src="${spec.product.url}">
+				#if(${spec.product.valid})
+					<div class="caption" min="${spec.min}" max="${spec.max}">
+						<span style="background-color:#FF8000;color=#FFF;">${spec.name}<br></span>
+						<i class="icon-plus" style="cursor:pointer" onclick="return onPlus(this);"></i>
+						<input type="text" id="${spec.id}" product_id="${spec.product.id}" price="${spec.price}" size="2" style="width:20px;" value="0"/>
+						<i class="icon-minus" style="cursor:pointer" onclick="return onMinus(this);"></i>
+					</div>
+				#else
+					<div class="caption" align="center">
+						<span style="background-color:#FF8000;color=#FFF;">${spec.name}<br></span>
+						<input type="text" id="${spec.id}" product_id="${spec.product.id}" price="${spec.price}" size="2" style="width:20px;" value="0" disabled/>
+					</div>
+				#end
+				</div>
+			</li>
+		#end
+		</ul>
+	</div><!-- END OF DIV of TAB_ITEMS -->
+</div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="onModifyOrder();">保存</button>
+         </div>
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -63,6 +63,18 @@ public class CustomerController {
 		return this.service.create(customer);
 	}
 	
+	@RequestMapping(method={RequestMethod.POST, RequestMethod.GET}, value="/detail")
+	public String detail(Model model, String customerID, Principal principal){
+		
+		Customer customer = this.service.findByUsername(customerID);
+		List<Specification> specs = this.specificationService.listAll();
+		model.addAttribute("customer", customer);
+		model.addAttribute("specs", specs);
+		model.addAttribute("stations", this.stationService.listAll());
+		model.addAttribute("orders", this.orderSerivce.ordersPaginationByCustomer(customer.getCredential().getUsername(), 1));
+		return "Customer/detail";
+	}
+	
 	@RequestMapping(method={RequestMethod.POST, RequestMethod.GET}, value="/search")
 	public String search(Model model, String customerID, Principal principal){
 		
@@ -95,5 +107,5 @@ public class CustomerController {
 	public Order createOrder(@RequestBody Order order, @PathVariable("customerID")int customerID){
 		
 		return this.orderSerivce.Place(customerID, order.getDelivery(), order.getDetails());
-	}
+	}	
 }

@@ -87,17 +87,17 @@
 		<div class="span5">
 			<div class="control-group">
 				<label class="control-label" for="uname">联系人</label>
-				<div class="controls"><input id="uname" class"input-xlarge" type="text"/></div>
+				<div class="controls"><input id="uname" class="input-large" type="text"/></div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="uphone">联系电话</label>
 				<div class="controls">
-					<input id="uphone" class"input-xlarge" type="text"/>
+					<input id="uphone" class="input-large" type="text"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="uaddress">联系地址</label>
-				<div class="controls"><input id="uaddress" class"input-xlarge" type="text"/></div>
+				<div class="controls"><input id="uaddress" class="input-large" type="text"/></div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="ucity">城市</label>

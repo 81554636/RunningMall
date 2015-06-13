@@ -159,7 +159,7 @@ public class OrderController {
    		return "SUCCESS";
 	}
 	
-	@RequestMapping(method={RequestMethod.POST}, value="/{orderID}/query")
+	@RequestMapping(method={RequestMethod.POST, RequestMethod.GET}, value="/{orderID}/query")
 	@ResponseBody
 	public Order queryOrder(@PathVariable("orderID")int orderID){
 		

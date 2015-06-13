@@ -1,66 +1,108 @@
 #set( $ContextPath = ${request.contextPath} )
-<script src="${ContextPath}/js/jqBootstrapValidation.js"></script>
+<!--<script src="${ContextPath}/js/jqBootstrapValidation.js"></script>-->
+<script src="${ContextPath}/js/jquery.validate.min.js"></script>
+
+<style type="text/css">
+	input.error { border: 1px solid red; }
+</style>
 
 <script>
 	$(function(){
-		$("input,textarea,select").jqBootstrapValidation({
-            preventSubmit: true,
-            submitError: function($form, event, errors) {
-                // Here I do nothing, but you could do something like display 
-                // the error messages to the user, log, etc.
-                console.log("submitError");
-            },
-            submitSuccess: function($form, event) {
-
-            	var customer = {
-            		name   :$('#uname').val(),
-            		address:$('#uaddress').val(),
-            		phone  :$('#uphone').val(),
-            		credential:{
-            			username:$('#uphone').val()
-            		}
-            	};
-            	
-            	var obj = jQuery.ajax({
-					url    : "register.do",
-					async  : false,
-					type   : "POST",
-					dataType:"json",
-					contentType:"application/json",
-					data   : JSON.stringify(customer),
-					success: function(data){
-						alert(data);
-					}
-				});
-
-                //event.preventDefault();
-                return false;
-            },
-            filter: function() {
-                return $(this).is(":visible");
-            }
-        });
-
-		$('#uphone').focusout(function(){
-			
-			var username = $('#uphone').val();
-			var obj = jQuery.ajax({
-				url    : "credential/username/" + username + ".do",
+		
+		jQuery.validator.addMethod("isMobile", function(value, element) {
+  			var length = value.length;
+			var mobile =/^1[3|4|5|8][0-9]\d{4,8}$/; 
+  			return this.optional(element) || (length == 11 && mobile.test(value));
+ 		}, "请正确填写手机号码");
+ 		
+ 		jQuery.validator.addMethod("isRegister", function(value, element) {
+  			
+  			var rtn = false;
+  			var obj = jQuery.ajax({
+				url    : "credential/username/" + value + ".do",
 				async  : false,
 				type   : "GET",
 				contentType:"application/json",
 				success: function(customer){
 
 					if(customer.id == null){
-						$('#uphone-help').html("<font color='green'>可以注册</font>");
+						//$('#uphone-help').html("<font color='green'>可以注册</font>");
+						rtn = true;
 						console.log("可以注册");
 					} else {
-						$('#uphone-help').html("<font color='red'>用户已存在</font>");
+						//$('#uphone-help').html("<font color='red'>用户已存在</font>");
 						console.log("用户已存在");
 					}
 				}
-			});//jQuery.ajax
-		});//focusout
+			});//jQuery.ajax 
+  			return rtn;
+ 		}, "该号码已注册");
+ 
+		jQuery('#newCustomer').validate({
+			focusInvalid:true, //当为false时，验证无效时，没有焦点响应  
+            onkeyup:false,   
+			rules:{
+				uname:{required:true, maxlength:10},
+				uphone:{required:true, isMobile:true, isRegister:true},
+				uaddress:{required:true, maxlength:50}
+			},
+			messages:{
+            	uname:{ required:"必填", maxlength:"请正确填写姓名" },
+            	uphone:{ required:"必填"},
+            	uaddress:{required:"必填", maxlength:"请正确填写地址"}
+            },
+            errorPlacement:function(error,element){
+                error.appendTo(element.siblings("p"));
+            },
+            submitHandler: function(form){
+				//console.log("submit");
+                //form.submit();
+                var userName = $('#uname').val();
+				var userPhone = $('#uphone').val();
+				var userAddress = $('#uaddress').val();
+				
+				var request = {
+					name   : userName,
+					phone  : userPhone,
+					address:userAddress,
+					credential:{
+						username:userPhone
+					}
+				}
+				var obj = jQuery.ajax({
+					url    : "register.do",
+					async  : false,
+					type   : "POST",
+					contentType:"application/json",
+					data   : JSON.stringify(request),
+					success: function(data){
+						var userID = data.id;
+						alert(userID);
+					}
+				});
+            }
+		});
+
+		//$('#uphone').focusout(function(){
+			
+		//	var username = $('#uphone').val();
+		//	var obj = jQuery.ajax({
+		//		url    : "credential/username/" + username + ".do",
+		//		async  : false,
+		//		type   : "GET",
+		//		contentType:"application/json",
+		//		success: function(customer){
+
+		//			if(customer.id == null){
+		//				$('#uphone-help').html("<font color='green'>可以注册</font>");
+		//				console.log("可以注册");
+		//			} else {
+		//				$('#uphone-help').html("<font color='red'>用户已存在</font>");
+		//				console.log("用户已存在");
+		//			}
+		//		}
+		//	});//jQuery.ajax
+		//});//focusout
 	});
 	
 	function onRegister(){
@@ -111,22 +153,21 @@
 					<div class="control-group">
 						<label class="control-label" for="uname">联系人</label>
 						<div class="controls">
-							<input id="uname" name="uname" class="input-xlarge" type="text" aria-invalid="false" required/>
+							<input id="uname" name="uname" class="input-xlarge" type="text"/>
 							<p class="help-block"></p>
 						</div>
 					</div>
 					<div class="control-group">
 						<label class="control-label" for="uphone">联系电话</label>
 						<div class="controls">
-							<input id="uphone" class="input-xlarge" type="text" required/>
-							<!--<p class="help-block" id="uphone-help"></p>-->
-							<span class="help-block" id="uphone-help"></span>
+							<input id="uphone" name="uphone" class="input-xlarge" type="text"/>
+							<p class="help-block" id="uphone-help"></p>
 						</div>
 					</div>
 					<div class="control-group">
 						<label class="control-label" for="uaddress">联系地址</label>
 						<div class="controls">
-							<input id="uaddress" class="input-xlarge" type="text" required/>
+							<input id="uaddress" name="uaddress" class="input-xlarge" type="text"/>
 							<p class="help-block"></p>
 						</div>
 					</div>

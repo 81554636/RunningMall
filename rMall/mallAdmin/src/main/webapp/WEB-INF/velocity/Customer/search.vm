@@ -30,7 +30,7 @@
 			
 			var customer = $(this).parent().parent();
 			$('#customerID').val(customer.attr("customerid"));
-			$('#uname').val($(customer).find("[type=name]").html());
+			$('#uname').val($(customer).find("[type=name]").children(":first").html());
 			$('#uphone').val($(customer).find("[type=phone]").html());
 			$('#uaddress').val($(customer).find("[type=address]").html());
 		});
@@ -71,7 +71,7 @@
 					<tbody>
 						#foreach( $customer in ${page.dataList})
 						<tr customerID="$!{customer.id}">
-							<td type="name" style="width:75px;">$!{customer.name}</td>
+							<td type="name" style="width:75px;"><a href="detail.do?customerID=${customer.credential.username}">$!{customer.name}</a></td>
 							<td type="phone" style="width:100px;">$!{customer.phone}</td>
 							<td type="address">$!{customer.address}</td>
 							<td>$!{customer.createDate}</td>

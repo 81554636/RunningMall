@@ -15,26 +15,24 @@
         <property name="place" type="java.lang.String" column="place" length="32"/>
         <property name="url" type="java.lang.String" column="url" length="256"/>
         <list name="imgUrls" cascade="save-update" table="rmall_product_imgs" lazy="false">
+        	<cache usage="read-only"/>
         	<key column="product_id"/>
         	<index column="index_"/>
         	<element column="imgUrl" type="java.lang.String" length="128"/>
         </list>
         <list name="areas" cascade="save-update" table="rmall_product_areas" lazy="false">
+        	<cache usage="read-only"/>
         	<key column="product_id"/>
         	<index column="index_"/>
         	<element column="area" type="java.lang.String" length="32"/>
         </list>
         
         <set name="specs" cascade="all" lazy="false" >
+        	<cache usage="read-only"/>
         	<key column="productID"/>
         	<one-to-many class="ecommerce.rmall.domain.Specification"/>
         </set>
 
-        <!--
-        <property name="price" type="float" column="price"/>
-        <property name="min" type="integer" column="min"/>
-        <property name="max" type="integer" column="max"/>
-        -->
         <property name="valid" type="boolean" column="isValid"/>
         <property name="createDate" type="java.sql.Timestamp" column="createDate"/>
         <property name="lastUpdate" type="java.sql.Timestamp" column="lastUpdate"/>

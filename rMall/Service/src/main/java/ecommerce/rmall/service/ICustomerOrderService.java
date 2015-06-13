@@ -52,6 +52,7 @@ public interface ICustomerOrderService {
 	 * @param pageNumber
 	 * @return
 	 */
+	Page<Order> ordersPaginationByCustomer(String customerID, int pageNumber);
 	Page<Order> ordersPagination(String sessionKey, int pageNumber);
 	Page<Order> ordersPaginationByStatus(String sessionKey, OrderStatus status, int pageNumber);
 	
