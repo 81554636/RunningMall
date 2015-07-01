@@ -3,6 +3,14 @@ package ecommerce.rmall.ws.restful;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.perf4j.aop.Profiled;
 
 import ecommerce.rmall.domain.Page;
 import ecommerce.rmall.domain.Product;
@@ -17,16 +25,19 @@ public class ProductService implements ecommerce.rmall.ws.IProductService {
 	}
 	
 	@Override
+	@Profiled
 	public Page<Product> queryWithPage(int pageNumber) {
 		return this.productService.queryWithPage(pageNumber);
 	}
 
 	@Override
+	@Profiled
 	public Page<Product> queryPagination(String sessionKey, int pageNumber) {
 		return this.productService.queryWithPage(sessionKey, pageNumber);
 	}
 	
 	@Override
+	@Profiled
 	public List<Product> queryByIDs(String ids) {
 		
 		String[] vals = ids.split(",");

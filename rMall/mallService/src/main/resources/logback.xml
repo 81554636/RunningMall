@@ -19,7 +19,6 @@
             <minIndex>1</minIndex>
             <maxIndex>10</maxIndex>
         </rollingPolicy>
-
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <maxFileSize>50MB</maxFileSize>
         </triggeringPolicy>
@@ -27,10 +26,56 @@
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
         </encoder>
     </appender>
+    
+    <appender name="graphExecutionTimes" class="org.perf4j.logback.GraphingStatisticsAppender">
+        <!-- GraphType:Mean（平均值）, Min（最小值）, Max（最大值）, TPS（每秒事务数） -->
+        <param name="GraphType" value="Mean"/>
+        <param name="TagNamesToGraph" value="queryWithPage,queryPagination"/>
+        <appender-ref ref="graphsFileAppender"/>
+    </appender>
+    <!-- 生成firstBlock,secondBlock的tps的图表 -->
+    <appender name="graphExecutionTPS" class="org.perf4j.logback.GraphingStatisticsAppender">
+        <param name="GraphType" value="TPS"/>
+        <param name="TagNamesToGraph" value="queryWithPage,queryPagination"/>
+        <appender-ref ref="graphsFileAppender"/>
+    </appender>
+    
+    <appender name="graphsFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${USER_HOME}/perfGraph.log</File>
+        <encoder>
+            <Pattern>%date %-5level [%thread] %logger{36} [%file:%line] %msg%n</Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>logs/perfGraph.%d{yyyy-MM-dd}.log</FileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+	<appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${USER_HOME}/perfStatus.log</File>
+        <encoder>
+            <Pattern>%date %-5level [%thread] %logger{36} [%file:%line] %msg%n</Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>logs/perf4j.%d{yyyy-MM-dd}.log</FileNamePattern>
+        </rollingPolicy>
+    </appender>
+    
+    <appender name="CoalescingStatistics" class="org.perf4j.logback.AsyncCoalescingStatisticsAppender">
+    	<param name="TimeSlice" value="15000"/>  
+	    <appender-ref ref="fileAppender"/>
+	</appender>
 
     <logger name="ecommerce.rmall">
     	<level value="DEBUG" />
     </logger>
+    
+    <!-- 配置perf4j logger Additivity设置成false主要因为是不想让代码运行时间的日志输出给上游appenders，即不要在控制台输出。 -->
+	<logger name="org.perf4j.TimingLogger" additivity="false">
+		<level value="INFO" />
+		<!-- <appender-ref ref="fileAppender"/> -->
+		<appender-ref ref="CoalescingStatistics"/>
+	</logger>
+	
     <root level="INFO">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="file" />
